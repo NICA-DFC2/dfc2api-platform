@@ -8,6 +8,7 @@
         "api-platform/api-pack": "^1.1",
         "friendsofsymfony/user-bundle": "^2.1",
         "lexik/jwt-authentication-bundle": "^2.4",
+        "nelmio/api-doc-bundle": "^3.2",
         "symfony/console": "^4.1",
         "symfony/flex": "^1.0",
         "symfony/framework-bundle": "^4.1",
@@ -60,7 +61,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false
+            "allow-contrib": true
         }
     }
 }
