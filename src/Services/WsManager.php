@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 
-use Nzo\UrlEncryptorBundle\UrlEncryptor\UrlEncryptor;
-
 use App\Services\Objets\TTParam;
 use App\Services\Objets\CritParam;
 use App\Services\Objets\CntxClient;
@@ -56,13 +54,12 @@ class WsManager
      *
      ################################################# */
 
-    public function __construct($env, RequestStack $requestStack, SessionInterface $session, UrlEncryptor $encryptor, string $wsAdminUser, string $wsAdminPassword) {
+    public function __construct($env, RequestStack $requestStack, SessionInterface $session, string $wsAdminUser, string $wsAdminPassword) {
         $this->environement = $env;
         $this->wsAdminUser = $wsAdminUser;
         $this->wsAdminPassword = $wsAdminPassword;
         $this->requestStack = $requestStack;
         $this->session = $session;
-        $this->encryptor = $encryptor;
         $this->baseUrl = $requestStack->getCurrentRequest()->getBaseUrl() . WsParameters::URL_SUFFIX;
         $this->setBaseUrl();
         $this->cache = new FilesystemCache();

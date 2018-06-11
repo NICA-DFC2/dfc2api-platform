@@ -104,9 +104,6 @@
     "nikic/php-parser": {
         "version": "v4.0.2"
     },
-    "nzo/url-encryptor-bundle": {
-        "version": "4.2.0"
-    },
     "paragonie/random_compat": {
         "version": "v2.0.12"
     },

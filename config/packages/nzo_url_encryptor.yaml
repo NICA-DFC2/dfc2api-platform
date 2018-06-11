@@ -1,4 +1,0 @@
-nzo_url_encryptor:
-    secret_key: 4edabc6b7a62efc046150dbfbffb12ee    # optional, max length of 100 characters.
-    secret_iv:  4edabc6b7a62efc046150dbfbffb12ee    # optional, max length of 100 characters.
-    cipher_algorithm:

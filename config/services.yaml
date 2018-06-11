@@ -41,7 +41,6 @@ services:
             $session: '@session'
             $wsAdminUser: '%dfc2.api.admin_user%'
             $wsAdminPassword: '%dfc2.api.admin_password%'
-            $encryptor: '@nzo_url_encryptor'
 
     dfc2.user.service:
         class: App\Services\UserService
@@ -49,8 +48,6 @@ services:
 
     App\Services\Serializer\ObjectNormalizer:
         arguments: [ '@api_platform.serializer.normalizer.item', '@dfc2.api.manager', '@dfc2.user.service' ]
-#        decorates: 'api_platform.jsonld.normalizer.item'
-#        arguments: [ '@App\Services\Serializer\ObjectNormalizer.inner', '@dfc2.api.manager', '@dfc2.user.service' ]
 
 
     # lexik_jwt_authentication EVENTS

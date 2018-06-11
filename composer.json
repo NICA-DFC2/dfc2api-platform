@@ -10,7 +10,6 @@
         "lexik/jwt-authentication-bundle": "^2.4",
         "mashape/unirest-php": "^3.0",
         "nelmio/api-doc-bundle": "^3.2",
-        "nzo/url-encryptor-bundle": "^4.2",
         "symfony/cache": "^4.1",
         "symfony/console": "^4.1",
         "symfony/flex": "^1.0",
