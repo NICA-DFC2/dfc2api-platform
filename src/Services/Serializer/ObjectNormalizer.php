@@ -118,9 +118,13 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
         // Identifiant technique de l'article dans Evolubat
         $IdArtEvoAD = $data["IdArtEvoAD"];
 
+        // Lecture du user connecté
         $user = $this->user_service->getCurrentUser();
+        // si user connecté et de type User
         if($user instanceof User) {
+            // hydratation de l'entité User avec les informations du service web gimel
             $user = $this->normalizeUser($user);
+            // instancie la propriété user du manager des services web gimel
             $this->ws_manager->setUser($user);
             // Appel service web d'un article par son identifiant technique IdArt et calcul du prix net si client connecté
             $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD, true);
@@ -190,10 +194,18 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
      * Fonction qui permet l'hydration d'un User
      *
      * @param $user_data
-     * @return User
+     * @return mixed
      */
     private function normalizeUser(User $user_data) {
+        // Appel service web d'un client par son username (code client) CodCli
         $TTRetour = $this->ws_manager->getClientByCodCli($user_data->getUsername());
+
+        // si le retour est de type Notif
+        // Message d'erreur retourné par les webservices
+        if($TTRetour instanceof Notif) {
+            throw new \ErrorException(sprintf('Il y a une erreur:  %s.', $TTRetour->__toString()), 401 ,1, __FILE__);
+        }
+
         if(!is_null($TTRetour)) {
             $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
             $wsClient = $TTParam->getItem(0);
@@ -203,12 +215,6 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
                 $user_data->setNoCli($wsClient->getNoCli());
                 $user_data->setCodeCli($wsClient->getCodCli());
                 $user_data->setDepotCli($wsClient->getIdDep());
-            }
-            else {
-                $user_data['id_cli'] = null;
-                $user_data['no_cli'] = null;
-                $user_data['code_cli'] = null;
-                $user_data['depot_cli'] = null;
             }
             return $user_data;
         }
