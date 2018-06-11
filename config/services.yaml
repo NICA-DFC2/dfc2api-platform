@@ -73,6 +73,6 @@ services:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_not_found, method: onJWTNotFound }
 
     dfc2.api.event.jwt_expired_listener:
-            class: AppBundle\EventListener\AuthenticationTokenExpiredListener
+            class: App\EventListener\AuthenticationTokenExpiredListener
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_expired, method: onJWTExpired }

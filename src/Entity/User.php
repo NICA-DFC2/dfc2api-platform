@@ -31,7 +31,7 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @var int
-     * @SWG\Property(description="Identifiant unique d'un user.", type="integer")
+     * @SWG\Property(description="Identifiant unique du user.", type="integer")
      */
     protected $id;
 
@@ -39,7 +39,7 @@ class User extends BaseUser
      * @Groups({"user"})
      *
      * @var string
-     * @SWG\Property(description="Email d'un user.", type="string")
+     * @SWG\Property(description="Email du user.", type="string")
      */
     protected $email;
 
@@ -48,7 +48,7 @@ class User extends BaseUser
      * @Groups({"user"})
      *
      * @var string
-     * @SWG\Property(description="Nom complet d'un user.", type="string", maxLength=255)
+     * @SWG\Property(description="Nom complet du user.", type="string", maxLength=255)
      */
     protected $fullname;
 
@@ -56,7 +56,7 @@ class User extends BaseUser
      * @Groups({"user-write"})
      *
      * @var string
-     * @SWG\Property(description="Mot de passe d'un user.", type="string")
+     * @SWG\Property(description="Mot de passe du user.", type="string")
      */
     protected $plainPassword;
 
@@ -64,7 +64,7 @@ class User extends BaseUser
      * @Groups({"user"})
      *
      * @var string
-     * @SWG\Property(description="Login/Nom d'utilisateur d'un user.", type="string")
+     * @SWG\Property(description="Login/Nom d'utilisateur du user.", type="string")
      */
     protected $username;
 
@@ -73,7 +73,7 @@ class User extends BaseUser
      * @Groups({"user"})
      *
      * @var string
-     * @SWG\Property(description="La raison sociale d'un user.", type="string")
+     * @SWG\Property(description="La raison sociale du user.", type="string")
      */
     protected $raison_sociale;
 
@@ -81,7 +81,7 @@ class User extends BaseUser
      * @Groups({"user"})
      *
      * @var integer
-     * @SWG\Property(description="Identifiant unique Evolubat d'un user.", type="integer")
+     * @SWG\Property(description="Identifiant unique Evolubat du user.", type="integer")
      */
     protected $id_cli;
 
@@ -89,7 +89,7 @@ class User extends BaseUser
      * @Groups({"user"})
      *
      * @var integer
-     * @SWG\Property(description="Numéro unique Evolubat d'un user.", type="integer")
+     * @SWG\Property(description="Numéro unique Evolubat du user.", type="integer")
      */
     protected $no_cli;
 
@@ -97,9 +97,17 @@ class User extends BaseUser
      * @Groups({"user"})
      *
      * @var string
-     * @SWG\Property(description="Code unique Evolubat d'un user.", type="string")
+     * @SWG\Property(description="Code unique Evolubat du user.", type="string")
      */
     protected $code_cli;
+
+    /**
+     * @Groups({"user"})
+     *
+     * @var string
+     * @SWG\Property(description="Identifiant unique Evolubat du dépot d'appartenance du user.", type="string")
+     */
+    protected $depot_cli;
 
 
     public function setFullname($fullname): void
@@ -217,5 +225,22 @@ class User extends BaseUser
     {
         $this->code_cli = $code_cli;
     }
+
+    /**
+     * @return integer
+     */
+    public function getDepotCli(): int
+    {
+        return $this->depot_cli;
+    }
+
+    /**
+     * @param integer $depot_cli
+     */
+    public function setDepotCli(int $depot_cli): void
+    {
+        $this->depot_cli = $depot_cli;
+    }
+
 
 }

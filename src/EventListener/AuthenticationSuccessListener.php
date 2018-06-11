@@ -72,6 +72,7 @@ class AuthenticationSuccessListener
                 'id_cli' => $wsClient->getIdCli(),
                 'no_cli' => $wsClient->getNoCli(),
                 'code_cli' => $wsClient->getCodCli(),
+                'depot_cli' => $wsClient->getIdDep(),
                 'roles' => $user->getRoles(),
                 'cntx_valid' => (!is_null($cntx) && $cntx->isValid()) ? true : false
             );

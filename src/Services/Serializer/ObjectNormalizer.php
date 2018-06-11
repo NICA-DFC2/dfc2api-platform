@@ -10,15 +10,37 @@ use App\Services\UserService;
 use App\Services\WsManager;
 use App\Services\Parameters\WsTableNamesRetour;
 
+use Swagger\Annotations as SWG;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
+
+/**
+ * Classe qui permet l'hydratation des propriétés vides avec les services web GIMEL d'une entité.
+ *
+ * Héritage des interfaces NormalizerInterface, DenormalizerInterface, SerializerAwareInterface.
+ *
+ */
 class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
     private $decorated;
+
+    /**
+     * @SWG\Property(
+     *     name="ws_manager",
+     *     type="WsManager",
+     *     description="Service qui permet de faire des appels aux services web GIMEL")
+     */
     private $ws_manager;
+
+    /**
+     * @SWG\Property(
+     *     name="user_service",
+     *     type="UserService",
+     *     description="Service qui permet de récupérer le client connecté par son token")
+     */
     private $user_service;
 
     public function __construct(NormalizerInterface $decorated, WsManager $wsManager, UserService $userService)
@@ -43,13 +65,27 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
         return $this->decorated->supportsNormalization($data, $format);
     }
 
+    /**
+     * Fonction qui permet l'hydration selon l'objet reçu en paramétre
+     *
+     * @param object $object
+     * @param null $format
+     * @param array $context
+     * @return mixed
+     * @throws \ErrorException
+     *
+     */
     public function normalize($object, $format = null, array $context = [])
     {
         $data = $this->decorated->normalize($object, $format, $context);
 
+        /*
+         * si data est de type Article : Hydratation d'un article
+         */
         if($object instanceof Article) {
             return $this->normalizeArtDet($data);
         }
+
         return $data;
     }
 
@@ -70,13 +106,32 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
         }
     }
 
-
+    /**
+     * Fonction qui permet l'hydration d'un Article
+     *
+     * @param $data
+     * @return mixed
+     * @throws \ErrorException
+     */
     private function normalizeArtDet($data) {
 
+        // Identifiant technique de l'article dans Evolubat
         $IdArtEvoAD = $data["IdArtEvoAD"];
 
-        $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD);
+        $user = $this->user_service->getCurrentUser();
+        if($user instanceof User) {
+            $user = $this->normalizeUser($user);
+            $this->ws_manager->setUser($user);
+            // Appel service web d'un article par son identifiant technique IdArt et calcul du prix net si client connecté
+            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD, true);
+        }
+        else {
+            // Appel service web d'un article par son identifiant technique IdArt
+            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD);
+        }
 
+        // si le retour est de type Notif
+        // Message d'erreur retourné par les webservices
         if($TTRetour instanceof Notif) {
             throw new \ErrorException(sprintf('Il y a une erreur:  %s.', $TTRetour->__toString()), 401 ,1, __FILE__);
         }
@@ -93,9 +148,12 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
             else {
                 $wsArticle = $TTParam->getItem(0);
 
+                // Lecture du tableau des stocks
+                // Le retour est complexe on doit créer un tableau simplifié
                 $stocks = $wsArticle->getStocks();
                 $arrayStocks = [];
                 if (!is_null($stocks)) {
+                    // Création d'un tableau des stocks simplifié
                     for ($i = 0; $i < $stocks->countItems(); $i++) {
                         array_push($arrayStocks, json_decode($stocks->getItem($i)->__toString()));
                     }
@@ -126,5 +184,34 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
             $data["Stocks"] = [];
         }
         return $data;
+    }
+
+    /**
+     * Fonction qui permet l'hydration d'un User
+     *
+     * @param $user_data
+     * @return User
+     */
+    private function normalizeUser(User $user_data) {
+        $TTRetour = $this->ws_manager->getClientByCodCli($user_data->getUsername());
+        if(!is_null($TTRetour)) {
+            $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
+            $wsClient = $TTParam->getItem(0);
+
+            if(!is_null($wsClient)) {
+                $user_data->setIdCli($wsClient->getIdCli());
+                $user_data->setNoCli($wsClient->getNoCli());
+                $user_data->setCodeCli($wsClient->getCodCli());
+                $user_data->setDepotCli($wsClient->getIdDep());
+            }
+            else {
+                $user_data['id_cli'] = null;
+                $user_data['no_cli'] = null;
+                $user_data['code_cli'] = null;
+                $user_data['depot_cli'] = null;
+            }
+            return $user_data;
+        }
+        return $user_data;
     }
 }
