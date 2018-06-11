@@ -2,15 +2,20 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'fr'
+    dfc2.api.admin_user: '%env(WSADMIN_USER)%'
+    dfc2.api.admin_password: '%env(WSADMIN_PASSWORD)%'
 
 services:
     # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
+        autowire: false      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         public: true        # Allows optimizing the container by removing unused services; this also means
                             # fetching services directly from the container via $container->get() won't work.
                             # The best practice is to be explicit about your dependencies anyway.
+
+    # Alias de la class du service manager du bundle
+    App\Services\WsManager: '@dfc2.api.manager'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -24,5 +29,53 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+
+    # paramétrage du service mannager
+    dfc2.api.manager:
+        class: App\Services\WsManager
+        autowire: false
+        public: true
+        arguments:
+            $env: '%kernel.environment%'
+            $requestStack: '@request_stack'
+            $session: '@session'
+            $wsAdminUser: '%dfc2.api.admin_user%'
+            $wsAdminPassword: '%dfc2.api.admin_password%'
+            $encryptor: '@nzo_url_encryptor'
+
+    dfc2.user.service:
+        class: App\Services\UserService
+        arguments: [ '@security.token_storage' ]
+
+    App\Services\Serializer\ObjectNormalizer:
+        arguments: [ '@api_platform.serializer.normalizer.item', '@dfc2.api.manager', '@dfc2.user.service' ]
+#        decorates: 'api_platform.jsonld.normalizer.item'
+#        arguments: [ '@App\Services\Serializer\ObjectNormalizer.inner', '@dfc2.api.manager', '@dfc2.user.service' ]
+
+
+    # lexik_jwt_authentication EVENTS
+    dfc2.api.event.authentication_success_listener:
+            class: App\EventListener\AuthenticationSuccessListener
+            tags:
+                - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+            arguments: [ '@dfc2.api.manager' ]
+
+    dfc2.api.event.authentication_failure_listener:
+            class: App\EventListener\AuthenticationFailureListener
+            tags:
+                - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailureResponse }
+
+    dfc2.api.event.jwt_invalid_listener:
+            class: App\EventListener\AuthenticationTokenInvalidListener
+            tags:
+                - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_invalid, method: onJWTInvalid }
+
+    dfc2.api.event.jwt_notfound_listener:
+            class: App\EventListener\AuthenticationTokenNotFoundListener
+            tags:
+                - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_not_found, method: onJWTNotFound }
+
+    dfc2.api.event.jwt_expired_listener:
+            class: AppBundle\EventListener\AuthenticationTokenExpiredListener
+            tags:
+                - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_expired, method: onJWTExpired }

@@ -2,6 +2,7 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb' and 'couchdb'
     firewall_name: main
     user_class: App\Entity\User
+    use_authentication_listener: true
     from_email:
         address: "contact@dfc2.biz"
         sender_name: "contact@dfc2.biz"

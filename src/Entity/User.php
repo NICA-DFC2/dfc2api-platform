@@ -13,9 +13,10 @@ use Swagger\Annotations as SWG;
 /**
  * Entité qui représente un User.
  *
- * Héritage de la classe BaseUser de FOSUserBundle.
+ * Héritage de la class BaseUser de FOSUserBundle.
  *
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  * @ApiResource(attributes={
  *     "normalization_context"={"groups"={"user", "user-read"}},
  *     "denormalization_context"={"groups"={"user", "user-write"}}
@@ -68,23 +69,37 @@ class User extends BaseUser
     protected $username;
 
     /**
-     * @ORM\Column(type="string", length=25, nullable=true )
+     * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"user"})
      *
      * @var string
-     * @SWG\Property(description="Code client d'un user. Hydratation de la propriété par un appel web service GIMEL", type="string", maxLength=25)
+     * @SWG\Property(description="La raison sociale d'un user.", type="string")
      */
-    protected $codCli;
+    protected $raison_sociale;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"user"})
+     *
+     * @var integer
+     * @SWG\Property(description="Identifiant unique Evolubat d'un user.", type="integer")
+     */
+    protected $id_cli;
+
+    /**
+     * @Groups({"user"})
+     *
+     * @var integer
+     * @SWG\Property(description="Numéro unique Evolubat d'un user.", type="integer")
+     */
+    protected $no_cli;
+
+    /**
      * @Groups({"user"})
      *
      * @var string
-     * @SWG\Property(description="Identifiant unique du logiciel Evolubat d'un user. Hydratation de la propriété par un appel web service GIMEL", type="integer")
+     * @SWG\Property(description="Code unique Evolubat d'un user.", type="string")
      */
-    protected $idCli;
-
+    protected $code_cli;
 
 
     public function setFullname($fullname): void
@@ -132,36 +147,75 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getCodCli(): ?string
+    public function getConfirmationToken(): ?string
     {
-        return $this->codCli;
+        return $this->confirmationToken;
     }
 
     /**
-     * @param mixed $codCli
+     * @return string
      */
-    public function setCodCli(?string $codCli): void
+    public function getRaisonSociale(): string
     {
-        $this->codCli = $codCli;
+        return $this->raison_sociale;
     }
 
     /**
-     * @return mixed
+     * @param string $raison_sociale
      */
-    public function getIdCli(): ?int
+    public function setRaisonSociale(string $raison_sociale): void
     {
-        return $this->idCli;
+        $this->raison_sociale = $raison_sociale;
     }
 
     /**
-     * @param mixed $idCli
+     * @return string
      */
-    public function setIdCli(?int $idCli): void
+    public function getIdCli(): int
     {
-        $this->idCli = $idCli;
+        return $this->id_cli;
     }
 
+    /**
+     * @param string $id_cli
+     */
+    public function setIdCli(int $id_cli): void
+    {
+        $this->id_cli = $id_cli;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNoCli(): int
+    {
+        return $this->no_cli;
+    }
+
+    /**
+     * @param string $no_cli
+     */
+    public function setNoCli(int $no_cli): void
+    {
+        $this->no_cli = $no_cli;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCodeCli(): string
+    {
+        return $this->code_cli;
+    }
+
+    /**
+     * @param string $code_cli
+     */
+    public function setCodeCli(string $code_cli): void
+    {
+        $this->code_cli = $code_cli;
+    }
 
 }

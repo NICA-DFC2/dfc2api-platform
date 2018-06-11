@@ -2,6 +2,14 @@ api_platform:
     enable_fos_user: true
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
+    swagger:
+         api_keys:
+             apiKey:
+                name: Authorization
+                type: header
+    oauth:
+          # To enable or disable oauth.
+          enabled: true
 
 framework:
     form: { enabled: true }

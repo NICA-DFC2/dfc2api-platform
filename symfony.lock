@@ -77,6 +77,9 @@
             "ref": "a66e8a7b75a1825cf2414d5dd53c7ed38c8654d1"
         }
     },
+    "mashape/unirest-php": {
+        "version": "v3.0.4"
+    },
     "namshi/jose": {
         "version": "7.2.3"
     },
@@ -100,6 +103,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.0.2"
+    },
+    "nzo/url-encryptor-bundle": {
+        "version": "4.2.0"
     },
     "paragonie/random_compat": {
         "version": "v2.0.12"
