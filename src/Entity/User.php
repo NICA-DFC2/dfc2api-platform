@@ -78,6 +78,15 @@ class User extends BaseUser
     protected $raison_sociale;
 
     /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     * @Groups({"user"})
+     *
+     * @var string
+     * @SWG\Property(description="Code unique du user.", type="string")
+     */
+    protected $code;
+
+    /**
      * @Groups({"user"})
      *
      * @var integer
@@ -97,17 +106,17 @@ class User extends BaseUser
      * @Groups({"user"})
      *
      * @var string
-     * @SWG\Property(description="Code unique Evolubat du user.", type="string")
+     * @SWG\Property(description="Identifiant unique Evolubat du dépot d'appartenance du user.", type="string")
      */
-    protected $code_cli;
+    protected $id_depot_cli;
 
     /**
      * @Groups({"user"})
      *
      * @var string
-     * @SWG\Property(description="Identifiant unique Evolubat du dépot d'appartenance du user.", type="string")
+     * @SWG\Property(description="Nom du dépot d'appartenance du user.", type="string")
      */
-    protected $depot_cli;
+    protected $nom_depot_cli;
 
 
     public function setFullname($fullname): void
@@ -181,6 +190,22 @@ class User extends BaseUser
     /**
      * @return string
      */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function setCode(string $code): void
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return string
+     */
     public function getIdCli(): int
     {
         return $this->id_cli;
@@ -211,35 +236,35 @@ class User extends BaseUser
     }
 
     /**
-     * @return string
-     */
-    public function getCodeCli(): string
-    {
-        return $this->code_cli;
-    }
-
-    /**
-     * @param string $code_cli
-     */
-    public function setCodeCli(string $code_cli): void
-    {
-        $this->code_cli = $code_cli;
-    }
-
-    /**
      * @return integer
      */
-    public function getDepotCli(): int
+    public function getIdDepotCli(): int
     {
-        return $this->depot_cli;
+        return $this->id_depot_cli;
     }
 
     /**
-     * @param integer $depot_cli
+     * @param integer $id_depot_cli
      */
-    public function setDepotCli(int $depot_cli): void
+    public function setIdDepotCli(int $id_depot_cli): void
     {
-        $this->depot_cli = $depot_cli;
+        $this->id_depot_cli = $id_depot_cli;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNomDepotCli(): string
+    {
+        return $this->nom_depot_cli;
+    }
+
+    /**
+     * @param string $nom_depot_cli
+     */
+    public function setNomDepotCli(string $nom_depot_cli): void
+    {
+        $this->nom_depot_cli = $nom_depot_cli;
     }
 
 

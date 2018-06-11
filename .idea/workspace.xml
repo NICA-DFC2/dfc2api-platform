@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8028fce5-4473-4af6-b17f-55d449f8ccaf" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EventListener/AuthenticationSuccessListener.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/EventListener/AuthenticationSuccessListener.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Services/Serializer/ObjectNormalizer.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/Serializer/ObjectNormalizer.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,10 +18,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="User.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Entity/User.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="344">
+              <caret line="116" column="87" lean-forward="true" selection-start-line="116" selection-start-column="87" selection-end-line="116" selection-end-column="87" />
+              <folding>
+                <element signature="e#30#74#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="ObjectNormalizer.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Services/Serializer/ObjectNormalizer.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
+            <state relative-caret-position="382">
               <caret line="218" column="30" lean-forward="true" selection-start-line="218" selection-start-column="30" selection-end-line="218" selection-end-column="30" />
               <folding>
                 <element signature="e#43#66#0#PHP" expanded="true" />
@@ -28,8 +42,16 @@
                 <element signature="e#1959#2121#0#PHP" />
                 <element signature="e#2127#2298#0#PHP" />
                 <element signature="e#2304#2513#0#PHP" />
-                <element signature="e#3018#5684#0#PHP" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WsClient.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Services/Objets/WsClient.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="218" column="22" selection-start-line="218" selection-start-column="22" selection-end-line="218" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -37,10 +59,13 @@
       <file leaf-file-name="AuthenticationSuccessListener.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/EventListener/AuthenticationSuccessListener.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="497">
-              <caret line="84" column="45" selection-start-line="84" selection-start-column="45" selection-end-line="84" selection-end-column="45" />
+            <state relative-caret-position="397">
+              <caret line="60" column="81" selection-start-line="60" selection-start-column="81" selection-end-line="60" selection-end-column="81" />
               <folding>
                 <element signature="e#36#69#0#PHP" expanded="true" />
+                <element signature="e#522#616#0#PHP" />
+                <element signature="e#780#1625#0#PHP" />
+                <element signature="e#1631#3102#0#PHP" />
               </folding>
             </state>
           </provider>
@@ -49,7 +74,7 @@
       <file leaf-file-name="WsManager.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Services/WsManager.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="134">
+            <state relative-caret-position="-120">
               <caret line="105" selection-start-line="105" selection-end-line="105" />
               <folding>
                 <element signature="e#32#52#0#PHP" expanded="true" />
@@ -135,10 +160,10 @@
         <option value="$PROJECT_DIR$/src/Entity/DocumLig.php" />
         <option value="$PROJECT_DIR$/.env.dist" />
         <option value="$PROJECT_DIR$/src/Services/UserService.php" />
-        <option value="$PROJECT_DIR$/src/Entity/User.php" />
-        <option value="$PROJECT_DIR$/src/EventListener/AuthenticationSuccessListener.php" />
         <option value="$PROJECT_DIR$/config/services.yaml" />
         <option value="$PROJECT_DIR$/src/Services/WsManager.php" />
+        <option value="$PROJECT_DIR$/src/EventListener/AuthenticationSuccessListener.php" />
+        <option value="$PROJECT_DIR$/src/Entity/User.php" />
         <option value="$PROJECT_DIR$/src/Services/Serializer/ObjectNormalizer.php" />
       </list>
     </option>
@@ -235,8 +260,8 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="260" />
-    <option name="y" value="36" />
+    <option name="x" value="17" />
+    <option name="y" value="15" />
     <option name="width" value="1892" />
     <option name="height" value="1000" />
   </component>
@@ -256,12 +281,20 @@
             <path>
               <item name="dfc2api-platform" type="b2602c69:ProjectViewProjectNode" />
               <item name="dfc2api-platform" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="config" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="dfc2api-platform" type="b2602c69:ProjectViewProjectNode" />
               <item name="dfc2api-platform" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Services" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="dfc2api-platform" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dfc2api-platform" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Services" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Objets" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -272,7 +305,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pronosports" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
@@ -315,18 +348,18 @@
       <workItem from="1528272807282" duration="1034000" />
       <workItem from="1528274015552" duration="3290000" />
       <workItem from="1528299697951" duration="37505000" />
-      <workItem from="1528699571869" duration="13632000" />
+      <workItem from="1528699571869" duration="15900000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="64969000" />
+    <option name="totallyTimeSpent" value="67237000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="260" y="36" width="1892" height="1000" extended-state="0" />
+    <frame x="17" y="15" width="1892" height="1000" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25586355" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25586355" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
@@ -335,7 +368,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.36497176" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.36497176" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -551,13 +584,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Services/Objets/WsClient.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6698">
-          <caret line="218" column="22" selection-start-line="218" selection-start-column="22" selection-end-line="218" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Services/Objets/CntxClient.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="463">
@@ -683,26 +709,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Entity/User.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="582">
-          <caret line="236" column="7" selection-start-line="236" selection-start-column="7" selection-end-line="236" selection-end-column="7" />
-          <folding>
-            <element signature="e#30#74#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/EventListener/AuthenticationSuccessListener.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
-          <caret line="84" column="45" selection-start-line="84" selection-start-column="45" selection-end-line="84" selection-end-column="45" />
-          <folding>
-            <element signature="e#36#69#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/services.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="123">
@@ -712,7 +718,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Services/WsManager.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
+        <state relative-caret-position="-120">
           <caret line="105" selection-start-line="105" selection-end-line="105" />
           <folding>
             <element signature="e#32#52#0#PHP" expanded="true" />
@@ -755,9 +761,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Services/Serializer/ObjectNormalizer.php">
+    <entry file="file://$PROJECT_DIR$/src/Entity/User.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="344">
+          <caret line="116" column="87" lean-forward="true" selection-start-line="116" selection-start-column="87" selection-end-line="116" selection-end-column="87" />
+          <folding>
+            <element signature="e#30#74#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/EventListener/AuthenticationSuccessListener.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="397">
+          <caret line="60" column="81" selection-start-line="60" selection-start-column="81" selection-end-line="60" selection-end-column="81" />
+          <folding>
+            <element signature="e#36#69#0#PHP" expanded="true" />
+            <element signature="e#522#616#0#PHP" />
+            <element signature="e#780#1625#0#PHP" />
+            <element signature="e#1631#3102#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Services/Objets/WsClient.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="218" column="22" selection-start-line="218" selection-start-column="22" selection-end-line="218" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Services/Serializer/ObjectNormalizer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="382">
           <caret line="218" column="30" lean-forward="true" selection-start-line="218" selection-start-column="30" selection-end-line="218" selection-end-column="30" />
           <folding>
             <element signature="e#43#66#0#PHP" expanded="true" />
@@ -766,7 +802,6 @@
             <element signature="e#1959#2121#0#PHP" />
             <element signature="e#2127#2298#0#PHP" />
             <element signature="e#2304#2513#0#PHP" />
-            <element signature="e#3018#5684#0#PHP" />
           </folding>
         </state>
       </provider>

@@ -6,7 +6,6 @@ use App\Services\Parameters\WsAlgorithmOpenSSL;
 use App\Services\Parameters\WsTableNamesRetour;
 use App\Services\WsManager;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * AuthenticationSuccessListener
@@ -17,14 +16,14 @@ class AuthenticationSuccessListener
     /**
      * @var WsManager
      */
-    private $manager;
+    private $ws_manager;
 
     /**
      * @param WsManager $manager
      */
     public function __construct(WsManager $manager)
     {
-        $this->manager = $manager;
+        $this->ws_manager = $manager;
     }
 
     /**
@@ -38,10 +37,10 @@ class AuthenticationSuccessListener
         $data = $event->getData();
         $user = $event->getUser();
 
-        if(!is_null($this->manager)) {
-            $cntx = $this->manager->getDemarre(null, null, WsAlgorithmOpenSSL::NONE);
+        if(!is_null($this->ws_manager)) {
+            $cntx = $this->ws_manager->getDemarre(null, null, WsAlgorithmOpenSSL::NONE);
 
-            $TTRetour = $this->manager->getClientByCodCli($user->getUsername());
+            $TTRetour = $this->ws_manager->getClientByCodCli($user->getCode());
             if(!is_null($TTRetour)) {
                 $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
                 $wsClient = $TTParam->getItem(0);
@@ -65,14 +64,15 @@ class AuthenticationSuccessListener
             $data['user'] = array(
                 'id' => $user->getId(),
                 'username' => $user->getUsername(),
+                'code' => $user->getCode(),
                 'fullname' => $user->getFullname(),
                 'email' => $user->getEmail(),
                 'last_login' => $user->getLastLogin(),
                 'raison_sociale' => $user->getRaisonSociale(),
                 'id_cli' => $wsClient->getIdCli(),
                 'no_cli' => $wsClient->getNoCli(),
-                'code_cli' => $wsClient->getCodCli(),
-                'depot_cli' => $wsClient->getIdDep(),
+                'id_depot_cli' => $wsClient->getIdDep(),
+                'nom_depot_cli' => $wsClient->getNomDep(),
                 'roles' => $user->getRoles(),
                 'cntx_valid' => (!is_null($cntx) && $cntx->isValid()) ? true : false
             );
@@ -81,6 +81,7 @@ class AuthenticationSuccessListener
             $data['user'] = array(
                 'id' => $user->getId(),
                 'username' => $user->getUsername(),
+                'code' => $user->getCode(),
                 'fullname' => $user->getFullname(),
                 'email' => $user->getEmail(),
                 'last_login' => $user->getLastLogin(),
@@ -88,7 +89,8 @@ class AuthenticationSuccessListener
                 'raison_sociale' => $user->getRaisonSociale(),
                 'id_cli' => null,
                 'no_cli' => null,
-                'code_cli' => null,
+                'id_depot_cli' => null,
+                'nom_depot_cli' => null,
                 'roles' => $user->getRoles(),
                 'cntx_valid' => (!is_null($cntx) && $cntx->isValid()) ? true : false
             );

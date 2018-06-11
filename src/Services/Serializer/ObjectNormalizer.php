@@ -197,8 +197,8 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
      * @return mixed
      */
     private function normalizeUser(User $user_data) {
-        // Appel service web d'un client par son username (code client) CodCli
-        $TTRetour = $this->ws_manager->getClientByCodCli($user_data->getUsername());
+        // Appel service web d'un client par son code client (CodCli)
+        $TTRetour = $this->ws_manager->getClientByCodCli($user_data->getCode());
 
         // si le retour est de type Notif
         // Message d'erreur retourné par les webservices
@@ -213,8 +213,8 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
             if(!is_null($wsClient)) {
                 $user_data->setIdCli($wsClient->getIdCli());
                 $user_data->setNoCli($wsClient->getNoCli());
-                $user_data->setCodeCli($wsClient->getCodCli());
-                $user_data->setDepotCli($wsClient->getIdDep());
+                $user_data->setIdDepotCli($wsClient->getIdDep());
+                $user_data->setNomDepotCli($wsClient->getNomDep());
             }
             return $user_data;
         }
