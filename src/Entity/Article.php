@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Swagger\Annotations as SWG;
 
 /**
  * @ApiResource
@@ -168,51 +169,53 @@ class Article
     ************************ */
 
     /**
-     * @ORM\Column(name="IdADWS", type="integer", options={"default":-1}, nullable=true)
+     * @SWG\Property(description="Identifiant unique Evolubat de l'article.", type="integer")
      */
     private $IdADWS;
 
     /**
-     * @ORM\Column(name="NoADWS", type="integer", options={"default":-1}, nullable=true)
+     * @SWG\Property(description="Numéro unique Evolubat de l'article.", type="integer")
      */
     private $NoADWS;
 
     /**
-     * @ORM\Column(name="CodADFWS", type="string", length=25, nullable=true)
+     * @SWG\Property(description="Code fournisseur unique Evolubat de l'article.", type="string")
      */
     private $CodADFWS;
 
     /**
-     * @ORM\Column(name="DesiADWS", type="string", length=255, nullable=true)
+     * @SWG\Property(description="Désignation Evolubat de l'article.", type="string")
      */
     private $DesiADWS;
 
     /**
-     * @ORM\Column(name="CodADWS", type="string", length=25, nullable=true)
+     * @SWG\Property(description="Code unique Evolubat de l'article.", type="string")
      */
     private $CodADWS;
 
     /**
-     * @ORM\Column(name="UVteADWS", type="string", length=25, nullable=true)
+     * @SWG\Property(description="Unité de vente de l'article.", type="string")
      */
     private $UVteADWS;
 
     /**
-     * @ORM\Column(name="UStoADWS", type="string", length=25, nullable=true)
+     * @SWG\Property(description="Unité de stock de l'article.", type="string")
      */
     private $UStoADWS;
 
     /**
-     * @ORM\Column(name="PrixPubADWS", type="decimal", precision=10, scale=2, nullable=true)
+     * @SWG\Property(description="Prix public HT de l'article.", type="decimal")
      */
     private $PrixPubADWS;
 
     /**
-     * @ORM\Column(name="PrixNetCliADWS", type="decimal", precision=10, scale=2, nullable=true)
+     * @SWG\Property(description="Prix net HT du client connecté de l'article.", type="decimal")
      */
     private $PrixNetCliADWS;
 
-
+    /**
+     * @SWG\Property(description="Stocks disponibles Evolubat de l'article dans les différents dépots.", type="array")
+     */
     private $Stocks = [];
 
 
