@@ -227,7 +227,6 @@ class Article
 
     }
 
-
     /**
      * @return mixed
      */

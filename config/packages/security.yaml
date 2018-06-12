@@ -34,9 +34,15 @@ security:
 
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+            security: true
+            provider: fos_userbundle
+            stateless: true
+            anonymous: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
 
     access_control:
         - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: [ ROLE_USER, ROLE_ADMIN ] }
-        - { path: ^/api$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: [ ROLE_USER, ROLE_ADMIN ] }
