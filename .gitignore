@@ -1,3 +1,6 @@
+###> global ###
+/.idea
+###< global ###
 
 ###> symfony/framework-bundle ###
 /.env
@@ -15,5 +18,7 @@
 ###< lexik/jwt-authentication-bundle ###
 
 ###> behat/symfony2-extension ###
-behat.yml
+/behat.yml
+/behat
+/behat.bat
 ###< behat/symfony2-extension ###
