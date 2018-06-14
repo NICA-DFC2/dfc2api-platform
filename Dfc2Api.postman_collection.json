@@ -1,0 +1,261 @@
+{
+	"info": {
+		"_postman_id": "de713358-d9cf-4364-b9b2-7089fc1388f5",
+		"name": "Dfc2Api",
+		"description": "Interface de programmation applicative REST qui offre des services GET, POST, DELETE, PUT à d'autres applications",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://127.0.0.1:8000/login_check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dab863b6-f144-403a-992a-3dc7e1d08d66",
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"",
+							"console.info(data.token);",
+							"",
+							"pm.environment.set(\"ApiToken\", data.token);",
+							"",
+							"console.info(pm.environment.get(\"ApiToken\"));",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"NICA\",\r\n  \"password\": \"DFC2info\"\r\n}"
+				},
+				"url": {
+					"raw": "http://{{ApiHost}}/login_check",
+					"protocol": "http",
+					"host": [
+						"{{ApiHost}}"
+					],
+					"path": [
+						"login_check"
+					]
+				},
+				"description": "LOGIN user to API\n\nAdd in the body the JSON for identification.\n\nSample JSON in the body:\n{\n  \"username\": \"my username\",\n  \"password\": \"my password\"\n}\n\nThe response should be:\n{\n    \"token\": \"token returned\",\n    \"user\": {\n        \"id\": integer,\n        \"username\": \"string\",\n        \"code\": \"string\",\n        \"fullname\": \"string\",\n        \"email\": \"string\",\n        \"last_login\": {\n            \"date\": \"datetime\",\n            \"timezone_type\": integer,\n            \"timezone\": \"string\"\n        },\n        \"raison_sociale\": \"string\",\n        \"id_cli\": integer,\n        \"no_cli\": integer,\n        \"id_depot_cli\": integer,\n        \"nom_depot_cli\": \"string\",\n        \"roles\": array,\n        \"cntx_valid\": boolean\n    }\n}\n\nSet ApiToken variable with token value of the response for using in other call."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/users/3",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{ApiToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test@dfc2.biz\",\r\n  \"fullname\": \"TEST\",\r\n  \"plainPassword\": \"DFC2test\",\r\n  \"username\": \"TEST1\",\r\n  \"code\": \"TEST1\"\r\n}"
+				},
+				"url": {
+					"raw": "http://{{ApiHost}}/api/users/3",
+					"protocol": "http",
+					"host": [
+						"{{ApiHost}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"3"
+					]
+				},
+				"description": "Read one user\n\nAdd in the header the token for authorization of user. For using ApiToken variable.\n\nThe response should be:\n{\n    \"email\": \"n.cartier@dfc2.biz\",\n    \"fullname\": \"Nicolas Cartier\",\n    \"username\": \"NICA\",\n    \"code\": \"PERSO124\"\n}"
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/articles",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0c164060-8087-4eea-ad86-eb937dc0961d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{ApiToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"IdArtEvoAD\": 76057,\r\n  \"DesiAD\": \"Premier article\",\r\n  \"DesiPrincAD\": \"Premier article\",\r\n  \"DescriWebAD\": \"description du premier article\",\r\n  \"DescriCatalogAD\": \"\",\r\n  \"MediasAD\": \"\",\r\n  \"PlusAD\": \"\",\r\n  \"MotsClesAD\": \"test mc\",\r\n  \"OrdreAD\": 0,\r\n  \"NumDecliAD\": 1,\r\n  \"FlgAncAD\": false,\r\n  \"FlgCatalogAD\": true,\r\n  \"FlgPrincAD\": true,\r\n  \"FlgDestockAD\": false,\r\n  \"FlgHorsMarqueAD\": false,\r\n  \"FlgNouvAD\": false,\r\n  \"FlgPromoAD\": false,\r\n  \"FlgVisibleAD\": true,\r\n  \"FlgEclBleuAD\": true,\r\n  \"FlgEclRoseAD\": true,\r\n  \"FlgEclVertAD\": true,\r\n  \"FlgEclOrangeAD\": true,\r\n  \"IdFourAD\": 0,\r\n  \"DateCreAD\": \"2018-06-11T07:28:45.650Z\",\r\n  \"DateModAD\": \"2018-06-11T07:28:45.650Z\",\r\n  \"UCreAD\": \"NICA\",\r\n  \"UModAD\": \"NICA\",\r\n  \"IdADWS\": 0,\r\n  \"NoADWS\": 0,\r\n  \"CodADFWS\": null,\r\n  \"DesiADWS\": null,\r\n  \"CodADWS\": null,\r\n  \"UVteADWS\": null,\r\n  \"UStoADWS\": null,\r\n  \"PrixPubADWS\": null,\r\n  \"PrixNetCliADWS\": null\r\n}"
+				},
+				"url": {
+					"raw": "http://{{ApiHost}}/api/articles",
+					"protocol": "http",
+					"host": [
+						"{{ApiHost}}"
+					],
+					"path": [
+						"api",
+						"articles"
+					]
+				},
+				"description": "Read articles\n\nAdd in the header the token for authorization of user. For using ApiToken variable.\n\nThe response should be a collection:\n[\n    {\n        \"IdAD\": 7,\n        \"IdArtEvoAD\": 95674,\n        \"DesiAD\": \"Premier article\",\n        \"DesiPrincAD\": \"Premier article\",\n        \"DescriWebAD\": \"description du premier article\",\n        \"DescriCatalogAD\": \"\",\n        \"MediasAD\": \"\",\n        \"PlusAD\": \"\",\n        \"MotsClesAD\": \"test mc\",\n        \"OrdreAD\": 0,\n        \"NumDecliAD\": 1,\n        \"FlgAncAD\": false,\n        \"FlgCatalogAD\": true,\n        \"FlgPrincAD\": true,\n        \"FlgDestockAD\": false,\n        \"FlgHorsMarqueAD\": false,\n        \"FlgNouvAD\": false,\n        \"FlgPromoAD\": false,\n        \"FlgVisibleAD\": true,\n        \"FlgEclBleuAD\": true,\n        \"FlgEclRoseAD\": true,\n        \"FlgEclVertAD\": true,\n        \"FlgEclOrangeAD\": true,\n        \"IdFourAD\": 0,\n        \"DateCreAD\": \"2018-06-11T07:28:45+00:00\",\n        \"DateModAD\": \"2018-06-11T07:28:45+00:00\",\n        \"UCreAD\": \"NICA\",\n        \"UModAD\": \"NICA\",\n        \"IdADWS\": 273780,\n        \"NoADWS\": 28365,\n        \"CodADFWS\": \"110143\",\n        \"DesiADWS\": \"EXTENSION DE SONNERIE  IER2\",\n        \"CodADWS\": \"AP110143\",\n        \"UVteADWS\": \"PCE\",\n        \"UStoADWS\": \"PCE\",\n        \"PrixPubADWS\": 40,\n        \"PrixNetCliADWS\": 24.64,\n        \"Stocks\": [\n            {\n                \"IdDep\": 5,\n                \"StkReelAD\": 0,\n                \"StkResAD\": 0,\n                \"StkCmdeAD\": 1,\n                \"CodGesStkAD\": \"01\",\n                \"EtatStockAD\": \"\",\n                \"StockDisponible\": 0,\n                \"StockDisponibleSoc\": 2,\n                \"StockPratique\": 1,\n                \"StkReelPlat1\": 0\n            },\n            {\n                \"IdDep\": 1,\n                \"StkReelAD\": 0,\n                \"StkResAD\": 0,\n                \"StkCmdeAD\": 0,\n                \"CodGesStkAD\": \"02\",\n                \"EtatStockAD\": \"\",\n                \"StockDisponible\": 0,\n                \"StockDisponibleSoc\": 2,\n                \"StockPratique\": 0,\n                \"StkReelPlat1\": 0\n            },\n            {\n                \"IdDep\": 10,\n                \"StkReelAD\": 2,\n                \"StkResAD\": 0,\n                \"StkCmdeAD\": 0,\n                \"CodGesStkAD\": \"01\",\n                \"EtatStockAD\": \"\",\n                \"StockDisponible\": 2,\n                \"StockDisponibleSoc\": 2,\n                \"StockPratique\": 2,\n                \"StkReelPlat1\": 0\n            },\n            {\n                \"IdDep\": 7,\n                \"StkReelAD\": 0,\n                \"StkResAD\": 0,\n                \"StkCmdeAD\": 0,\n                \"CodGesStkAD\": \"01\",\n                \"EtatStockAD\": \"\",\n                \"StockDisponible\": 0,\n                \"StockDisponibleSoc\": 2,\n                \"StockPratique\": 0,\n                \"StkReelPlat1\": 0\n            },\n            {\n                \"IdDep\": 8,\n                \"StkReelAD\": 0,\n                \"StkResAD\": 0,\n                \"StkCmdeAD\": 0,\n                \"CodGesStkAD\": \"02\",\n                \"EtatStockAD\": \"\",\n                \"StockDisponible\": 0,\n                \"StockDisponibleSoc\": 2,\n                \"StockPratique\": 0,\n                \"StkReelPlat1\": 0\n            },\n            {\n                \"IdDep\": 11,\n                \"StkReelAD\": 0,\n                \"StkResAD\": 0,\n                \"StkCmdeAD\": 0,\n                \"CodGesStkAD\": \"01\",\n                \"EtatStockAD\": \"\",\n                \"StockDisponible\": 0,\n                \"StockDisponibleSoc\": 2,\n                \"StockPratique\": 0,\n                \"StkReelPlat1\": 0\n            },\n            {\n                \"IdDep\": 14,\n                \"StkReelAD\": 0,\n                \"StkResAD\": 0,\n                \"StkCmdeAD\": 0,\n                \"CodGesStkAD\": \"02\",\n                \"EtatStockAD\": \"\",\n                \"StockDisponible\": 0,\n                \"StockDisponibleSoc\": 2,\n                \"StockPratique\": 0,\n                \"StkReelPlat1\": 0\n            },\n            {\n                \"IdDep\": 15,\n                \"StkReelAD\": 0,\n                \"StkResAD\": 0,\n                \"StkCmdeAD\": 0,\n                \"CodGesStkAD\": \"01\",\n                \"EtatStockAD\": \"\",\n                \"StockDisponible\": 0,\n                \"StockDisponibleSoc\": 2,\n                \"StockPratique\": 0,\n                \"StkReelPlat1\": 0\n            },\n            {\n                \"IdDep\": 6,\n                \"StkReelAD\": 0,\n                \"StkResAD\": 0,\n                \"StkCmdeAD\": 0,\n                \"CodGesStkAD\": \"01\",\n                \"EtatStockAD\": \"\",\n                \"StockDisponible\": 0,\n                \"StockDisponibleSoc\": 2,\n                \"StockPratique\": 0,\n                \"StkReelPlat1\": 0\n            }\n        ]\n    }\n]"
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/articles/7/logistic",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{ApiToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test@dfc2.biz\",\r\n  \"fullname\": \"TEST\",\r\n  \"plainPassword\": \"DFC2test\",\r\n  \"username\": \"TEST1\",\r\n  \"code\": \"TEST1\"\r\n}"
+				},
+				"url": {
+					"raw": "http://{{ApiHost}}/api/articles/7/logistic",
+					"protocol": "http",
+					"host": [
+						"{{ApiHost}}"
+					],
+					"path": [
+						"api",
+						"articles",
+						"7",
+						"logistic"
+					]
+				},
+				"description": "Read one article\n\nAdd in the header the token for authorization of user. For using ApiToken variable.\n\nThe response should be:\n{\n    \"IdAD\": 7,\n    \"IdArtEvoAD\": 95674,\n    \"DesiAD\": \"Premier article\",\n    \"DesiPrincAD\": \"Premier article\",\n    \"DescriWebAD\": \"description du premier article\",\n    \"DescriCatalogAD\": \"\",\n    \"MediasAD\": \"\",\n    \"PlusAD\": \"\",\n    \"MotsClesAD\": \"test mc\",\n    \"OrdreAD\": 0,\n    \"NumDecliAD\": 1,\n    \"FlgAncAD\": false,\n    \"FlgCatalogAD\": true,\n    \"FlgPrincAD\": true,\n    \"FlgDestockAD\": false,\n    \"FlgHorsMarqueAD\": false,\n    \"FlgNouvAD\": false,\n    \"FlgPromoAD\": false,\n    \"FlgVisibleAD\": true,\n    \"FlgEclBleuAD\": true,\n    \"FlgEclRoseAD\": true,\n    \"FlgEclVertAD\": true,\n    \"FlgEclOrangeAD\": true,\n    \"IdFourAD\": 0,\n    \"DateCreAD\": \"2018-06-11T07:28:45+00:00\",\n    \"DateModAD\": \"2018-06-11T07:28:45+00:00\",\n    \"UCreAD\": \"NICA\",\n    \"UModAD\": \"NICA\",\n    \"IdADWS\": 273780,\n    \"NoADWS\": 28365,\n    \"CodADFWS\": \"110143\",\n    \"DesiADWS\": \"EXTENSION DE SONNERIE  IER2\",\n    \"CodADWS\": \"AP110143\",\n    \"UVteADWS\": \"PCE\",\n    \"UStoADWS\": \"PCE\",\n    \"PrixPubADWS\": 40,\n    \"PrixNetCliADWS\": 24.64,\n    \"Stocks\": [\n        {\n            \"IdDep\": 5,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 1,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 1,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 1,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"02\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 10,\n            \"StkReelAD\": 2,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 2,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 2,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 7,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 8,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"02\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 11,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 14,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"02\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 15,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 6,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        }\n    ]\n}"
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/articles/7/prix-net",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{ApiToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test@dfc2.biz\",\r\n  \"fullname\": \"TEST\",\r\n  \"plainPassword\": \"DFC2test\",\r\n  \"username\": \"TEST1\",\r\n  \"code\": \"TEST1\"\r\n}"
+				},
+				"url": {
+					"raw": "http://{{ApiHost}}/api/articles/7/prix-net",
+					"protocol": "http",
+					"host": [
+						"{{ApiHost}}"
+					],
+					"path": [
+						"api",
+						"articles",
+						"7",
+						"prix-net"
+					]
+				},
+				"description": "Read one article\n\nAdd in the header the token for authorization of user. For using ApiToken variable.\n\nThe response should be:\n{\n    \"IdAD\": 7,\n    \"IdArtEvoAD\": 95674,\n    \"DesiAD\": \"Premier article\",\n    \"DesiPrincAD\": \"Premier article\",\n    \"DescriWebAD\": \"description du premier article\",\n    \"DescriCatalogAD\": \"\",\n    \"MediasAD\": \"\",\n    \"PlusAD\": \"\",\n    \"MotsClesAD\": \"test mc\",\n    \"OrdreAD\": 0,\n    \"NumDecliAD\": 1,\n    \"FlgAncAD\": false,\n    \"FlgCatalogAD\": true,\n    \"FlgPrincAD\": true,\n    \"FlgDestockAD\": false,\n    \"FlgHorsMarqueAD\": false,\n    \"FlgNouvAD\": false,\n    \"FlgPromoAD\": false,\n    \"FlgVisibleAD\": true,\n    \"FlgEclBleuAD\": true,\n    \"FlgEclRoseAD\": true,\n    \"FlgEclVertAD\": true,\n    \"FlgEclOrangeAD\": true,\n    \"IdFourAD\": 0,\n    \"DateCreAD\": \"2018-06-11T07:28:45+00:00\",\n    \"DateModAD\": \"2018-06-11T07:28:45+00:00\",\n    \"UCreAD\": \"NICA\",\n    \"UModAD\": \"NICA\",\n    \"IdADWS\": 273780,\n    \"NoADWS\": 28365,\n    \"CodADFWS\": \"110143\",\n    \"DesiADWS\": \"EXTENSION DE SONNERIE  IER2\",\n    \"CodADWS\": \"AP110143\",\n    \"UVteADWS\": \"PCE\",\n    \"UStoADWS\": \"PCE\",\n    \"PrixPubADWS\": 40,\n    \"PrixNetCliADWS\": 24.64,\n    \"Stocks\": [\n        {\n            \"IdDep\": 5,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 1,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 1,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 1,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"02\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 10,\n            \"StkReelAD\": 2,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 2,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 2,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 7,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 8,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"02\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 11,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 14,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"02\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 15,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        },\n        {\n            \"IdDep\": 6,\n            \"StkReelAD\": 0,\n            \"StkResAD\": 0,\n            \"StkCmdeAD\": 0,\n            \"CodGesStkAD\": \"01\",\n            \"EtatStockAD\": \"\",\n            \"StockDisponible\": 0,\n            \"StockDisponibleSoc\": 2,\n            \"StockPratique\": 0,\n            \"StkReelPlat1\": 0\n        }\n    ]\n}"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{token}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"id": "1a0986e0-30c5-489e-8a18-cd3439cdb72b",
+			"key": "token",
+			"value": "",
+			"type": "string",
+			"description": ""
+		}
+	]
+}

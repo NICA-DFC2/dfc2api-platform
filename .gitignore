@@ -18,7 +18,7 @@
 ###< lexik/jwt-authentication-bundle ###
 
 ###> behat/symfony2-extension ###
-/behat.yml
-/behat
-/behat.bat
+###/behat.yml
+###/behat
+###/behat.bat
 ###< behat/symfony2-extension ###
