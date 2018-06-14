@@ -1,0 +1,4 @@
+JWT Token not found: Le Token n'a pas été trouvé
+Bad credentials: Mauvaise identification, vérifier s'il vous plaît que username/password sont correctement renseignés
+Expired JWT Token: Votre connexion a expirée, veuillez vous reconnecter
+Invalid JWT Token: Mauvaise identification (token)

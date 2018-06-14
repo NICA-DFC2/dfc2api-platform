@@ -52,27 +52,32 @@ services:
 
     # lexik_jwt_authentication EVENTS
     dfc2.api.event.authentication_success_listener:
+            autowire: true
             class: App\EventListener\AuthenticationSuccessListener
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
             arguments: [ '@dfc2.api.manager' ]
 
     dfc2.api.event.authentication_failure_listener:
+            autowire: true
             class: App\EventListener\AuthenticationFailureListener
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailureResponse }
 
     dfc2.api.event.jwt_invalid_listener:
+            autowire: true
             class: App\EventListener\AuthenticationTokenInvalidListener
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_invalid, method: onJWTInvalid }
 
     dfc2.api.event.jwt_notfound_listener:
+            autowire: true
             class: App\EventListener\AuthenticationTokenNotFoundListener
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_not_found, method: onJWTNotFound }
 
     dfc2.api.event.jwt_expired_listener:
+            autowire: true
             class: App\EventListener\AuthenticationTokenExpiredListener
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_expired, method: onJWTExpired }
