@@ -9,7 +9,9 @@ use Swagger\Annotations as SWG;
 /**
  * Entité qui représente un Article. Certain champs sont hydratés par un appel aux services web GIMEL.
  *
- * @ApiResource(itemOperations={
+ * @ApiResource(
+ *     itemOperations={
+ *     "get"={"method"="GET"},
  *     "logistic"={
  *         "method"="GET",
  *         "path"="/articles/{id}/logistic",
