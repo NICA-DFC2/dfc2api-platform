@@ -5,13 +5,13 @@ Feature: Article
 
   Scenario: Read Article If not authorized NOK
     When I send a "GET" request to "/api/articles/7"
-    Then the response status code should be 403
+    Then the response status code should be 401
     And the response should be in JSON
     And the header "Content-Type" should be equal to "application/json"
 
   Scenario: Read List Articles If not authorized NOK
     When I send a "GET" request to "/api/articles"
-    Then the response status code should be 403
+    Then the response status code should be 401
     And the response should be in JSON
     And the header "Content-Type" should be equal to "application/json"
 

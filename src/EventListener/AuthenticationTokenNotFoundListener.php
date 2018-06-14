@@ -2,6 +2,7 @@
 namespace App\EventListener;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTNotFoundEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Response\JWTAuthenticationFailureResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -25,12 +26,8 @@ class AuthenticationTokenNotFoundListener
         $message = $this->translator->trans($event->getResponse()->getMessage());
         $status = $event->getResponse()->getStatusCode();
 
-        $data = [
-            'status' => $status,
-            'message' => $message,
-        ];
 
-        $response = new JsonResponse($data, 403);
+        $response = new JWTAuthenticationFailureResponse($message, $status);
 
         $event->setResponse($response);
     }
