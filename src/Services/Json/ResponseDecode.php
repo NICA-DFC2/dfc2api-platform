@@ -13,6 +13,7 @@ use App\Services\Objets\WsStock;
 use App\Services\Objets\WsClient;
 use App\Services\Objets\WsArticle;
 use App\Services\Parameters\WsTableNamesRetour;
+use Unirest\Response;
 
 class ResponseDecode
 {
@@ -20,7 +21,7 @@ class ResponseDecode
 
     /**
      * Constructeur
-     * @param mixed $response : réponse de l'appel à décoder
+     * @param Response $response : réponse de l'appel à décoder
      */
     public function __construct($response)
     {

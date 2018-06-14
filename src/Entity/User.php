@@ -10,9 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Swagger\Annotations as SWG;
 
 /**
- * Entité qui représente un User.
- *
- * Héritage de la class BaseUser de FOSUserBundle.
+ * Entité qui représente un User. Certain champs sont hydratés par un appel aux services web GIMEL. Héritage de la class BaseUser de FOSUserBundle.
  *
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
@@ -86,7 +84,7 @@ class User extends BaseUser
     protected $code;
 
     /**
-     * @Groups({"user"})
+     * @Groups({"user", "user-read"})
      *
      * @var integer
      * @SWG\Property(description="Identifiant unique Evolubat du user.", type="integer")
@@ -94,7 +92,7 @@ class User extends BaseUser
     protected $id_cli;
 
     /**
-     * @Groups({"user"})
+     * @Groups({"user", "user-read"})
      *
      * @var integer
      * @SWG\Property(description="Numéro unique Evolubat du user.", type="integer")
@@ -102,7 +100,7 @@ class User extends BaseUser
     protected $no_cli;
 
     /**
-     * @Groups({"user"})
+     * @Groups({"user", "user-read"})
      *
      * @var string
      * @SWG\Property(description="Identifiant unique Evolubat du dépot d'appartenance du user.", type="string")
@@ -110,7 +108,7 @@ class User extends BaseUser
     protected $id_depot_cli;
 
     /**
-     * @Groups({"user"})
+     * @Groups({"user", "user-read"})
      *
      * @var string
      * @SWG\Property(description="Nom du dépot d'appartenance du user.", type="string")

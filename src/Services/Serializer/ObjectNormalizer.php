@@ -83,7 +83,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
          * si data est de type Article : Hydratation d'un article
          */
         if($object instanceof Article) {
-            return $this->normalizeArtDet($data);
+            return $this->normalizeArtDet($data, $context['uri']);
         }
 
         return $data;
@@ -113,7 +113,11 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
      * @return mixed
      * @throws \ErrorException
      */
-    private function normalizeArtDet($data) {
+    private function normalizeArtDet($data, $uri) {
+
+        $flg_prixnet = (strpos($uri, 'prix-net') !== false);
+        $flg_logistic = (strpos($uri, 'logistic') !== false);
+        $flg_anduser = (strpos($uri, 'and-user')  !== false);
 
         // Identifiant technique de l'article dans Evolubat
         $IdArtEvoAD = $data["IdArtEvoAD"];
@@ -127,11 +131,11 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
             // instancie la propriété user du manager des services web gimel
             $this->ws_manager->setUser($user);
             // Appel service web d'un article par son identifiant technique IdArt et calcul du prix net si client connecté
-            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD, true);
+            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD, $flg_prixnet, $flg_logistic, $flg_anduser);
         }
         else {
             // Appel service web d'un article par son identifiant technique IdArt
-            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD);
+            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD, false, $flg_logistic);
         }
 
         // si le retour est de type Notif

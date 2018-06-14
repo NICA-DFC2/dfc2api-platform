@@ -7,7 +7,40 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Swagger\Annotations as SWG;
 
 /**
- * @ApiResource
+ * Entité qui représente un Article. Certain champs sont hydratés par un appel aux services web GIMEL.
+ *
+ * @ApiResource(itemOperations={
+ *     "logistic"={
+ *         "method"="GET",
+ *         "path"="/articles/{id}/logistic",
+ *         "requirements"={"id"="\d+"},
+ *         "access_control"="is_granted('ROLE_USER')"
+ *     },
+ *     "anduser"={
+ *         "method"="GET",
+ *         "path"="/articles/{id}/and-user",
+ *         "requirements"={"id"="\d+"},
+ *         "access_control"="is_granted('ROLE_USER')"
+ *     },
+ *     "prixnet"={
+ *         "method"="GET",
+ *         "path"="/articles/{id}/prix-net",
+ *         "requirements"={"id"="\d+"},
+ *         "access_control"="is_granted('ROLE_USER')"
+ *     },
+ *     "prixnetlogistic"={
+ *         "method"="GET",
+ *         "path"="/articles/{id}/prix-net/logistic",
+ *         "requirements"={"id"="\d+"},
+ *         "access_control"="is_granted('ROLE_USER')"
+ *     },
+ *     "prixnetanduser"={
+ *         "method"="GET",
+ *         "path"="/articles/{id}/prix-net/and-user",
+ *         "requirements"={"id"="\d+"},
+ *         "access_control"="is_granted('ROLE_USER')"
+ *     }
+ * })
  * @ORM\Entity
  * @ORM\Table(name="Article")
  */
@@ -169,51 +202,61 @@ class Article
     ************************ */
 
     /**
+     * @var integer|null
      * @SWG\Property(description="Identifiant unique Evolubat de l'article.", type="integer")
      */
     private $IdADWS;
 
     /**
+     * @var integer|null
      * @SWG\Property(description="Numéro unique Evolubat de l'article.", type="integer")
      */
     private $NoADWS;
 
     /**
+     * @var string|null
      * @SWG\Property(description="Code fournisseur unique Evolubat de l'article.", type="string")
      */
     private $CodADFWS;
 
     /**
+     * @var string|null
      * @SWG\Property(description="Désignation Evolubat de l'article.", type="string")
      */
     private $DesiADWS;
 
     /**
+     * @var string|null
      * @SWG\Property(description="Code unique Evolubat de l'article.", type="string")
      */
     private $CodADWS;
 
     /**
+     * @var string|null
      * @SWG\Property(description="Unité de vente de l'article.", type="string")
      */
     private $UVteADWS;
 
     /**
+     * @var string|null
      * @SWG\Property(description="Unité de stock de l'article.", type="string")
      */
     private $UStoADWS;
 
     /**
+     * @var float|null
      * @SWG\Property(description="Prix public HT de l'article.", type="decimal")
      */
     private $PrixPubADWS;
 
     /**
+     * @var float|null
      * @SWG\Property(description="Prix net HT du client connecté de l'article.", type="decimal")
      */
     private $PrixNetCliADWS;
 
     /**
+     * @var array
      * @SWG\Property(description="Stocks disponibles Evolubat de l'article dans les différents dépots.", type="array")
      */
     private $Stocks = [];
@@ -675,8 +718,14 @@ class Article
         $this->UModAD = $UModAD;
     }
 
+    /* ***********************
+
+    DEBUT :: A HYDRATER AVEC API WEB SERVICE
+
+    ************************ */
+
     /**
-     * @return mixed
+     * @return integer|null
      */
     public function getIdADWS()
     {
@@ -684,7 +733,7 @@ class Article
     }
 
     /**
-     * @param mixed $IdADWS
+     * @param integer|null $IdADWS
      */
     public function setIdADWS($IdADWS): void
     {
@@ -692,7 +741,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return integer|null
      */
     public function getNoADWS()
     {
@@ -700,7 +749,7 @@ class Article
     }
 
     /**
-     * @param mixed $NoADWS
+     * @param integer|null $NoADWS
      */
     public function setNoADWS($NoADWS): void
     {
@@ -708,7 +757,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getCodADFWS()
     {
@@ -716,7 +765,7 @@ class Article
     }
 
     /**
-     * @param mixed $CodADFWS
+     * @param string|null $CodADFWS
      */
     public function setCodADFWS($CodADFWS): void
     {
@@ -724,7 +773,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getDesiADWS()
     {
@@ -732,7 +781,7 @@ class Article
     }
 
     /**
-     * @param mixed $DesiADWS
+     * @param string|null $DesiADWS
      */
     public function setDesiADWS($DesiADWS): void
     {
@@ -740,7 +789,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getCodADWS()
     {
@@ -748,7 +797,7 @@ class Article
     }
 
     /**
-     * @param mixed $CodADWS
+     * @param string|null $CodADWS
      */
     public function setCodADWS($CodADWS): void
     {
@@ -756,7 +805,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getUVteADWS()
     {
@@ -764,7 +813,7 @@ class Article
     }
 
     /**
-     * @param mixed $UVteADWS
+     * @param string|null $UVteADWS
      */
     public function setUVteADWS($UVteADWS): void
     {
@@ -772,7 +821,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getUStoADWS()
     {
@@ -780,7 +829,7 @@ class Article
     }
 
     /**
-     * @param mixed $UStoADWS
+     * @param string|null $UStoADWS
      */
     public function setUStoADWS($UStoADWS): void
     {
@@ -788,7 +837,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return float|null
      */
     public function getPrixPubADWS()
     {
@@ -796,7 +845,7 @@ class Article
     }
 
     /**
-     * @param mixed $PrixPubADWS
+     * @param float|null $PrixPubADWS
      */
     public function setPrixPubADWS($PrixPubADWS): void
     {
@@ -804,7 +853,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return float|null
      */
     public function getPrixNetCliADWS()
     {
@@ -812,7 +861,7 @@ class Article
     }
 
     /**
-     * @param mixed $PrixNetCliADWS
+     * @param float|null $PrixNetCliADWS
      */
     public function setPrixNetCliADWS($PrixNetCliADWS): void
     {

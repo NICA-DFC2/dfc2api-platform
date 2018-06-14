@@ -1,4 +1,14 @@
 lexik_jwt_authentication:
+    # ssh private key path
     private_key_path: '%kernel.project_dir%/%env(JWT_PRIVATE_KEY_PATH)%'
+    # ssh public key path
     public_key_path: '%kernel.project_dir%/%env(JWT_PUBLIC_KEY_PATH)%'
+    # ssh key pass phrase
     pass_phrase: '%env(JWT_PASSPHRASE)%'
+
+    # token extraction settings
+    token_extractors:
+        authorization_header:      # look for a token as Authorization Header
+            enabled: true
+            prefix:  Bearer
+            name:    Authorization

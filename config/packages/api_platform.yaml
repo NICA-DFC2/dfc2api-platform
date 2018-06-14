@@ -9,7 +9,7 @@ api_platform:
                 type: header
     oauth:
           # To enable or disable oauth.
-          enabled: true
+          enabled: false
 
 framework:
     form: { enabled: true }
