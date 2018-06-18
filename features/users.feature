@@ -33,7 +33,7 @@ Feature: User
 
 
   Scenario: Read User If not authorized NOK
-    When after authentication with method "POST" on "login_check" as "NIC" with password "DFC2info", i send an authenticated "GET" request to "/api/users/3" with body:
+    When after authentication with method "POST" on "login_check" as "userr" with password "test", i send an authenticated "GET" request to "/api/users/3" with body:
     Then the response status code should be 401
     And the response should be in JSON
     And the header "Content-Type" should be equal to "application/json"
@@ -43,7 +43,7 @@ Feature: User
 
   @dropSchema
   Scenario: Read User If Authorized OK
-    When after authentication with method "POST" on "login_check" as "NICA" with password "DFC2info", i send an authenticated "GET" request to "/api/users/3" with body:
+    When after authentication with method "POST" on "login_check" as "user" with password "test", i send an authenticated "GET" request to "/api/users/3" with body:
     Then the response status code should be 200
     And the response should be in JSON
     And the header "Content-Type" should be equal to "application/ld+json"
