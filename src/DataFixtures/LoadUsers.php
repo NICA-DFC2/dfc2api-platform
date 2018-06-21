@@ -59,6 +59,17 @@ class LoadUsers extends Fixture implements OrderedFixtureInterface, ContainerAwa
         $this->addReference('user.admin', $admin);
         unset($admin);
 
+        $user = $manager->createUser();
+        $user->setUsername('NICA');
+        $user->setPlainPassword('user_nica');
+        $user->setEmail('user@example.com');
+        $user->setFullname('Standard User');
+        $user->setRaisonSociale("DFC2");
+        $user->setRoles(array('ROLE_USER'));
+        $user->setEnabled(true);
+        $manager->updateUser($user);
+        $this->addReference('user.demo_0', $user);
+        unset($user);
 
         $user = $manager->createUser();
         $user->setUsername('user');
@@ -73,9 +84,8 @@ class LoadUsers extends Fixture implements OrderedFixtureInterface, ContainerAwa
         unset($user);
 
 
-
         $faker = Faker\Factory::create('fr_FR');
-        for($i = 1; $i < 100; $i++){
+        for($i = 1; $i < 50; $i++){
             $user = $manager->createUser();
             $user->setUsername($faker->userName);
             $user->setPlainPassword($test_password);
