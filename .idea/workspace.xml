@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8028fce5-4473-4af6-b17f-55d449f8ccaf" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.dist" beforeDir="false" afterPath="$PROJECT_DIR$/.env.dist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/articles.feature" beforeDir="false" afterPath="$PROJECT_DIR$/features/articles.feature" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/users.feature" beforeDir="false" afterPath="$PROJECT_DIR$/features/users.feature" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/EventListener/AuthenticationTokenNotFoundListener.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/EventListener/AuthenticationTokenNotFoundListener.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,21 +15,32 @@
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="users.feature" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/features/users.feature">
+    <leaf>
+      <file leaf-file-name="WsManager.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Services/WsManager.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="17" column="38" lean-forward="true" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".env.dist" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.env.dist">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="519">
-              <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
+            <state relative-caret-position="-6012">
+              <caret line="309" column="7" lean-forward="true" selection-start-line="309" selection-start-column="7" selection-end-line="309" selection-end-column="7" />
+              <folding>
+                <element signature="e#32#52#0#PHP" expanded="true" />
+                <element signature="e#15969#16833#0#PHP" />
+                <element signature="e#16990#17854#0#PHP" />
+                <element signature="e#17998#18866#0#PHP" />
+                <element signature="e#19566#21143#0#PHP" />
+                <element signature="e#21700#23277#0#PHP" />
+                <element signature="e#23821#25402#0#PHP" />
+                <element signature="e#26137#27713#0#PHP" />
+                <element signature="e#28284#29860#0#PHP" />
+                <element signature="e#30447#32028#0#PHP" />
+                <element signature="e#32586#34166#0#PHP" />
+                <element signature="e#34908#36440#0#PHP" />
+                <element signature="e#36718#37374#0#PHP" />
+                <element signature="e#37499#38155#0#PHP" />
+                <element signature="e#38367#38445#0#PHP" />
+                <element signature="e#38523#38880#0#PHP" />
+                <element signature="e#38923#38995#0#PHP" />
+                <element signature="e#39070#39400#0#PHP" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -212,8 +219,8 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1920" />
-    <option name="y" value="21" />
+    <option name="x" value="14" />
+    <option name="y" value="26" />
     <option name="width" value="1889" />
     <option name="height" value="1000" />
   </component>
@@ -235,30 +242,25 @@
             <path>
               <item name="dfc2api-platform" type="b2602c69:ProjectViewProjectNode" />
               <item name="dfc2api-platform" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="config" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="dfc2api-platform" type="b2602c69:ProjectViewProjectNode" />
               <item name="dfc2api-platform" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="config" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="packages" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Entity" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="dfc2api-platform" type="b2602c69:ProjectViewProjectNode" />
               <item name="dfc2api-platform" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="features" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="dfc2api-platform" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dfc2api-platform" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="translations" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Services" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -313,28 +315,29 @@
       <workItem from="1528699571869" duration="20388000" />
       <workItem from="1528785066281" duration="48951000" />
       <workItem from="1528956890526" duration="2572000" />
+      <workItem from="1529562316996" duration="807000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="133776000" />
+    <option name="totallyTimeSpent" value="135457000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="21" width="1889" height="1000" extended-state="0" />
+    <frame x="14" y="26" width="1889" height="1000" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24986653" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Docker" />
+      <window_info anchor="bottom" id="Docker" order="7" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="right" id="Database" order="3" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.34689265" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -458,16 +461,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Services/WsManager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5253">
-          <caret line="325" column="30" selection-start-line="325" selection-start-column="30" selection-end-line="325" selection-end-column="30" />
-          <folding>
-            <element signature="e#32#52#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/packages/security.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="719">
@@ -507,25 +500,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1564">
           <caret line="104" column="57" selection-start-line="104" selection-start-column="57" selection-end-line="104" selection-end-column="57" />
-          <folding>
-            <element signature="e#43#66#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/EventSubscriber/LocaleSubscriber.php" />
-    <entry file="file://$PROJECT_DIR$/config/packages/doctrine.yaml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/packages/nelmio_api_doc.yaml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/packages/nelmio_cors.yaml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/packages/routing.yaml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/lexik/jwt-authentication-bundle/Event/JWTNotFoundEvent.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -544,29 +522,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="5" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
-          <folding>
-            <element signature="e#36#99#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/packages/translation.yaml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/features/bootstrap/FwtEventListenerContext.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/features/fwt_event_listener.feature">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="9" lean-forward="true" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/features/bootstrap/FwtEventListenerContext.php" />
+    <entry file="file://$PROJECT_DIR$/features/fwt_event_listener.feature" />
     <entry file="file://$PROJECT_DIR$/src/Entity/Article.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="248">
@@ -588,9 +548,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="377">
           <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="31" selection-end-column="39" />
-          <folding>
-            <element signature="e#36#99#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -598,9 +555,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="343">
           <caret line="29" column="50" lean-forward="true" selection-start-line="29" selection-start-column="50" selection-end-line="29" selection-end-column="50" />
-          <folding>
-            <element signature="e#36#100#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -632,9 +586,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/packages/fos_user.yaml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/packages/api_platform.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -654,6 +605,13 @@
         <state relative-caret-position="-229" />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.env.dist">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="519">
+          <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/features/users.feature">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -661,10 +619,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.env.dist">
+    <entry file="file://$PROJECT_DIR$/src/Services/WsManager.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="519">
-          <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
+        <state relative-caret-position="-6012">
+          <caret line="309" column="7" lean-forward="true" selection-start-line="309" selection-start-column="7" selection-end-line="309" selection-end-column="7" />
+          <folding>
+            <element signature="e#32#52#0#PHP" expanded="true" />
+            <element signature="e#15969#16833#0#PHP" />
+            <element signature="e#16990#17854#0#PHP" />
+            <element signature="e#17998#18866#0#PHP" />
+            <element signature="e#19566#21143#0#PHP" />
+            <element signature="e#21700#23277#0#PHP" />
+            <element signature="e#23821#25402#0#PHP" />
+            <element signature="e#26137#27713#0#PHP" />
+            <element signature="e#28284#29860#0#PHP" />
+            <element signature="e#30447#32028#0#PHP" />
+            <element signature="e#32586#34166#0#PHP" />
+            <element signature="e#34908#36440#0#PHP" />
+            <element signature="e#36718#37374#0#PHP" />
+            <element signature="e#37499#38155#0#PHP" />
+            <element signature="e#38367#38445#0#PHP" />
+            <element signature="e#38523#38880#0#PHP" />
+            <element signature="e#38923#38995#0#PHP" />
+            <element signature="e#39070#39400#0#PHP" />
+          </folding>
         </state>
       </provider>
     </entry>
