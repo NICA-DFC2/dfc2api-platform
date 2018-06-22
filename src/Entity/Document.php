@@ -2,23 +2,35 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 
-//@ApiResource
-
-
 /**
+ * Entité qui représente une entête de document. Certain champs sont hydratés par un appel aux services web GIMEL.
  *
+ * @ApiResource(
+ *     collectionOperations = {
+ *          "header" = {
+ *              "route_name" = "api_document_header_items_get"
+ *          }
+ *     }
+ * )
  * @ORM\Entity
- * @ORM\Table(name="DocumEnt")
+ * @ORM\Table(name="Document")
  */
-class DocumEnt
+class Document
 {
     /**
-     * @ORM\Column(name="IdDE", type="integer")
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(name="IdDE", type="integer", options={"default":0}, nullable=true)
      */
     private $IdDE;
 
@@ -101,6 +113,47 @@ class DocumEnt
      * @ORM\Column(name="MotsClesAutoDE", type="text", nullable=true)
      */
     private $MotsClesAutoDE;
+
+
+    private $DocumLig;
+
+
+    public function __construct()
+    {
+        $this->DocumLig = new ArrayCollection();
+    }
+
+
+    /**
+     * @return Collection|DocumentLigne[]
+     */
+    public function getDocumLig(): Collection
+    {
+        return $this->DocumLig;
+    }
+
+    public function setDocumLig(Collection $DocumLig)
+    {
+        $this->DocumLig = $DocumLig;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param integer $Id
+     */
+    public function setId($Id): void
+    {
+        $this->id = $Id;
+    }
 
     /**
      * @return mixed

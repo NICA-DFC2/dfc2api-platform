@@ -10,14 +10,19 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  *
  * @ORM\Entity
- * @ORM\Table(name="DocumLig")
+ * @ORM\Table(name="DocumentLigne")
  */
-class DocumLig
+class DocumentLigne
 {
     /**
-     * @ORM\Column(name="IdDL", type="integer")
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(name="IdDL", type="integer", options={"default":0}, nullable=true)
      */
     private $IdDL;
 
@@ -91,8 +96,25 @@ class DocumLig
      */
     private $ComDL;
 
+
     /**
-     * @return mixed
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $Id
+     */
+    public function setId($Id): void
+    {
+        $this->id = $Id;
+    }
+
+    /**
+     * @return integer
      */
     public function getIdDL()
     {

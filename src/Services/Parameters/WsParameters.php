@@ -48,7 +48,12 @@ class WsParameters
 
     public const TYPE_PDS_SIMPLE = 'DocumentSimple';
 
-    public const TYPE_PRENDRE_PANIER = 'ValDefAjoutPanier';
+    public const TYPE_PRENDRE_VALDEF_PANIER = 'ValDefAjoutPanier';
+    public const TYPE_PRENDRE_BL = 'DocumentBL';
+    public const TYPE_PRENDRE_DEVIS = 'DocumentDevis';
+    public const TYPE_PRENDRE_CMDCLI = 'DocumentCommandeClient';
+    public const TYPE_PRENDRE_FACCLI = 'DocumentFactureClient';
+    public const TYPE_PRENDRE_PANIER = 'DocumentPanier';
 
     public const FORMAT_DOCUMENT_VIDE = ' ';
     public const FORMAT_DOCUMENT_ENT = 'Ent';

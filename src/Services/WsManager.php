@@ -971,6 +971,33 @@ class WsManager
         }
 
 
+    /* #################################################
+    *
+    * MANAGE DOCUMENTS
+    *
+    ################################################# */
+
+    /**
+     * Lecture des devis d'un client
+     * @param $format : Indique le type de retour (Tout, Entete ou ligne)
+     * @return Objets\TTRetour|\Exception|mixed
+     */
+    public function getDevis($format = WsParameters::FORMAT_DOCUMENT_VIDE)
+    {
+        $TTParamAppel = new TTParam();
+        $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
+        $TTParamAppel->addItem(new CritParam("TypePrendre", WsParameters::TYPE_PRENDRE_DEVIS));
+        $TTParamAppel->addItem(new CritParam("FormatDocument", $format));
+
+        if(!is_null($this->getUser())) {
+            $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+        }
+        $this->setParamAppel($TTParamAppel);
+
+        $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
+        return $response->decodeRetour();
+    }
+
 
     /* #################################################
      *
