@@ -44,7 +44,7 @@ install:
 
 # Run script
 script:
-  - behat
+  - bin/behat
 
 # After a build, send email notification with the build results
 notifications:

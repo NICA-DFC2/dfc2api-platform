@@ -42,7 +42,6 @@ class LoadArticles extends Fixture implements OrderedFixtureInterface
             $article->setDateCreAD($faker->dateTimeBetween('-5 years','-2 years'));
             $article->setDateModAD($faker->dateTimeBetween('-2 years', 'now'));
             $manager->persist($article);
-            var_dump($article);
             $manager->flush();
             $manager->clear();
 
