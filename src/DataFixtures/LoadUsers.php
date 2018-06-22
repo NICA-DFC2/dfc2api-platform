@@ -60,18 +60,6 @@ class LoadUsers extends Fixture implements OrderedFixtureInterface, ContainerAwa
         unset($admin);
 
         $user = $manager->createUser();
-        $user->setUsername('NICA');
-        $user->setPlainPassword('user_nica');
-        $user->setEmail('user@example.com');
-        $user->setFullname('Standard User');
-        $user->setRaisonSociale("DFC2");
-        $user->setRoles(array('ROLE_USER'));
-        $user->setEnabled(true);
-        $manager->updateUser($user);
-        $this->addReference('user.demo_0', $user);
-        unset($user);
-
-        $user = $manager->createUser();
         $user->setUsername('user');
         $user->setPlainPassword($test_password);
         $user->setEmail('user@example.com');

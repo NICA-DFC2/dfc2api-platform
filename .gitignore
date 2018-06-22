@@ -1,6 +1,8 @@
 ###> global ###
 /.idea
 /.idea/
+.idea/
+
 ###< global ###
 
 ###> symfony/framework-bundle ###
