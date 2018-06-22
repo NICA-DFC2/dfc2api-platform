@@ -30,13 +30,13 @@ env:
 # Update composer
 before-install:
     - composer self-update
-    - cp .env.test.dist .env
 
 
 
 # Install composer dependencies,
 # Create database, schema and fixtures
 install:
+  - cp .env.test.dist .env
   - composer install
   - php bin/console doctrine:database:create --env=test
   - php bin/console doctrine:schema:create --env=test
