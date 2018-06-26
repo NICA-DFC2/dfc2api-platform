@@ -23,12 +23,8 @@ services:
         resource: '../src/*'
         exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller'
-        tags: ['controller.service_arguments']
-
+    App\Services\Serializer\ObjectNormalizer:
+        arguments: [ '@api_platform.serializer.normalizer.item', '@dfc2.api.manager', '@dfc2.user.service' ]
 
     # paramétrage du service mannager
     dfc2.api.manager:
@@ -46,8 +42,13 @@ services:
         class: App\Services\UserService
         arguments: [ '@security.token_storage' ]
 
-    App\Services\Serializer\ObjectNormalizer:
-        arguments: [ '@api_platform.serializer.normalizer.item', '@dfc2.api.manager', '@dfc2.user.service' ]
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+        arguments: [ '@dfc2.api.manager', '@dfc2.user.service' ]
 
 
     # lexik_jwt_authentication EVENTS

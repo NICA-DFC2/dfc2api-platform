@@ -3,15 +3,14 @@
 namespace App\Services;
 
 use App\Entity\User;
-use App\Services\Objets\ApiKey;
 use App\Services\Objets\CntxAdmin;
+use App\Services\Parameters\WsTableNamesRetour;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 
 use App\Services\Objets\TTParam;
 use App\Services\Objets\CritParam;
-use App\Services\Objets\CntxClient;
 use App\Services\Objets\Notif;
 use App\Services\Json\ResponseDecode;
 use App\Services\Parameters\WsParameters;
@@ -28,7 +27,6 @@ class WsManager
      *
      ################################################# */
     private $cache_key_admin = 'dfc2.api.contexte.admin';
-    private $cache_key_client = 'dfc2.api.contexte.client';
 
     protected $httpheaders = array(
         'Accept' => WsParameters::ACCEPT,
@@ -130,9 +128,6 @@ class WsManager
         $url = $this->baseUrl . '?' . 'picModule=' . $module;
 
         switch($type_context) {
-            case WsTypeContext::CONTEXT_CLIENT:
-                $url .= '&' . $this->getCntxClientToString();
-                break;
             case WsTypeContext::CONTEXT_ADMIN:
                 $url .= '&' . $this->getCntxAdminToString();
                 break;
@@ -149,7 +144,8 @@ class WsManager
         }
         $this->setUrl($url);
 
-        return $this->getRequest();
+        $response = $this->getRequest();
+        return $response;
     }
 
     private function getRequest() {
@@ -177,40 +173,24 @@ class WsManager
      * @param string $password
      * @param string $algorithme
      * @return mixed
+     * @throws
      */
-    public function getDemarre(?string $login=null,?string $password=null,?string $algorithme = WsAlgorithmOpenSSL::NONE) {
+    public function getDemarre($algorithme = WsAlgorithmOpenSSL::NONE) {
+        $context = null;
         $this->getPublicKey();
 
-        if(is_null($login) && is_null($password)) {
-            if($this->cache->has($this->cache_key_admin)) {
-                $cntxAdmin =  new Objets\CntxAdmin();
-                $cntxAdmin->__parse($this->cache->get($this->cache_key_admin));
-                if($cntxAdmin->isValid()) {
-                    return $cntxAdmin;
-                }
-            }
-
-            $context = $this->getCntxAdmin($this->wsAdminUser, $this->wsAdminPassword, $algorithme);
-            if ($context instanceof CntxAdmin) {
-                // met en cache le contexte de connexion
-                $this->cache->set($this->cache_key_admin, $context->__toValsString());
+        if($this->cache->has($this->cache_key_admin)) {
+            $cntxAdmin =  new Objets\CntxAdmin();
+            $cntxAdmin->__parse($this->cache->get($this->cache_key_admin));
+            if($cntxAdmin->isValid()) {
+                return $cntxAdmin;
             }
         }
 
-        if(!is_null($login) && !is_null($password)){
-            if($this->cache->has($this->cache_key_client)) {
-                $cntxClient =  new Objets\CntxClient();
-                $cntxClient->__parse($this->cache->get($this->cache_key_client));
-                if($cntxClient->isValid()) {
-                    return $cntxClient;
-                }
-            }
-
-            $context = $this->getCntxClient($login, $password, $algorithme);
-            if($context instanceof CntxClient) {
-                // met en cache le contexte de connexion
-                $this->cache->set($this->cache_key_client, $context->__toValsString());
-            }
+        $context = $this->getCntxAdmin($this->wsAdminUser, $this->wsAdminPassword, $algorithme);
+        if ($context instanceof CntxAdmin) {
+            // met en cache le contexte de connexion
+            $this->cache->set($this->cache_key_admin, $context->__toValsString());
         }
 
         return $context;
@@ -284,20 +264,6 @@ class WsManager
      * @param $login
      * @param $password
      * @param $algorithme
-     * @return Objets\CntxClient|\Exception|mixed
-     */
-    private function getCntxClient($login, $password, $algorithme)
-    {
-        if(!is_null($login) && !is_null($password)) {
-            return $this->login($login, $password, $algorithme)->decodeCntxClient();
-        }
-        return null;
-    }
-
-    /**
-     * @param $login
-     * @param $password
-     * @param $algorithme
      * @return Objets\CntxAdmin|\Exception|mixed
      */
     private function getCntxAdmin($login, $password, $algorithme)
@@ -309,38 +275,7 @@ class WsManager
 
     /**
      * @return string
-     */
-    private function getCntxClientToString()
-    {
-        if($this->cache->has($this->cache_key_client)) {
-            $data = $this->cache->get($this->cache_key_client);
-            $contexte = new CntxClient();
-            if($contexte->__parse($data)) {
-                return 'pijDSCntxClient=' . $contexte->__toString();
-            }
-        }
-        return 'pijDSCntxClient={"ProDataSet":{}}';
-    }
-
-    /**
-     * @return CntxClient|null
-     */
-    private function getCntxClientToObject()
-    {
-        if($this->cache->has($this->cache_key_client)) {
-            $data = $this->cache->get($this->cache_key_client);
-            $contexte = new CntxClient();
-            if($contexte->__parse($data)) {
-                return $contexte;
-            }
-        }
-        return null;
-    }
-
-
-
-    /**
-     * @return string
+     * @throws
      */
     private function getCntxAdminToString()
     {
@@ -352,21 +287,6 @@ class WsManager
             }
         }
         return 'pijDSCntxClient={"ProDataSet":{}}';
-    }
-
-    /**
-     * @return CntxAdmin|null
-     */
-    private function getCntxAdminToObject()
-    {
-        if($this->cache->has($this->cache_key_admin)) {
-            $data = $this->cache->get($this->cache_key_admin);
-            $contexte = new CntxAdmin();
-            if($contexte->__parse($data)) {
-                return $contexte;
-            }
-        }
-        return null;
     }
 
 
@@ -977,26 +897,64 @@ class WsManager
     *
     ################################################# */
 
-    /**
-     * Lecture des devis d'un client
-     * @param $format : Indique le type de retour (Tout, Entete ou ligne)
-     * @return Objets\TTRetour|\Exception|mixed
-     */
-    public function getDevis($format = WsParameters::FORMAT_DOCUMENT_VIDE)
-    {
-        $TTParamAppel = new TTParam();
-        $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
-        $TTParamAppel->addItem(new CritParam("TypePrendre", WsParameters::TYPE_PRENDRE_DEVIS));
-        $TTParamAppel->addItem(new CritParam("FormatDocument", $format));
+        /**
+         * Lecture des devis d'un client
+         * @param $format : Indique le type de retour (Tout, Entete ou ligne)
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getDevis($format = WsParameters::FORMAT_DOCUMENT_VIDE)
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
+            $TTParamAppel->addItem(new CritParam("TypePrendre", WsParameters::TYPE_PRENDRE_DEVIS));
+            if ($format !== WsParameters::FORMAT_DOCUMENT_VIDE) {
+                $TTParamAppel->addItem(new CritParam("FormatDocument", $format));
+            }
+            $this->setParamAppel($TTParamAppel);
 
-        if(!is_null($this->getUser())) {
-            $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+            $TTCritSel = new TTParam();
+            if(!is_null($this->getUser())) {
+                $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                $TTCritSel->addItem(new CritParam('DateDE', 'DESC', 1, '|Tri|'));
+                $this->setCritSel($TTCritSel);
+            }
+
+            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
+            return $response->decodeRetour();
         }
-        $this->setParamAppel($TTParamAppel);
 
-        $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
-        return $response->decodeRetour();
-    }
+        /**
+         * Lecture des devis d'un client à partir d'une date
+         * @param $jour : jour de limite
+         * @param $mois : mois de limite
+         * @param $annee : annee de limite
+         * @param $format : Indique le type de retour (Tout, Entete ou ligne)
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getDevisByDate($jour, $mois, $annee, $format = WsParameters::FORMAT_DOCUMENT_VIDE)
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
+            $TTParamAppel->addItem(new CritParam("TypePrendre", WsParameters::TYPE_PRENDRE_DEVIS));
+            if ($format !== WsParameters::FORMAT_DOCUMENT_VIDE) {
+                $TTParamAppel->addItem(new CritParam("FormatDocument", $format));
+            }
+            $this->setParamAppel($TTParamAppel);
+
+            $TTCritSel = new TTParam();
+            if(!is_null($this->getUser())) {
+                $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                $TTCritSel->addItem(new CritParam('DateDE', $jour.'-'.$mois.'-'.$annee, 1));
+                $TTCritSel->addItem(new CritParam('DateDE', '>=', 2));
+                $TTCritSel->addItem(new CritParam('DateDE', 'DESC', 1, '|Tri|'));
+                $this->setCritSel($TTCritSel);
+            }
+
+            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
+            return $response->decodeRetour();
+        }
+
+
 
 
     /* #################################################

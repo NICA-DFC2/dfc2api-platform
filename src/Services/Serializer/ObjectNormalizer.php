@@ -90,9 +90,9 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
         /*
          * si data est de type Document : Hydratation d'un document
          */
-        else if($object instanceof Document) {
+        //else if($object instanceof Document) {
             //return $this->normalizeDoc($data, $context['uri']);
-        }
+        //}
 
         return $data;
     }
@@ -271,6 +271,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
      *
      * @param $user_data
      * @return mixed
+     * @throws
      */
     private function normalizeUser(User $user_data) {
         // Appel service web d'un client par son code client (CodCli)

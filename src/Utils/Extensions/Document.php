@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Services\Objets;
+namespace App\Utils\Extensions;
 
-class WsDocumEnt
+
+use App\Services\Objets\WsDocumEnt;
+
+class Document
 {
     private $IdDE = 0;
     private $IdDocDE = 0;
@@ -17,56 +20,49 @@ class WsDocumEnt
     private $MontHTDE = 0;
     private $ComDE = "";
     private $DateLivrDE = null;
-    private $IdFac = 0;
-    private $IdDepLiv = 0;
+    private $IdFac = null;
+    private $IdDepLiv = null;
     private $FlgValidDE = false;
-    private $MotsClesAutoDE = "";
+    private $MotsClesAutoDE = null;
 
     /**
-     * Constructeur
-     * Peut prendre un argument $json_object : hydrate l'objet avec la structure json passée en argument
+     * parseObject
+     * Prend un argument $json_object : hydrate l'objet avec la structure json passée en argument
      */
-    public function __construct($json_object=null) {
+    public function parseObject(WsDocumEnt $object) {
 
-        $this->setDateLivrDE('1970-01-01');
-        $this->setDateDE('1970-01-01');
-
-        if(!is_null($json_object)) {
-            if(isset($json_object->{'DateLivrDE'})) {
-                $this->setDateLivrDE($json_object->{'DateLivrDE'});
-            }
-            if(isset($json_object->{'DateDE'})) {
-                $this->setDateDE($json_object->{'DateDE'});
-            }
-            $this->setIdCli($json_object->{'IdCli'});
-            $this->setIdDE($json_object->{'IdDE'});
-            $this->setIdSoc($json_object->{'IdSoc'});
-            $this->setIdDocDE($json_object->{'IdDocDE'});
-            $this->setNumDE($json_object->{'NumDE'});
-            $this->setEtatDE($json_object->{'EtatDE'});
-            $this->setTypeDE($json_object->{'TypeDE'});
-            $this->setRefDE($json_object->{'RefDE'});
-            $this->setMontTTCDE($json_object->{'MontTTCDE'});
-            $this->setMontHTDE($json_object->{'MontHTDE'});
-            $this->setComDE($json_object->{'ComDE'});
-
-            if(isset($json_object->{'IdFac'})) {
-                $this->setIdFac($json_object->{'IdFac'});
-            }
-
-            $this->setIdDepLiv($json_object->{'IdDepLiv'});
-            $this->setFlgValidDE($json_object->{'FlgValidDE'});
-            $this->setMotsClesAutoDE($json_object->{'MotsClesAutoDE'});
+        if(!is_null($object)) {
+            $this->setDateLivrDE($object->getDateLivrDE());
+            $this->setDateDE($object->getDateDE());
+            $this->setIdCli($object->getIdCli());
+            $this->setIdDE($object->getIdDE());
+            $this->setIdSoc($object->getIdSoc());
+            $this->setIdDocDE($object->getIdDocDE());
+            $this->setNumDE($object->getNumDE());
+            $this->setEtatDE($object->getEtatDE());
+            $this->setTypeDE($object->getTypeDE());
+            $this->setRefDE($object->getRefDE());
+            $this->setMontTTCDE($object->getMontTTCDE());
+            $this->setMontHTDE($object->getMontHTDE());
+            $this->setComDE($object->getComDE());
+            $this->setIdFac($object->getIdFac());
+            $this->setIdDepLiv($object->getIdDepLiv());
+            $this->setFlgValidDE($object->getFlgValidDE());
+            $this->setMotsClesAutoDE($object->getMotsClesAutoDE());
         }
     }
 
-    public function __toString()
+    /**
+     * parseJson
+     * Convertion de l'objet en une structure JSON personnalisée
+     */
+    public function parseJson()
     {
         $string = '{';
         $string .= '"IdDE": '.$this->getIdDE().' ,';
         $string .= '"IdDocDE": '.$this->getIdDocDE().' ,';
         $string .= '"NumDE": '.$this->getNumDE().' ,';
-        $string .= '"DateDE": "'.date_format($this->getDateDE(), 'Y-m-d').'" ,';
+        $string .= '"DateDE": "'.$this->getDateDE().'" ,';
         $string .= '"IdCli": '.$this->getIdCli().' ,';
         $string .= '"IdSoc": '.$this->getIdSoc().' ,';
         $string .= '"EtatDE": "'.$this->getEtatDE().'" ,';
@@ -75,7 +71,7 @@ class WsDocumEnt
         $string .= '"MontTTCDE": '.$this->getMontTTCDE().' ,';
         $string .= '"MontHTDE": '.$this->getMontHTDE().' ,';
         $string .= '"ComDE": "'.$this->getComDE().'" ,';
-        $string .= '"DateLivrDE": "'.date_format($this->getDateLivrDE(), 'Y-m-d').'" ,';
+        $string .= '"DateLivrDE": "'.$this->getDateLivrDE().'" ,';
         $string .= '"IdFac": '.$this->getIdFac().' ,';
         $string .= '"IdDepLiv": '.$this->getIdDepLiv().' ,';
 
@@ -99,7 +95,7 @@ class WsDocumEnt
     /**
      * @param mixed $IdDE
      */
-    public function setIdDE($IdDE): void
+    public function setIdDE($IdDE)
     {
         $this->IdDE = $IdDE;
     }
@@ -115,7 +111,7 @@ class WsDocumEnt
     /**
      * @param mixed $IdDocDE
      */
-    public function setIdDocDE($IdDocDE): void
+    public function setIdDocDE($IdDocDE)
     {
         $this->IdDocDE = $IdDocDE;
     }
@@ -131,7 +127,7 @@ class WsDocumEnt
     /**
      * @param mixed $NumDE
      */
-    public function setNumDE($NumDE): void
+    public function setNumDE($NumDE)
     {
         $this->NumDE = $NumDE;
     }
@@ -147,7 +143,7 @@ class WsDocumEnt
     /**
      * @param mixed $DateDE
      */
-    public function setDateDE($DateDE): void
+    public function setDateDE($DateDE)
     {
         $this->DateDE = $DateDE;
     }
@@ -163,7 +159,7 @@ class WsDocumEnt
     /**
      * @param mixed $IdCli
      */
-    public function setIdCli($IdCli): void
+    public function setIdCli($IdCli)
     {
         $this->IdCli = $IdCli;
     }
@@ -179,7 +175,7 @@ class WsDocumEnt
     /**
      * @param mixed $IdSoc
      */
-    public function setIdSoc($IdSoc): void
+    public function setIdSoc($IdSoc)
     {
         $this->IdSoc = $IdSoc;
     }
@@ -195,7 +191,7 @@ class WsDocumEnt
     /**
      * @param mixed $EtatDE
      */
-    public function setEtatDE($EtatDE): void
+    public function setEtatDE($EtatDE)
     {
         $this->EtatDE = $EtatDE;
     }
@@ -211,7 +207,7 @@ class WsDocumEnt
     /**
      * @param mixed $TypeDE
      */
-    public function setTypeDE($TypeDE): void
+    public function setTypeDE($TypeDE)
     {
         $this->TypeDE = $TypeDE;
     }
@@ -227,7 +223,7 @@ class WsDocumEnt
     /**
      * @param mixed $RefDE
      */
-    public function setRefDE($RefDE): void
+    public function setRefDE($RefDE)
     {
         $this->RefDE = $RefDE;
     }
@@ -243,7 +239,7 @@ class WsDocumEnt
     /**
      * @param mixed $MontTTCDE
      */
-    public function setMontTTCDE($MontTTCDE): void
+    public function setMontTTCDE($MontTTCDE)
     {
         $this->MontTTCDE = $MontTTCDE;
     }
@@ -259,7 +255,7 @@ class WsDocumEnt
     /**
      * @param mixed $MontHTDE
      */
-    public function setMontHTDE($MontHTDE): void
+    public function setMontHTDE($MontHTDE)
     {
         $this->MontHTDE = $MontHTDE;
     }
@@ -275,7 +271,7 @@ class WsDocumEnt
     /**
      * @param mixed $ComDE
      */
-    public function setComDE($ComDE): void
+    public function setComDE($ComDE)
     {
         $this->ComDE = $ComDE;
     }
@@ -291,7 +287,7 @@ class WsDocumEnt
     /**
      * @param mixed $DateLivrDE
      */
-    public function setDateLivrDE($DateLivrDE): void
+    public function setDateLivrDE($DateLivrDE)
     {
         $this->DateLivrDE = $DateLivrDE;
     }
@@ -307,7 +303,7 @@ class WsDocumEnt
     /**
      * @param mixed $IdFac
      */
-    public function setIdFac($IdFac): void
+    public function setIdFac($IdFac)
     {
         $this->IdFac = $IdFac;
     }
@@ -323,7 +319,7 @@ class WsDocumEnt
     /**
      * @param mixed $IdDepLiv
      */
-    public function setIdDepLiv($IdDepLiv): void
+    public function setIdDepLiv($IdDepLiv)
     {
         $this->IdDepLiv = $IdDepLiv;
     }
@@ -339,7 +335,7 @@ class WsDocumEnt
     /**
      * @param mixed $FlgValidDE
      */
-    public function setFlgValidDE($FlgValidDE): void
+    public function setFlgValidDE($FlgValidDE)
     {
         $this->FlgValidDE = $FlgValidDE;
     }
@@ -355,10 +351,8 @@ class WsDocumEnt
     /**
      * @param mixed $MotsClesAutoDE
      */
-    public function setMotsClesAutoDE($MotsClesAutoDE): void
+    public function setMotsClesAutoDE($MotsClesAutoDE)
     {
         $this->MotsClesAutoDE = $MotsClesAutoDE;
     }
-
-
 }

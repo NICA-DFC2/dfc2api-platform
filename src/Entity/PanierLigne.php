@@ -3,16 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Core\Annotation\ApiResource;
 
-//@ApiResource
 
 /**
  *
  * @ORM\Entity
- * @ORM\Table(name="DocumentLigne")
+ * @ORM\Table(name="PanierLigne")
  */
-class DocumentLigne
+class PanierLigne
 {
     /**
      * @ORM\Column(type="integer")
@@ -108,7 +106,7 @@ class DocumentLigne
     /**
      * @param mixed $Id
      */
-    public function setId($Id): void
+    public function setId($Id)
     {
         $this->id = $Id;
     }
@@ -124,7 +122,7 @@ class DocumentLigne
     /**
      * @param mixed $IdDL
      */
-    public function setIdDL($IdDL): void
+    public function setIdDL($IdDL)
     {
         $this->IdDL = $IdDL;
     }
@@ -140,7 +138,7 @@ class DocumentLigne
     /**
      * @param mixed $IdDE
      */
-    public function setIdDE($IdDE): void
+    public function setIdDE($IdDE)
     {
         $this->IdDE = $IdDE;
     }
@@ -156,7 +154,7 @@ class DocumentLigne
     /**
      * @param mixed $IdDocDL
      */
-    public function setIdDocDL($IdDocDL): void
+    public function setIdDocDL($IdDocDL)
     {
         $this->IdDocDL = $IdDocDL;
     }
@@ -172,7 +170,7 @@ class DocumentLigne
     /**
      * @param mixed $IdDocDE
      */
-    public function setIdDocDE($IdDocDE): void
+    public function setIdDocDE($IdDocDE)
     {
         $this->IdDocDE = $IdDocDE;
     }
@@ -188,7 +186,7 @@ class DocumentLigne
     /**
      * @param mixed $IdDocSecDE
      */
-    public function setIdDocSecDE($IdDocSecDE): void
+    public function setIdDocSecDE($IdDocSecDE)
     {
         $this->IdDocSecDE = $IdDocSecDE;
     }
@@ -204,7 +202,7 @@ class DocumentLigne
     /**
      * @param mixed $IdAD
      */
-    public function setIdAD($IdAD): void
+    public function setIdAD($IdAD)
     {
         $this->IdAD = $IdAD;
     }
@@ -220,7 +218,7 @@ class DocumentLigne
     /**
      * @param mixed $NumDL
      */
-    public function setNumDL($NumDL): void
+    public function setNumDL($NumDL)
     {
         $this->NumDL = $NumDL;
     }
@@ -236,7 +234,7 @@ class DocumentLigne
     /**
      * @param mixed $NbUStoDL
      */
-    public function setNbUStoDL($NbUStoDL): void
+    public function setNbUStoDL($NbUStoDL)
     {
         $this->NbUStoDL = $NbUStoDL;
     }
@@ -252,7 +250,7 @@ class DocumentLigne
     /**
      * @param mixed $UStoDL
      */
-    public function setUStoDL($UStoDL): void
+    public function setUStoDL($UStoDL)
     {
         $this->UStoDL = $UStoDL;
     }
@@ -268,7 +266,7 @@ class DocumentLigne
     /**
      * @param mixed $MontHTDL
      */
-    public function setMontHTDL($MontHTDL): void
+    public function setMontHTDL($MontHTDL)
     {
         $this->MontHTDL = $MontHTDL;
     }
@@ -284,7 +282,7 @@ class DocumentLigne
     /**
      * @param mixed $MontTTCDL
      */
-    public function setMontTTCDL($MontTTCDL): void
+    public function setMontTTCDL($MontTTCDL)
     {
         $this->MontTTCDL = $MontTTCDL;
     }
@@ -300,7 +298,7 @@ class DocumentLigne
     /**
      * @param mixed $PrixNetDL
      */
-    public function setPrixNetDL($PrixNetDL): void
+    public function setPrixNetDL($PrixNetDL)
     {
         $this->PrixNetDL = $PrixNetDL;
     }
@@ -316,7 +314,7 @@ class DocumentLigne
     /**
      * @param mixed $NbUVteDL
      */
-    public function setNbUVteDL($NbUVteDL): void
+    public function setNbUVteDL($NbUVteDL)
     {
         $this->NbUVteDL = $NbUVteDL;
     }
@@ -332,7 +330,7 @@ class DocumentLigne
     /**
      * @param mixed $UVteDL
      */
-    public function setUVteDL($UVteDL): void
+    public function setUVteDL($UVteDL)
     {
         $this->UVteDL = $UVteDL;
     }
@@ -348,7 +346,7 @@ class DocumentLigne
     /**
      * @param mixed $ComDL
      */
-    public function setComDL($ComDL): void
+    public function setComDL($ComDL)
     {
         $this->ComDL = $ComDL;
     }

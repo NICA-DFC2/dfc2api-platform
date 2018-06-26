@@ -3,12 +3,12 @@
 namespace App\Services\Json;
 
 use App\Services\Objets\CntxAdmin;
-use App\Services\Objets\CntxClient;
 use App\Services\Objets\TTParam;
 use App\Services\Objets\CritParam;
 use App\Services\Objets\Notif;
 use App\Services\Objets\TTRetour;
 use App\Services\Objets\WsDocumEnt;
+use App\Services\Objets\WsDocumLig;
 use App\Services\Objets\WsStock;
 use App\Services\Objets\WsClient;
 use App\Services\Objets\WsArticle;
@@ -57,46 +57,12 @@ class ResponseDecode
 
     /**
      * Decode le paramètre CntxClient de la réponse
-     * contient le contexte de connexion de l'utilisateur connecté de type Client
-     * @return CntxClient|Notif|null
-     */
-    public function decodeCntxClient() {
-        if(isset($this->response->body)) {
-            if(isset($this->response->body->response->pojDSCntxClient)) {
-
-                $pojDSCntxClient= json_decode($this->response->body->response->pojDSCntxClient, false);
-
-                if(isset($pojDSCntxClient->ProDataSet->ttParam)) {
-                    $ttparam = $pojDSCntxClient->ProDataSet->ttParam[0];
-                    $CntxClient = new CntxClient(
-                        $ttparam->{'IdAdr'},
-                        $ttparam->{'IdCli'},
-                        $ttparam->{'IdDep'},
-                        $ttparam->{'IdSal'},
-                        $ttparam->{'IdSession'},
-                        $ttparam->{'IdSoc'},
-                        $ttparam->{'IdU'},
-                        $ttparam->{'Valid'}
-                    );
-                    return $CntxClient;
-                }
-                else{
-                    return $this->decodeNotif(__FUNCTION__);
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Decode le paramètre CntxClient de la réponse
      * contient le contexte de connexion de l'utilisateur connecté de type Admin
      * @return CntxAdmin|Notif|null
      */
     public function decodeCntxAdmin() {
         if(isset($this->response->body)) {
             if(isset($this->response->body->response->pojDSCntxClient)) {
-
                 $pojDSCntxClient= json_decode($this->response->body->response->pojDSCntxClient, false);
 
                 if(isset($pojDSCntxClient->ProDataSet->ttParam)) {
@@ -194,10 +160,10 @@ class ResponseDecode
                     $ttRetour->addTable($this->decodeRetourTTFacCliAtt($pojDSRetour->ProDataSet->ttFacCliAtt), WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
                 }
                 if(isset($pojDSRetour->ProDataSet->ttDocumEnt)) {
-                    $ttRetour->addTable($this->decodeRetourTTDocumEnt($pojDSRetour->ProDataSet->ttDocumEnt), WsTableNamesRetour::TABLENAME_TT_DOCUMENT);
+                    $ttRetour->addTable($this->decodeRetourTTDocumEnt($pojDSRetour->ProDataSet->ttDocumEnt), WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
                 }
                 if(isset($pojDSRetour->ProDataSet->ttDocumLig)) {
-                    $ttRetour->addTable($this->decodeRetourTTDocumLig($pojDSRetour->ProDataSet->ttDocumLig), WsTableNamesRetour::TABLENAME_TT_DOCUMLIG);
+                    $ttRetour->addTable($this->decodeRetourTTDocumLig($pojDSRetour->ProDataSet->ttDocumLig), WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
                 }
                 if(isset($pojDSRetour->ProDataSet->ttEdition)) {
                     $ttRetour->addTable($this->decodeRetourTTEdition($pojDSRetour->ProDataSet->ttEdition), WsTableNamesRetour::TABLENAME_TT_EDITION);
@@ -349,7 +315,7 @@ class ResponseDecode
     private function decodeRetourTTDocumLig($ttDocumLig){
         $ttReturn = new TTParam();
         foreach ($ttDocumLig as $item){
-            $lig = new WsDocumEnt($item);
+            $lig = new WsDocumLig($item);
             $ttReturn->addItem($lig);
         }
         return $ttReturn;

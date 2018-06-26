@@ -193,13 +193,14 @@ class CntxAdmin
     {
         return $this->Valid;
     }
-
     /**
      * @param mixed $Valid
+     * @return CntxAdmin
      */
     public function setValid($Valid)
     {
         $this->Valid = $Valid;
+        return $this;
     }
 
     /**
@@ -214,7 +215,6 @@ class CntxAdmin
             $args_date = explode('/', $args_fulldate[0]);
             // on créé la nouvelle date
             $date = new \DateTime($args_date[2].'-'.$args_date[1].'-'.$args_date[0]. ' '.$args_fulldate[1]);
-
             return ($date > new \DateTime('now'));
         }
         return false;

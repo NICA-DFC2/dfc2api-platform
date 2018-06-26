@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Services\Objets;
+namespace App\Utils\Extensions;
 
-class WsDocumLig
+
+use App\Services\Objets\WsDocumLig;
+
+class DocumentLigne
 {
     private $IdDL;
     private $IdDE;
@@ -46,57 +49,64 @@ class WsDocumLig
     private $TypePrixDL= null;
     private $ComCel= null;
 
+
     /**
-     * Constructeur
-     * Peut prendre un argument $json_object : hydrate l'objet avec la structure json passée en argument
+     * parseObject
+     * Prend un argument $json_object : hydrate l'objet avec la structure json passée en argument
+     *
+     * @param WsDocumLig $object
      */
-    public function __construct($json_object=null) {
-        if(!is_null($json_object)) {
-            $this->setIdDL($json_object->{'IdDL'});
-            $this->setIdDE($json_object->{'IdDE'});
-            $this->setIdDocDL($json_object->{'IdDocDL'});
-            $this->setIdDocDE($json_object->{'IdDocDE'});
-            $this->setIdDocSecDE($json_object->{'IdDocSecDE'});
-            $this->setIdAD($json_object->{'IdAD'});
-            $this->setNumDL($json_object->{'NumDL'});
-            $this->setNbUStoDL($json_object->{'NbUStoDL'});
-            $this->setUStoDL($json_object->{'UStoDL'});
-            $this->setMontHTDL($json_object->{'MontHTDL'});
-            $this->setMontTTCDL($json_object->{'MontTTCDL'});
-            $this->setPrixNetDL($json_object->{'PrixNetDL'});
-            $this->setNbUVteDL($json_object->{'NbUVteDL'});
-            $this->setUVteDL($json_object->{'UVteDL'});
-            $this->setComDL($json_object->{'ComDL'});
-            $this->setCodEcoTaxeDL($json_object->{'CodEcoTaxeDL'});
-            $this->setCodTgapDL($json_object->{'CodTgapDL'});
-            $this->setPoidsUVteDL($json_object->{'PoidsUVteDL'});
-            $this->setMontTVADL($json_object->{'MontTVADL'});
-            $this->setMontTgapDL($json_object->{'MontTgapDL'});
-            $this->setMontParafDL($json_object->{'MontParafDL'});
-            $this->setNbUCondDL($json_object->{'NbUCondDL'});
-            $this->setFlgBonniDL($json_object->{'FlgBonniDL'});
-            $this->setTypeQteDL($json_object->{'TypeQteDL'});
-            $this->setIdPTA($json_object->{'IdPTA'});
-            $this->setIdCel($json_object->{'IdCel'});
-            $this->setMontTTCComDL($json_object->{'MontTTCComDL'});
-            $this->setMontHTComDL($json_object->{'MontHTComDL'});
-            $this->setNbUVteComDL($json_object->{'NbUVteComDL'});
-            $this->setFlgVarDL($json_object->{'FlgVarDL'});
-            $this->setNbUStoComDL($json_object->{'NbUStoComDL'});
-            $this->setIdTA($json_object->{'IdTA'});
-            $this->setNoAD($json_object->{'NoAD'});
-            $this->setCodAD($json_object->{'CodAD'});
-            $this->setCodADDL($json_object->{'CodADDL'});
-            $this->setRefDL($json_object->{'RefDL'});
-            $this->setDesignationAD($json_object->{'DesignationAD'});
-            $this->setDesi2Art($json_object->{'Desi2Art'});
-            $this->setHASH($json_object->{'HASH'});
-            $this->setTypePrixDL($json_object->{'TypePrixDL'});
-            $this->setComCel($json_object->{'ComCel'});
+    public function parseObject(WsDocumLig $object) {
+        if(!is_null($object)) {
+            $this->setIdDL($object->getIdDL());
+            $this->setIdDE($object->getIdDE());
+            $this->setIdDocDL($object->getIdDocDL());
+            $this->setIdDocDE($object->getIdDocDE());
+            $this->setIdDocSecDE($object->getIdDocSecDE());
+            $this->setIdAD($object->getIdAD());
+            $this->setNumDL($object->getNumDL());
+            $this->setNbUStoDL($object->getNbUStoDL());
+            $this->setUStoDL($object->getUStoDL());
+            $this->setMontHTDL($object->getMontHTDL());
+            $this->setMontTTCDL($object->getMontTTCDL());
+            $this->setPrixNetDL($object->getPrixNetDL());
+            $this->setNbUVteDL($object->getNbUVteDL());
+            $this->setUVteDL($object->getUVteDL());
+            $this->setComDL($object->getComDL());
+            $this->setCodEcoTaxeDL($object->getCodEcoTaxeDL());
+            $this->setCodTgapDL($object->getCodTgapDL());
+            $this->setPoidsUVteDL($object->getPoidsUVteDL());
+            $this->setMontTVADL($object->getMontTVADL());
+            $this->setMontTgapDL($object->getMontTgapDL());
+            $this->setMontParafDL($object->getMontParafDL());
+            $this->setNbUCondDL($object->getNbUCondDL());
+            $this->setFlgBonniDL($object->getFlgBonniDL());
+            $this->setTypeQteDL($object->getTypeQteDL());
+            $this->setIdPTA($object->getIdPTA());
+            $this->setIdCel($object->getIdCel());
+            $this->setMontTTCComDL($object->getMontTTCComDL());
+            $this->setMontHTComDL($object->getMontHTComDL());
+            $this->setNbUVteComDL($object->getNbUVteComDL());
+            $this->setFlgVarDL($object->getFlgVarDL());
+            $this->setNbUStoComDL($object->getNbUStoComDL());
+            $this->setIdTA($object->getIdTA());
+            $this->setNoAD($object->getNoAD());
+            $this->setCodAD($object->getCodAD());
+            $this->setCodADDL($object->getCodADDL());
+            $this->setRefDL($object->getRefDL());
+            $this->setDesignationAD($object->getDesignationAD());
+            $this->setDesi2Art($object->getDesi2Art());
+            $this->setHASH($object->getHASH());
+            $this->setTypePrixDL($object->getTypePrixDL());
+            $this->setComCel($object->getComCel());
         }
     }
 
-    public function __toString()
+    /**
+     * parseJson
+     * Convertion de l'objet en une structure JSON personnalisée
+     */
+    public function parseJson()
     {
         $string = '{';
         $string .= '"IdDL": '.$this->getIdDL().' ,';
@@ -150,7 +160,6 @@ class WsDocumLig
 
         return $string;
     }
-
 
     public function getIdDL()
     {
@@ -804,6 +813,5 @@ class WsDocumLig
     {
         $this->ComCel = $ComCel;
     }
-
 
 }

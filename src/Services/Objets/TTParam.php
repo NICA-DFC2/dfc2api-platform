@@ -112,4 +112,24 @@ class TTParam
         return $this;
     }
 
+    /**
+     * @param ArrayCollection $params
+     * @return array
+     */
+    public function getItemsByFilter($property, $value)
+    {
+        $itemsFind = array();
+        foreach ($this->params as $param){
+            if(property_exists($param, $property)) {
+                if($param->{$property} === $value){
+                    array_push($itemsFind, $param);
+                }
+            }
+            else {
+                break;
+            }
+        }
+        return $itemsFind;
+    }
+
 }
