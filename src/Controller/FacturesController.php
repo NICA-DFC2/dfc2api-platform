@@ -9,9 +9,9 @@ use App\Services\Parameters\WsParameters;
 use App\Services\Parameters\WsTableNamesRetour;
 use App\Services\UserService;
 use App\Services\WsManager;
-use App\Utils\Devis;
 use App\Utils\ErrorRoute;
 use App\Utils\Extensions\DocumentLigne;
+use App\Utils\Facture;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,8 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Swagger\Annotations as SWG;
 
-
-class DevisController extends Controller
+class FacturesController extends Controller
 {
     /**
      * @SWG\Property(
@@ -39,7 +38,7 @@ class DevisController extends Controller
     private $user_service;
 
     /**
-     * DevisController constructor.
+     * FactureController constructor.
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {
@@ -53,43 +52,30 @@ class DevisController extends Controller
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
         $this->setCurrentUser();
-
-//        var_dump("DEVIS");
-//        $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_DEVIS, WsParameters::FORMAT_DOCUMENT_VIDE);
-//
-//        var_dump("CMDCLI");
-//        $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_CMDCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
-//
-//        var_dump("BL");
-//        $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_BL, WsParameters::FORMAT_DOCUMENT_VIDE);
-//
-//        var_dump("FACCLI");
-//        $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_FACCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
-
     }
 
     /**
-     * Liste d'entêtes de devis pour le client connecté dans un ordre décroissant.
+     * Liste d'entêtes de facture pour le client connecté dans un ordre décroissant.
      *
      * @Route(
-     *     name = "api_devis_items_get",
-     *     path = "/api/devis",
+     *     name = "api_factures_items_get",
+     *     path = "/api/factures",
      *     methods= "GET"
      * )
      * @SWG\Response(
      *     response=200,
-     *     description="Retourne une liste de devis pour le client connecté dans un ordre décroissant",
+     *     description="Retourne une liste de factures pour le client connecté dans un ordre décroissant",
      *     @SWG\Schema(
      *         type="array",
-     *         @SWG\Items(ref=@Model(type=Devis::class, groups={"full"}))
+     *         @SWG\Items(ref=@Model(type=Facture::class, groups={"full"}))
      *     )
      * )
      */
-    public function devisGetAction(Request $request)
+    public function facturesGetAction(Request $request)
     {
         // S'il n'y a pas de paramétres dans l'url on lance un appel de tout les documents
         if(is_null($request->getQueryString())) {
-            $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_DEVIS, WsParameters::FORMAT_DOCUMENT_VIDE);
+            $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_FACCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
 
             if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
                 if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
@@ -99,7 +85,7 @@ class DevisController extends Controller
                     $list_docs = array();
                     for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
                         $wsDocs = $TTParamEnt->getItem($i);
-                        $doc = new Devis();
+                        $doc = new Facture();
                         $doc->parseObject($wsDocs);
 
                         $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
@@ -120,7 +106,7 @@ class DevisController extends Controller
         }
         // S'il y a le paramétre 'd' dans l'url on lance un appel des documents à partir de la date limite
         else if(strpos($request->getQueryString(), 'd=') !== false) {
-            return $this->devisLimitGetAction($request->get('d'));
+            return $this->facturesLimitGetAction($request->get('d'));
         }
 
         return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
@@ -128,23 +114,24 @@ class DevisController extends Controller
 
 
     /**
-     * Liste de devis pour le client connecté dans une limite de date (sup. au) dans un ordre décroissant.
+     * Liste de factures pour le client connecté dans une limite de date (sup. au) dans un ordre décroissant.
      *
      * @Route(
-     *     name = "api_devis_limit_items_get",
-     *     path = "/api/devis?d={date_limit}",
-     *     methods= "GET"
+     *     name = "api_factures_limit_items_get",
+     *     path = "/api/factures?d={date_limit}",
+     *     methods= "GET",
+     *     requirements={"date_limit" = "[0-9]{4}\-[0-9]{2}\-[0-9]{2}"}
      * )
      * @SWG\Response(
      *     response=200,
-     *     description="Retourne une liste de devis à partir d'une date pour le client connecté dans un ordre décroissant",
+     *     description="Retourne une liste de factures à partir d'une date pour le client connecté dans un ordre décroissant",
      *     @SWG\Schema(
      *         type="array",
-     *         @SWG\Items(ref=@Model(type=Devis::class, groups={"full"}))
+     *         @SWG\Items(ref=@Model(type=Facture::class, groups={"full"}))
      *     )
      * )
      */
-    public function devisLimitGetAction($date_limit)
+    public function facturesLimitGetAction($date_limit)
     {
         try{
             if( !preg_match ( '/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/' , $date_limit ) )
@@ -154,7 +141,7 @@ class DevisController extends Controller
 
             $date = new \DateTime($date_limit);
 
-            $TTRetour = $this->ws_manager->getDocumentsByDate($date->format('d-m-Y'), WsParameters::TYPE_PRENDRE_DEVIS, WsParameters::FORMAT_DOCUMENT_VIDE);
+            $TTRetour = $this->ws_manager->getDocumentsByDate($date->format('d-m-Y'), WsParameters::TYPE_PRENDRE_FACCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
 
             if(!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
                 if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
@@ -164,7 +151,7 @@ class DevisController extends Controller
                     $list_docs = array();
                     for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
                         $wsDocs = $TTParamEnt->getItem($i);
-                        $doc = new Devis();
+                        $doc = new Facture();
                         $doc->parseObject($wsDocs);
 
                         $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());

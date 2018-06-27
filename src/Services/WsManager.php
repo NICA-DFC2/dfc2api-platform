@@ -898,15 +898,16 @@ class WsManager
     ################################################# */
 
         /**
-         * Lecture des devis d'un client
+         * Lecture des documents d'un client
          * @param $format : Indique le type de retour (Tout, Entete ou ligne)
+         * @param $type_prendre : Indique le type de document
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getDevis($format = WsParameters::FORMAT_DOCUMENT_VIDE)
+        public function getDocuments($type_prendre=null, $format = WsParameters::FORMAT_DOCUMENT_VIDE)
         {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
-            $TTParamAppel->addItem(new CritParam("TypePrendre", WsParameters::TYPE_PRENDRE_DEVIS));
+            $TTParamAppel->addItem(new CritParam("TypePrendre", $type_prendre));
             if ($format !== WsParameters::FORMAT_DOCUMENT_VIDE) {
                 $TTParamAppel->addItem(new CritParam("FormatDocument", $format));
             }
@@ -924,18 +925,16 @@ class WsManager
         }
 
         /**
-         * Lecture des devis d'un client à partir d'une date
-         * @param $jour : jour de limite
-         * @param $mois : mois de limite
-         * @param $annee : annee de limite
+         * Lecture des documents d'un client à partir d'une date
+         * @param $date : date de délimitation
          * @param $format : Indique le type de retour (Tout, Entete ou ligne)
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getDevisByDate($jour, $mois, $annee, $format = WsParameters::FORMAT_DOCUMENT_VIDE)
+        public function getDocumentsByDate($date, $type_prendre=null, $format = WsParameters::FORMAT_DOCUMENT_VIDE)
         {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
-            $TTParamAppel->addItem(new CritParam("TypePrendre", WsParameters::TYPE_PRENDRE_DEVIS));
+            $TTParamAppel->addItem(new CritParam("TypePrendre", $type_prendre));
             if ($format !== WsParameters::FORMAT_DOCUMENT_VIDE) {
                 $TTParamAppel->addItem(new CritParam("FormatDocument", $format));
             }
@@ -944,7 +943,7 @@ class WsManager
             $TTCritSel = new TTParam();
             if(!is_null($this->getUser())) {
                 $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-                $TTCritSel->addItem(new CritParam('DateDE', $jour.'-'.$mois.'-'.$annee, 1));
+                $TTCritSel->addItem(new CritParam('DateDE', $date, 1));
                 $TTCritSel->addItem(new CritParam('DateDE', '>=', 2));
                 $TTCritSel->addItem(new CritParam('DateDE', 'DESC', 1, '|Tri|'));
                 $this->setCritSel($TTCritSel);
@@ -953,8 +952,6 @@ class WsManager
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
         }
-
-
 
 
     /* #################################################
