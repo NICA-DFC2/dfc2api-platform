@@ -955,6 +955,29 @@ class WsManager
 
 
     /* #################################################
+    *
+    * MANAGE DOCUMENTS
+    *
+    ################################################# */
+
+        /**
+         * Lecture des factures en attentes d'un client
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getFacturesEnAttente()
+        {
+            $TTCritSel = new TTParam();
+            if(!is_null($this->getUser())) {
+                $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                $this->setCritSel($TTCritSel);
+            }
+
+            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_FACCLIATT, WsTypeContext::CONTEXT_ADMIN));
+            return $response->decodeRetour();
+        }
+
+
+    /* #################################################
      *
      * MANAGE THE PARAMETERS OF CALL
      *

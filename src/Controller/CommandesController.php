@@ -118,9 +118,8 @@ class CommandesController extends Controller
      *
      * @Route(
      *     name = "api_commandes_limit_items_get",
-     *     path = "/api/commandes?d={date_limit}",
-     *     methods= "GET",
-     *     requirements={"date_limit" = "[0-9]{4}\-[0-9]{2}\-[0-9]{2}"}
+     *     path = "/api/commandes?date_from={date_from}",
+     *     methods= "GET"
      * )
      * @SWG\Response(
      *     response=200,
@@ -131,15 +130,15 @@ class CommandesController extends Controller
      *     )
      * )
      */
-    public function commandesLimitGetAction($date_limit)
+    public function commandesLimitGetAction($date_from)
     {
         try{
-            if( !preg_match ( '/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/' , $date_limit ) )
+            if( !preg_match ( '/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/' , $date_from ) )
             {
                 return new JsonResponse(new ErrorRoute('La date renseignée est incorecte. (format autorisé yyyy-mm-dd)', 406), 406, array(), true);
             }
 
-            $date = new \DateTime($date_limit);
+            $date = new \DateTime($date_from);
 
             $TTRetour = $this->ws_manager->getDocumentsByDate($date->format('d-m-Y'), WsParameters::TYPE_PRENDRE_CMDCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
 

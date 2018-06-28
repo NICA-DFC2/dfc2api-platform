@@ -5,8 +5,6 @@ namespace App\Utils;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Services\Objets\WsDocumEnt;
 use App\Utils\Extensions\Document;
-use App\Utils\Extensions\DocumentLigne;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Entité qui représente une entête de facture. Certain champs sont hydratés par un appel aux services web GIMEL.

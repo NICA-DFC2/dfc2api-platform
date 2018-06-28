@@ -119,9 +119,8 @@ class BonsLivraisonController extends Controller
      *
      * @Route(
      *     name = "api_bonslivraison_limit_items_get",
-     *     path = "/api/bonslivraison?d={date_limit}",
-     *     methods= "GET",
-     *     requirements={"date_limit" = "[0-9]{4}\-[0-9]{2}\-[0-9]{2}"}
+     *     path = "/api/bonslivraison?date_from={date_from}",
+     *     methods= "GET"
      * )
      * @SWG\Response(
      *     response=200,
@@ -132,15 +131,15 @@ class BonsLivraisonController extends Controller
      *     )
      * )
      */
-    public function bonsLivraisonLimitGetAction($date_limit)
+    public function bonsLivraisonLimitGetAction($date_from)
     {
         try{
-            if( !preg_match ( '/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/' , $date_limit ) )
+            if( !preg_match ( '/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/' , $date_from ) )
             {
                 return new JsonResponse(new ErrorRoute('La date renseignée est incorecte. (format autorisé yyyy-mm-dd)', 406), 406, array(), true);
             }
 
-            $date = new \DateTime($date_limit);
+            $date = new \DateTime($date_from);
 
             $TTRetour = $this->ws_manager->getDocumentsByDate($date->format('d-m-Y'), WsParameters::TYPE_PRENDRE_BL, WsParameters::FORMAT_DOCUMENT_VIDE);
 

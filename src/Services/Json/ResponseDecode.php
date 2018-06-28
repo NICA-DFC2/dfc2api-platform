@@ -9,6 +9,7 @@ use App\Services\Objets\Notif;
 use App\Services\Objets\TTRetour;
 use App\Services\Objets\WsDocumEnt;
 use App\Services\Objets\WsDocumLig;
+use App\Services\Objets\WsFacCliAtt;
 use App\Services\Objets\WsStock;
 use App\Services\Objets\WsClient;
 use App\Services\Objets\WsArticle;
@@ -282,14 +283,10 @@ class ResponseDecode
     // NON TERMINEE
     private function decodeRetourTTFacCliAtt($ttFacCliAtt){
         $ttReturn = new TTParam();
-        dump($ttFacCliAtt);
-/*        foreach ($ttFacCliAtt as $item){
-            $critParam = new CritParam($item->{'NomPar'}, $item->{'ValPar'}, $item->{'IndPar'}, $item->{'FamPar'});
-            $ttReturn->addItem($critParam);
+        foreach ($ttFacCliAtt as $item){
+            $ent = new WsFacCliAtt($item);
+            $ttReturn->addItem($ent);
         }
-
-        $notif = $this->decodeNotif(__FUNCTION__);
-        $ttReturn->setNotif($notif);*/
         return $ttReturn;
     }
 
