@@ -27,6 +27,7 @@ class Facture extends Document
     private $MontTgapTableDE = array();
     private $MontParafTableDE = array();
     private $MontTvaTableDE = array();
+    private $EtatFacDE = null;
 
     public function setLigne(Ligne $ligne)
     {
@@ -150,6 +151,22 @@ class Facture extends Document
             $this->setCodOrigDE($object->{'CodOrigDE'});
             $this->setDateCloDE($object->{'DateCloDE'});
         }
+    }
+
+    /**
+     * @return EtatFacture|null
+     */
+    public function getEtatFacDE()
+    {
+        return $this->EtatFacDE;
+    }
+
+    /**
+     * @param EtatFacture|null $EtatFacDE
+     */
+    public function setEtatFacDE(EtatFacture $EtatFacDE)
+    {
+        $this->EtatFacDE = $EtatFacDE;
     }
 
     /**

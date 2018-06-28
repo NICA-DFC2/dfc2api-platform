@@ -2,6 +2,8 @@
 
 namespace App\Utils;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+
 /**
  * Entité qui représente les factures en attente de paiement. Certain champs sont hydratés par un appel aux services web GIMEL.
  *

@@ -287,6 +287,7 @@ class ResponseDecode
             $ent = new WsFacCliAtt($item);
             $ttReturn->addItem($ent);
         }
+
         return $ttReturn;
     }
 

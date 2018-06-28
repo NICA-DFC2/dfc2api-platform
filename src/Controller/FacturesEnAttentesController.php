@@ -77,7 +77,7 @@ class FacturesEnAttentesController extends Controller
     {
         // S'il n'y a pas de paramétres dans l'url on lance un appel de tout les documents
         if(is_null($request->getQueryString())) {
-            $TTRetour = $this->ws_manager->getFacturesEnAttente();
+            $TTRetour = $this->ws_manager->getFacturesEnAttentes();
 
             if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
                 if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
@@ -85,9 +85,9 @@ class FacturesEnAttentesController extends Controller
 
                     $list_docs = array();
                     for ($i = 0; $i < $TTFacCliAtt->countItems(); $i++) {
-                        $wsDocs = $TTFacCliAtt->getItem($i);
+                        $wsFacCliAtt = $TTFacCliAtt->getItem($i);
                         $doc = new FactureEnAttente();
-                        $doc->parseObject($wsDocs);
+                        $doc->parseObject($wsFacCliAtt);
                         array_push($list_docs, $doc);
                     }
 

@@ -11,7 +11,7 @@ use App\Services\UserService;
 use App\Services\WsManager;
 use App\Utils\Devis;
 use App\Utils\ErrorRoute;
-use App\Utils\Extensions\DocumentLigne;
+use App\Utils\Ligne;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,19 +53,6 @@ class DevisController extends Controller
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
         $this->setCurrentUser();
-
-//        var_dump("DEVIS");
-//        $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_DEVIS, WsParameters::FORMAT_DOCUMENT_VIDE);
-//
-//        var_dump("CMDCLI");
-//        $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_CMDCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
-//
-//        var_dump("BL");
-//        $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_BL, WsParameters::FORMAT_DOCUMENT_VIDE);
-//
-//        var_dump("FACCLI");
-//        $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_FACCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
-
     }
 
     /**
@@ -104,7 +91,7 @@ class DevisController extends Controller
 
                         $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
                         for ($iL = 0; $iL < count($wsLignes); $iL++) {
-                            $ligne = new DocumentLigne();
+                            $ligne = new Ligne();
                             $ligne->parseObject($wsLignes[$iL]);
                             $doc->setLignes($ligne);
                         }
@@ -169,7 +156,7 @@ class DevisController extends Controller
 
                         $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
                         for ($iL = 0; $iL < count($wsLignes); $iL++) {
-                            $ligne = new DocumentLigne();
+                            $ligne = new Ligne();
                             $ligne->parseObject($wsLignes[$iL]);
                             $doc->setLignes($ligne);
                         }

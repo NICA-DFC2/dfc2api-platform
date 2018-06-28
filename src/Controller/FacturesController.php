@@ -10,8 +10,9 @@ use App\Services\Parameters\WsTableNamesRetour;
 use App\Services\UserService;
 use App\Services\WsManager;
 use App\Utils\ErrorRoute;
-use App\Utils\Extensions\DocumentLigne;
+use App\Utils\EtatFacture;
 use App\Utils\Facture;
+use App\Utils\Ligne;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -90,10 +91,27 @@ class FacturesController extends Controller
 
                         $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
                         for ($iL = 0; $iL < count($wsLignes); $iL++) {
-                            $ligne = new DocumentLigne();
+                            $ligne = new Ligne();
                             $ligne->parseObject($wsLignes[$iL]);
                             $doc->setLignes($ligne);
                         }
+
+                        // Etat de la facture
+                        $TTRetourFacCliAtt = $this->ws_manager->getFactureEnAttente($doc->getIdDocDE());
+
+                        if (!is_null($TTRetourFacCliAtt) && $TTRetourFacCliAtt instanceof TTRetour) {
+                            if($TTRetourFacCliAtt->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
+                                $TTFacCliAtt = $TTRetourFacCliAtt->getTable(WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
+
+                                for ($i = 0; $i < $TTFacCliAtt->countItems(); $i++) {
+                                    $wsFacCliAtt = $TTFacCliAtt->getItem($i);
+                                    $etat = new EtatFacture();
+                                    $etat->parseObject($wsFacCliAtt);
+                                    $doc->setEtatFacDE($etat);
+                                }
+                            }
+                        }
+
                         array_push($list_docs, $doc);
                     }
 
@@ -155,10 +173,27 @@ class FacturesController extends Controller
 
                         $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
                         for ($iL = 0; $iL < count($wsLignes); $iL++) {
-                            $ligne = new DocumentLigne();
+                            $ligne = new Ligne();
                             $ligne->parseObject($wsLignes[$iL]);
                             $doc->setLignes($ligne);
                         }
+
+                        // Etat de la facture
+                        $TTRetourFacCliAtt = $this->ws_manager->getFactureEnAttente($doc->getIdDocDE());
+
+                        if (!is_null($TTRetourFacCliAtt) && $TTRetourFacCliAtt instanceof TTRetour) {
+                            if($TTRetourFacCliAtt->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
+                                $TTFacCliAtt = $TTRetourFacCliAtt->getTable(WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
+
+                                for ($i = 0; $i < $TTFacCliAtt->countItems(); $i++) {
+                                    $wsFacCliAtt = $TTFacCliAtt->getItem($i);
+                                    $etat = new EtatFacture();
+                                    $etat->parseObject($wsFacCliAtt);
+                                    $doc->setEtatFacDE($etat);
+                                }
+                            }
+                        }
+
                         array_push($list_docs, $doc);
                     }
 

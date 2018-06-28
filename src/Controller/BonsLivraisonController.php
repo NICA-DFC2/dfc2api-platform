@@ -11,7 +11,7 @@ use App\Services\UserService;
 use App\Services\WsManager;
 use App\Utils\Devis;
 use App\Utils\ErrorRoute;
-use App\Utils\Extensions\DocumentLigne;
+use App\Utils\Ligne;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -91,7 +91,7 @@ class BonsLivraisonController extends Controller
 
                         $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
                         for ($iL = 0; $iL < count($wsLignes); $iL++) {
-                            $ligne = new DocumentLigne();
+                            $ligne = new Ligne();
                             $ligne->parseObject($wsLignes[$iL]);
                             $doc->setLignes($ligne);
                         }
@@ -156,7 +156,7 @@ class BonsLivraisonController extends Controller
 
                         $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
                         for ($iL = 0; $iL < count($wsLignes); $iL++) {
-                            $ligne = new DocumentLigne();
+                            $ligne = new Ligne();
                             $ligne->parseObject($wsLignes[$iL]);
                             $doc->setLignes($ligne);
                         }
