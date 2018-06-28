@@ -119,8 +119,8 @@ class DevisController extends Controller
             }
         }
         // S'il y a le paramétre 'd' dans l'url on lance un appel des documents à partir de la date limite
-        else if(strpos($request->getQueryString(), 'd=') !== false) {
-            return $this->devisLimitGetAction($request->get('d'));
+        else if(strpos($request->getQueryString(), 'date_from=') !== false) {
+            return $this->devisLimitGetAction($request->get('date_from'));
         }
 
         return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
