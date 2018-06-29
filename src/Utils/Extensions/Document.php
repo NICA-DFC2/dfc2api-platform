@@ -110,6 +110,7 @@ class Document
     private $CodOrigDE = "";
     private $DateCloDE = null;
 
+    private $Edition = null;
     private $Lignes = null;
 
     /**
@@ -143,6 +144,24 @@ class Document
     {
         $this->Lignes->add($ligne);
     }
+
+    /**
+     * @return null
+     */
+    public function getEdition()
+    {
+        return $this->Edition;
+    }
+
+    /**
+     * @param null $Edition
+     */
+    public function setEdition($Edition)
+    {
+        $this->Edition = $Edition;
+    }
+
+
 
     /**
      * parseObject

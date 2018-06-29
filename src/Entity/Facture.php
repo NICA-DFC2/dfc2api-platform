@@ -1,26 +1,37 @@
 <?php
 
-namespace App\Utils;
+namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Services\Objets\WsDocumEnt;
 use App\Utils\Extensions\Document;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Utils\Ligne;
 
 /**
- * Entité qui représente une entête de bon de livraison. Certain champs sont hydratés par un appel aux services web GIMEL.
+ * Entité qui représente une entête de facture. Certain champs sont hydratés par un appel aux services web GIMEL.
  *
  * @ApiResource(
  *      collectionOperations={
- *          "all"={"route_name"="api_bonslivraison_items_get"},
- *          "allInLimit"={"route_name"="api_bonslivraison_limit_items_get"}
- *      }
+ *          "all"={"route_name"="api_factures_items_get"},
+ *          "allInLimit"={"route_name"="api_factures_limit_items_get"}
+ *      },
+ *     itemOperations={
+ *          "edition"={"route_name"="api_factures_edition_item_get"}
+ *     }
  * )
  *
  */
-class BonLivraison extends Document
+class Facture extends Document
 {
-    private $DateFacDE = null;
+    private $CodTvaDE = array();
+    private $BaseHTDE = array();
+    private $BaseTvaDE = array();
+    private $BaseTgapDE = array();
+    private $BaseParafDE = array();
+    private $MontTgapTableDE = array();
+    private $MontParafTableDE = array();
+    private $MontTvaTableDE = array();
+    private $EtatFacDE = null;
 
     public function setLigne(Ligne $ligne)
     {
@@ -69,9 +80,17 @@ class BonLivraison extends Document
             $this->setDateModDE($object->{'DateModDE'});
             $this->setIdDUCre($object->{'IdDUCre'});
             $this->setIdDUMod($object->{'IdDUMod'});
+            $this->setCodTvaDE($object->{'CodTvaDE'});
+            $this->setBaseHTDE($object->{'BaseHTDE'});
+            $this->setBaseTvaDE($object->{'BaseTvaDE'});
+            $this->setBaseTgapDE($object->{'BaseTgapDE'});
+            $this->setBaseParafDE($object->{'BaseParafDE'});
             $this->setMontTvaDE($object->{'MontTvaDE'});
             $this->setMontTgapDE($object->{'MontTgapDE'});
             $this->setMontParafDE($object->{'MontParafDE'});
+            $this->setMontTgapTableDE($object->{'MontTgapTableDE'});
+            $this->setMontParafTableDE($object->{'MontParafTableDE'});
+            $this->setMontTvaTableDE($object->{'MontTvaTableDE'});
             $this->setMontHTApRemDE($object->{'MontHTApRemDE'});
             $this->setMontTvaApRemDE($object->{'MontTvaApRemDE'});
             $this->setMontParafApRemDE($object->{'MontParafApRemDE'});
@@ -135,23 +154,152 @@ class BonLivraison extends Document
             $this->setFlgPFDE($object->{'FlgPFDE'});
             $this->setCodOrigDE($object->{'CodOrigDE'});
             $this->setDateCloDE($object->{'DateCloDE'});
-            $this->setDateFacDE($object->{'DateFacDE'});
         }
     }
 
     /**
-     * @return null
+     * @return EtatFacture|null
      */
-    public function getDateFacDE()
+    public function getEtatFacDE()
     {
-        return $this->DateFacDE;
+        return $this->EtatFacDE;
     }
 
     /**
-     * @param null $DateFacDE
+     * @param EtatFacture|null $EtatFacDE
      */
-    public function setDateFacDE($DateFacDE)
+    public function setEtatFacDE(EtatFacture $EtatFacDE)
     {
-        $this->DateFacDE = $DateFacDE;
+        $this->EtatFacDE = $EtatFacDE;
     }
+
+    /**
+     * @return array
+     */
+    public function getCodTvaDE()
+    {
+        return $this->CodTvaDE;
+    }
+
+    /**
+     * @param array $CodTvaDE
+     */
+    public function setCodTvaDE($CodTvaDE)
+    {
+        $this->CodTvaDE = $CodTvaDE;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBaseHTDE()
+    {
+        return $this->BaseHTDE;
+    }
+
+    /**
+     * @param array $BaseHTDE
+     */
+    public function setBaseHTDE($BaseHTDE)
+    {
+        $this->BaseHTDE = $BaseHTDE;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBaseTvaDE()
+    {
+        return $this->BaseTvaDE;
+    }
+
+    /**
+     * @param array $BaseTvaDE
+     */
+    public function setBaseTvaDE($BaseTvaDE)
+    {
+        $this->BaseTvaDE = $BaseTvaDE;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBaseTgapDE()
+    {
+        return $this->BaseTgapDE;
+    }
+
+    /**
+     * @param array $BaseTgapDE
+     */
+    public function setBaseTgapDE($BaseTgapDE)
+    {
+        $this->BaseTgapDE = $BaseTgapDE;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBaseParafDE()
+    {
+        return $this->BaseParafDE;
+    }
+
+    /**
+     * @param array $BaseParafDE
+     */
+    public function setBaseParafDE($BaseParafDE)
+    {
+        $this->BaseParafDE = $BaseParafDE;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMontTgapTableDE()
+    {
+        return $this->MontTgapTableDE;
+    }
+
+    /**
+     * @param array $MontTgapTableDE
+     */
+    public function setMontTgapTableDE($MontTgapTableDE)
+    {
+        $this->MontTgapTableDE = $MontTgapTableDE;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMontParafTableDE()
+    {
+        return $this->MontParafTableDE;
+    }
+
+    /**
+     * @param array $MontParafTableDE
+     */
+    public function setMontParafTableDE($MontParafTableDE)
+    {
+        $this->MontParafTableDE = $MontParafTableDE;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMontTvaTableDE()
+    {
+        return $this->MontTvaTableDE;
+    }
+
+    /**
+     * @param array $MontTvaTableDE
+     */
+    public function setMontTvaTableDE($MontTvaTableDE)
+    {
+        $this->MontTvaTableDE = $MontTvaTableDE;
+    }
+
+
 }

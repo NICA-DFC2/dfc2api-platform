@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Entity\User;
 use App\Services\Objets\CntxAdmin;
-use App\Services\Parameters\WsTableNamesRetour;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Cache\Simple\FilesystemCache;
@@ -169,8 +168,6 @@ class WsManager
      ################################################# */
 
     /**
-     * @param string $login
-     * @param string $password
      * @param string $algorithme
      * @return mixed
      * @throws
@@ -900,7 +897,7 @@ class WsManager
         /**
          * Lecture des documents d'un client
          * @param $format : Indique le type de retour (Tout, Entete ou ligne)
-         * @param $type_prendre : Indique le type de document
+         * @param $type_prendre : Indique le type de document à lire
          * @return Objets\TTRetour|\Exception|mixed
          */
         public function getDocuments($type_prendre=null, $format = WsParameters::FORMAT_DOCUMENT_VIDE)
@@ -927,6 +924,7 @@ class WsManager
         /**
          * Lecture des documents d'un client à partir d'une date
          * @param $date : date de délimitation
+         * @param $type_prendre : type de document à lire
          * @param $format : Indique le type de retour (Tout, Entete ou ligne)
          * @return Objets\TTRetour|\Exception|mixed
          */
@@ -997,6 +995,76 @@ class WsManager
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_FACCLIATT, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
         }
+
+
+    /* #################################################
+    *
+    * MANAGE DOCUMENTS
+    *
+    ################################################# */
+
+        /**
+         * Lecture de l'édition d'un document pour un client
+         * @param $id : identifiant du document à lire
+         * @param $type_prendre : type d'edition à lire
+         * @param $format : Indique le type de retour (Tout, BLOB, LINK)
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getEdition($id, $type_prendre=null, $format = WsParameters::FORMAT_EDITION_BLOB)
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam("TypePrendre", $type_prendre));
+            if ($format !== WsParameters::FORMAT_EDITION_VIDE) {
+                $TTParamAppel->addItem(new CritParam("FormatEdition", $format));
+            }
+            $this->setParamAppel($TTParamAppel);
+
+            $TTCritSel = new TTParam();
+            if(!is_null($this->getUser())) {
+                $TTCritSel->addItem(new CritParam('IdDocDE', $id));
+                $this->setCritSel($TTCritSel);
+            }
+
+            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_EDITION, WsTypeContext::CONTEXT_ADMIN));
+            return $response->decodeRetour();
+        }
+
+    /* #################################################
+    *
+    * MANAGE DEPOTS
+    *
+    ################################################# */
+
+    /**
+     * Lecture des depots
+     * @return Objets\TTRetour|\Exception|mixed
+     */
+    public function getDepots()
+    {
+        $this->setParamAppel(new TTParam());
+
+        $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DEPOT, WsTypeContext::CONTEXT_ADMIN));
+        return $response->decodeRetour();
+    }
+
+    /**
+     * Lecture d'un depot
+     * @param $id : identifiant du depot à lire
+     * @return Objets\TTRetour|\Exception|mixed
+     */
+    public function getDepot($id)
+    {
+        $this->setParamAppel(new TTParam());
+
+        $TTCritSel = new TTParam();
+        if(!is_null($this->getUser())) {
+            $TTCritSel->addItem(new CritParam('IdDep', $id));
+            $this->setCritSel($TTCritSel);
+        }
+
+        $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DEPOT, WsTypeContext::CONTEXT_ADMIN));
+        return $response->decodeRetour();
+    }
 
 
     /* #################################################

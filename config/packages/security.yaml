@@ -57,3 +57,5 @@ security:
         - { path: ^/api/bonslivraison, roles: [ ROLE_USER, ROLE_ADMIN ] }
         - { path: ^/api/commandes, roles: [ ROLE_USER, ROLE_ADMIN ] }
         - { path: ^/api/factures-en-attentes, roles: [ ROLE_USER, ROLE_ADMIN ] }
+
+        - { path: ^/api/editions$, roles: [ ROLE_USER, ROLE_ADMIN ] }

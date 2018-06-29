@@ -9,7 +9,8 @@ use App\Services\Parameters\WsParameters;
 use App\Services\Parameters\WsTableNamesRetour;
 use App\Services\UserService;
 use App\Services\WsManager;
-use App\Utils\Devis;
+use App\Entity\Devis;
+use App\Utils\Edition;
 use App\Utils\ErrorRoute;
 use App\Utils\Ligne;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -104,6 +105,9 @@ class DevisController extends Controller
                     return $this->json(array());
                 }
             }
+            else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+                return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+            }
         }
         // S'il y a le paramétre 'd' dans l'url on lance un appel des documents à partir de la date limite
         else if(strpos($request->getQueryString(), 'date_from=') !== false) {
@@ -120,7 +124,8 @@ class DevisController extends Controller
      * @Route(
      *     name = "api_devis_limit_items_get",
      *     path = "/api/devis?date_from={date_from}",
-     *     methods= "GET"
+     *     methods= "GET",
+     *     requirements={"date_form"}
      * )
      * @SWG\Response(
      *     response=200,
@@ -169,6 +174,9 @@ class DevisController extends Controller
                     return $this->json(array());
                 }
             }
+            else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+                return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+            }
         }
         catch(\Exception $exception)
         {
@@ -176,6 +184,53 @@ class DevisController extends Controller
         }
     }
 
+
+    /**
+     * Retourne l'édition d'un devis pour le client connecté.
+     *
+     * @Route(
+     *     name = "api_devis_edition_item_get",
+     *     path = "/api/devis/{id}/edition",
+     *     methods= "GET",
+     *     requirements={"id"="\d+"}
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne l'édition d'un devis pour le client connecté",
+     *     @SWG\Schema(
+     *         type="",
+     *         @SWG\Items(ref=@Model(type=Edition::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function editionsDevisGetAction($id)
+    {
+        $TTRetour = $this->ws_manager->getEdition($id, WsParameters::TYPE_PRENDRE_EDITION_DEVIS, WsParameters::FORMAT_EDITION_BLOB);
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_EDITION)) {
+                $TTEdition = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_EDITION);
+
+                $list_docs = array();
+                for ($i = 0; $i < $TTEdition->countItems(); $i++) {
+                    $wsEdition = $TTEdition->getItem($i);
+                    $doc = new Edition();
+                    $doc->parseObject($wsEdition);
+                    array_push($list_docs, $doc);
+                }
+
+                return $this->json($list_docs);
+            }
+            else {
+                return $this->json(array());
+            }
+        }
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
+
+        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
+    }
 
     private function setCurrentUser()
     {

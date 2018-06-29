@@ -9,7 +9,8 @@ use App\Services\Parameters\WsParameters;
 use App\Services\Parameters\WsTableNamesRetour;
 use App\Services\UserService;
 use App\Services\WsManager;
-use App\Utils\Commande;
+use App\Entity\Commande;
+use App\Utils\Edition;
 use App\Utils\ErrorRoute;
 use App\Utils\Ligne;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -103,6 +104,9 @@ class CommandesController extends Controller
                     return $this->json(array());
                 }
             }
+            else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+                return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+            }
         }
         // S'il y a le paramétre 'd' dans l'url on lance un appel des documents à partir de la date limite
         else if(strpos($request->getQueryString(), 'date_from=') !== false) {
@@ -153,6 +157,8 @@ class CommandesController extends Controller
                         $doc = new Commande();
                         $doc->parseObject($wsDocs);
 
+                        $this->ws_manager->getEditions($wsDocs->getIdDocDE(), WsParameters::TYPE_PRENDRE_EDITION_CMDCLI, WsParameters::FORMAT_EDITION_BLOB);
+
                         $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
                         for ($iL = 0; $iL < count($wsLignes); $iL++) {
                             $ligne = new Ligne();
@@ -168,6 +174,9 @@ class CommandesController extends Controller
                     return $this->json(array());
                 }
             }
+            else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+                return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+            }
         }
         catch(\Exception $exception)
         {
@@ -175,6 +184,52 @@ class CommandesController extends Controller
         }
     }
 
+    /**
+     * Retourne l'édition d'une commande pour le client connecté.
+     *
+     * @Route(
+     *     name = "api_commandes_edition_item_get",
+     *     path = "/api/commandes/{id}/edition",
+     *     methods= "GET",
+     *     requirements={"id"="\d+"}
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne l'édition d'une commande pour le client connecté",
+     *     @SWG\Schema(
+     *         type="",
+     *         @SWG\Items(ref=@Model(type=Edition::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function editionsCommandeGetAction($id)
+    {
+        $TTRetour = $this->ws_manager->getEdition($id, WsParameters::TYPE_PRENDRE_EDITION_CMDCLI, WsParameters::FORMAT_EDITION_BLOB);
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_EDITION)) {
+                $TTEdition = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_EDITION);
+
+                $list_docs = array();
+                for ($i = 0; $i < $TTEdition->countItems(); $i++) {
+                    $wsEdition = $TTEdition->getItem($i);
+                    $doc = new Edition();
+                    $doc->parseObject($wsEdition);
+                    array_push($list_docs, $doc);
+                }
+
+                return $this->json($list_docs);
+            }
+            else {
+                return $this->json(array());
+            }
+        }
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
+
+        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
+    }
 
     private function setCurrentUser()
     {

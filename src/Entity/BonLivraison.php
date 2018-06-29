@@ -1,28 +1,29 @@
 <?php
 
-namespace App\Utils;
+namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Services\Objets\WsDocumEnt;
 use App\Utils\Extensions\Document;
+use App\Utils\Ligne;
 
 /**
- * Entité qui représente une entête de devis. Certain champs sont hydratés par un appel aux services web GIMEL.
+ * Entité qui représente une entête de bon de livraison. Certain champs sont hydratés par un appel aux services web GIMEL.
  *
  * @ApiResource(
  *      collectionOperations={
- *          "all"={"route_name"="api_devis_items_get"},
- *          "allInLimit"={"route_name"="api_devis_limit_items_get"}
- *      }
+ *          "all"={"route_name"="api_bonslivraison_items_get"},
+ *          "allInLimit"={"route_name"="api_bonslivraison_limit_items_get"}
+ *      },
+ *     itemOperations={
+ *          "edition"={"route_name"="api_bonslivraison_edition_item_get"}
+ *     }
  * )
  *
  */
-class Devis extends Document
+class BonLivraison extends Document
 {
-    private $DateRelDE = null;
-    private $IdSalRel = null;
-    private $NatDE = null;
-    private $DateRealDE = null;
+    private $DateFacDE = null;
 
     public function setLigne(Ligne $ligne)
     {
@@ -137,77 +138,23 @@ class Devis extends Document
             $this->setFlgPFDE($object->{'FlgPFDE'});
             $this->setCodOrigDE($object->{'CodOrigDE'});
             $this->setDateCloDE($object->{'DateCloDE'});
-            $this->setDateRelDE($object->{'DateRelDE'});
-            $this->setIdSalRel($object->{'IdSalRel'});
-            $this->setNatDE($object->{'NatDE'});
-            $this->setDateRealDE($object->{'DateRealDE'});
+            $this->setDateFacDE($object->{'DateFacDE'});
         }
     }
 
-
     /**
      * @return null
      */
-    public function getDateRelDE()
+    public function getDateFacDE()
     {
-        return $this->DateRelDE;
+        return $this->DateFacDE;
     }
 
     /**
-     * @param null $DateRelDE
+     * @param null $DateFacDE
      */
-    public function setDateRelDE($DateRelDE)
+    public function setDateFacDE($DateFacDE)
     {
-        $this->DateRelDE = $DateRelDE;
+        $this->DateFacDE = $DateFacDE;
     }
-
-    /**
-     * @return null
-     */
-    public function getIdSalRel()
-    {
-        return $this->IdSalRel;
-    }
-
-    /**
-     * @param null $IdSalRel
-     */
-    public function setIdSalRel($IdSalRel)
-    {
-        $this->IdSalRel = $IdSalRel;
-    }
-
-    /**
-     * @return null
-     */
-    public function getNatDE()
-    {
-        return $this->NatDE;
-    }
-
-    /**
-     * @param null $NatDE
-     */
-    public function setNatDE($NatDE)
-    {
-        $this->NatDE = $NatDE;
-    }
-
-    /**
-     * @return null
-     */
-    public function getDateRealDE()
-    {
-        return $this->DateRealDE;
-    }
-
-    /**
-     * @param null $DateRealDE
-     */
-    public function setDateRealDE($DateRealDE)
-    {
-        $this->DateRealDE = $DateRealDE;
-    }
-
-
 }

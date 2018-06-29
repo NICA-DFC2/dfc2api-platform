@@ -7,6 +7,7 @@ use App\Entity\Article;
 use App\Entity\Document;
 use App\Entity\User;
 use App\Services\Objets\Notif;
+use App\Services\Objets\TTRetour;
 use App\Services\Parameters\WsParameters;
 use App\Services\UserService;
 use App\Services\WsManager;
@@ -165,7 +166,16 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
                 if (!is_null($stocks)) {
                     // Création d'un tableau des stocks simplifié
                     for ($i = 0; $i < $stocks->countItems(); $i++) {
-                        array_push($arrayStocks, json_decode($stocks->getItem($i)->__toString()));
+                        $wsStock = $stocks->getItem($i);
+
+                        $TTDepotRetour = $this->ws_manager->getDepot($wsStock->getIdDep());
+                        var_dump($TTDepotRetour);
+                        if(!is_null($TTDepotRetour) && $TTDepotRetour instanceof TTRetour) {
+                            $TTDepot = $TTDepotRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DEPOT);
+                            $wsDepot = $TTDepot->getItem(0);
+                            $wsStock->setDepot($wsDepot);
+                        }
+                        array_push($arrayStocks, json_decode($wsStock->__toString()));
                     }
                 }
 

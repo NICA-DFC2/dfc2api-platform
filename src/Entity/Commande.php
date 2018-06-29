@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Utils;
+namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Services\Objets\WsDocumEnt;
 use App\Utils\Extensions\Document;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Utils\Ligne;
 
 /**
  * Entité qui représente une entête de commande. Certain champs sont hydratés par un appel aux services web GIMEL.
@@ -14,7 +14,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  *      collectionOperations={
  *          "all"={"route_name"="api_commandes_items_get"},
  *          "allInLimit"={"route_name"="api_commandes_limit_items_get"}
- *      }
+ *      },
+ *     itemOperations={
+ *          "edition"={"route_name"="api_commandes_edition_item_get"}
+ *     }
  * )
  *
  */

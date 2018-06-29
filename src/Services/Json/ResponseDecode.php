@@ -7,8 +7,10 @@ use App\Services\Objets\TTParam;
 use App\Services\Objets\CritParam;
 use App\Services\Objets\Notif;
 use App\Services\Objets\TTRetour;
+use App\Services\Objets\WsDepot;
 use App\Services\Objets\WsDocumEnt;
 use App\Services\Objets\WsDocumLig;
+use App\Services\Objets\WsEdition;
 use App\Services\Objets\WsFacCliAtt;
 use App\Services\Objets\WsStock;
 use App\Services\Objets\WsClient;
@@ -146,6 +148,9 @@ class ResponseDecode
                 if(isset($pojDSRetour->ProDataSet->ttParam)) {
                     $ttRetour->addTable($this->decodeRetourTTParam($pojDSRetour->ProDataSet->ttParam), WsTableNamesRetour::TABLENAME_TT_PARAM);
                 }
+                if(isset($pojDSRetour->ProDataSet->ttDepot)) {
+                    $ttRetour->addTable($this->decodeRetourTTDepot($pojDSRetour->ProDataSet->ttDepot), WsTableNamesRetour::TABLENAME_TT_DEPOT);
+                }
                 if(isset($pojDSRetour->ProDataSet->ttCli)) {
                     $ttRetour->addTable($this->decodeRetourTTCli($pojDSRetour->ProDataSet->ttCli), WsTableNamesRetour::TABLENAME_TT_CLI);
                 }
@@ -227,6 +232,20 @@ class ResponseDecode
             $ttReturn->addItem($client);
         }
 
+        return $ttReturn;
+    }
+
+    /**
+     * Decode la collection de depots de la réponse
+     * @param $ttDepot
+     * @return TTParam
+     */
+    private function decodeRetourTTDepot($ttDepot){
+        $ttReturn = new TTParam();
+        foreach ($ttDepot as $item){
+            $depot = new WsDepot($item);
+            $ttReturn->addItem($depot);
+        }
         return $ttReturn;
     }
 
@@ -324,13 +343,10 @@ class ResponseDecode
     private function decodeRetourTTEdition($ttEdition){
         $ttReturn = new TTParam();
         dump($ttEdition);
-/*        foreach ($ttEdition as $item){
-            $critParam = new CritParam($item->{'NomPar'}, $item->{'ValPar'}, $item->{'IndPar'}, $item->{'FamPar'});
-            $ttReturn->addItem($critParam);
+        foreach ($ttEdition as $item){
+            $lig = new WsEdition($item);
+            $ttReturn->addItem($lig);
         }
-
-        $notif = $this->decodeNotif(__FUNCTION__);
-        $ttReturn->setNotif($notif);*/
         return $ttReturn;
     }
 
