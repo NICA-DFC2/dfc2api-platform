@@ -7,7 +7,7 @@
 .idea/misc.xml
 .idea/php-test-framework.xml
 .idea/php.xml
-
+.idea/modules.xml
 # Sensitive or high-churn files:
 .idea/**/dataSources/
 .idea/**/dataSources.ids

@@ -15,15 +15,15 @@ class LoadArticles extends Fixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create('fr_FR');
-        for($i = 0; $i < 500; $i++){
+        for($i = 0; $i < 50; $i++){
             $article = new Article();
             $article->setIdArtEvoAD($faker->numberBetween(10000,39999));
             $article->setDesiAD($faker->text(50));
             $article->setDesiPrincAD($faker->text(50));
-            $article->setDescriWebAD($faker->realText(200, 2));
-            $article->setDescriCatalogAD($faker->realText(200, 2));
+            $article->setDescriWebAD($faker->text(200));
+            $article->setDescriCatalogAD($faker->text(200));
             $article->setMediasAD($faker->imageUrl(640,480, 'cats', true, 'DFC2', false));
-            $article->setPlusAD($faker->realText(200, 2));
+            $article->setPlusAD($faker->text(200));
             $article->setMotsClesAD($faker->sentence(6));
             $article->setOrdreAD($faker->numberBetween(0,5));
             $article->setNumDecliAD($faker->numberBetween(1,200));

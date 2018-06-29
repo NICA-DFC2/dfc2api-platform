@@ -43,6 +43,7 @@ class LoadUsers extends Fixture implements OrderedFixtureInterface, ContainerAwa
         $superAdmin->setRoles(array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_USER'));
         $superAdmin->setEnabled(true);
         $superAdmin->setPlainPassword($test_password);
+        $superAdmin->setCode("PERSO124");
         $manager->updateUser($superAdmin);
         $this->addReference('user.super_admin', $superAdmin);
         unset($superAdmin);
@@ -55,6 +56,7 @@ class LoadUsers extends Fixture implements OrderedFixtureInterface, ContainerAwa
         $admin->setRoles(array('ROLE_ADMIN', 'ROLE_USER'));
         $admin->setEnabled(true);
         $admin->setPlainPassword($test_password);
+        $admin->setCode("PERSO124");
         $manager->updateUser($admin);
         $this->addReference('user.admin', $admin);
         unset($admin);
@@ -67,13 +69,14 @@ class LoadUsers extends Fixture implements OrderedFixtureInterface, ContainerAwa
         $user->setRaisonSociale("DFC2");
         $user->setRoles(array('ROLE_USER'));
         $user->setEnabled(true);
+        $user->setCode("PERSO124");
         $manager->updateUser($user);
         $this->addReference('user.demo_0', $user);
         unset($user);
 
 
         $faker = Faker\Factory::create('fr_FR');
-        for($i = 1; $i < 50; $i++){
+        for($i = 1; $i < 10; $i++){
             $user = $manager->createUser();
             $user->setUsername($faker->userName);
             $user->setPlainPassword($test_password);
