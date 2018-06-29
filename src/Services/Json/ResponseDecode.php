@@ -12,6 +12,7 @@ use App\Services\Objets\WsDocumEnt;
 use App\Services\Objets\WsDocumLig;
 use App\Services\Objets\WsEdition;
 use App\Services\Objets\WsFacCliAtt;
+use App\Services\Objets\WsLibelle;
 use App\Services\Objets\WsStock;
 use App\Services\Objets\WsClient;
 use App\Services\Objets\WsArticle;
@@ -177,6 +178,9 @@ class ResponseDecode
                 if(isset($pojDSRetour->ProDataSet->ttSal)) {
                     $ttRetour->addTable($this->decodeRetourTTSal($pojDSRetour->ProDataSet->ttSal), WsTableNamesRetour::TABLENAME_TT_SAL);
                 }
+                if(isset($pojDSRetour->ProDataSet->ttLib)) {
+                    $ttRetour->addTable($this->decodeRetourTTLib($pojDSRetour->ProDataSet->ttLib), WsTableNamesRetour::TABLENAME_TT_LIB);
+                }
 
                 return $ttRetour;
             }
@@ -245,6 +249,20 @@ class ResponseDecode
         foreach ($ttDepot as $item){
             $depot = new WsDepot($item);
             $ttReturn->addItem($depot);
+        }
+        return $ttReturn;
+    }
+
+    /**
+     * Decode la collection de libellés de la réponse
+     * @param $ttLib
+     * @return TTParam
+     */
+    private function decodeRetourTTLib($ttLib){
+        $ttReturn = new TTParam();
+        foreach ($ttLib as $item){
+            $libelle = new WsLibelle($item);
+            $ttReturn->addItem($libelle);
         }
         return $ttReturn;
     }
