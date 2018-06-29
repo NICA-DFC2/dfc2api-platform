@@ -5,6 +5,7 @@ namespace App\Services\Parameters;
 class WsTableNamesRetour
 {
     public const TABLENAME_TT_PARAM = 'ttParam';
+    public const TABLENAME_TT_LIB = 'ttLib';
     public const TABLENAME_TT_CLI = 'ttCli';
     public const TABLENAME_TT_ARTDET = 'ttArtDet';
     public const TABLENAME_TT_STOCK = 'ttStock';

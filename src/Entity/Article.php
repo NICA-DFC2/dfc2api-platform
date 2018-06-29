@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Swagger\Annotations as SWG;
@@ -45,6 +47,7 @@ use Swagger\Annotations as SWG;
  * })
  * @ORM\Entity
  * @ORM\Table(name="Article")
+ * @ApiFilter(SearchFilter::class, properties={"IdAD": "exact", "DesiAD": "partial", "DesiPrincAD": "partial"})
  */
 class Article
 {
@@ -70,6 +73,7 @@ class Article
     private $DesiAD;
 
     /**
+     * Désignation commune à tous les articles de la même déclinaison
      * @ORM\Column(name="DesiPrincAD", type="string", length=255, nullable=true)
      */
     private $DesiPrincAD;
