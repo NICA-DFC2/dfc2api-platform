@@ -90,7 +90,7 @@ class LibellesController extends Controller
                 return $this->json($list_libelles);
             }
 
-            return $this->json(new Depot());
+            return $this->json(new Libelle());
         }
         else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
             return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);

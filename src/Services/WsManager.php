@@ -854,6 +854,7 @@ class WsManager
                     $filter_depots = array(WsParameters::ID_DEP_PLATEFORME, intval($this->getUser()->getIdDepotCli()));
                 }
             }
+            $this->setCritSel(new TTParam());
 
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_ARTICLE, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour($filter_depots);
@@ -880,6 +881,8 @@ class WsManager
             }
             $this->setParamAppel($TTParamAppel);
 
+            $this->setCritSel(new TTParam());
+
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
         }
@@ -898,6 +901,8 @@ class WsManager
                 $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
             }
             $this->setParamAppel($TTParamAppel);
+
+            $this->setCritSel(new TTParam());
 
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
@@ -929,8 +934,8 @@ class WsManager
             $TTCritSel = new TTParam();
             if(!is_null($this->getUser())) {
                 $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-                $this->setCritSel($TTCritSel);
             }
+            $this->setCritSel($TTCritSel);
 
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
@@ -954,8 +959,8 @@ class WsManager
             $TTCritSel = new TTParam();
             if(!is_null($this->getUser())) {
                 $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-                $this->setCritSel($TTCritSel);
             }
+            $this->setCritSel($TTCritSel);
 
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_FACCLIATT, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
@@ -973,9 +978,9 @@ class WsManager
             $TTCritSel = new TTParam();
             if(!is_null($this->getUser())) {
                 $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-                $TTCritSel->addItem(new CritParam('IdFac', $id));
-                $this->setCritSel($TTCritSel);
             }
+            $TTCritSel->addItem(new CritParam('IdFac', $id));
+            $this->setCritSel($TTCritSel);
 
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_FACCLIATT, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
@@ -1005,10 +1010,8 @@ class WsManager
             $this->setParamAppel($TTParamAppel);
 
             $TTCritSel = new TTParam();
-            if(!is_null($this->getUser())) {
-                $TTCritSel->addItem(new CritParam('IdDocDE', $id));
-                $this->setCritSel($TTCritSel);
-            }
+            $TTCritSel->addItem(new CritParam('IdDocDE', $id));
+            $this->setCritSel($TTCritSel);
 
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_EDITION, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
@@ -1027,6 +1030,7 @@ class WsManager
         public function getDepots()
         {
             $this->setParamAppel(new TTParam());
+            $this->setCritSel(new TTParam());
 
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DEPOT, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
@@ -1042,10 +1046,8 @@ class WsManager
             $this->setParamAppel(new TTParam());
 
             $TTCritSel = new TTParam();
-            if(!is_null($this->getUser())) {
-                $TTCritSel->addItem(new CritParam('IdDep', $id));
-                $this->setCritSel($TTCritSel);
-            }
+            $TTCritSel->addItem(new CritParam('IdDep', $id));
+            $this->setCritSel($TTCritSel);
 
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DEPOT, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
@@ -1064,6 +1066,7 @@ class WsManager
         public function getLibelles()
         {
             $this->setParamAppel(new TTParam());
+            $this->setCritSel(new TTParam());
 
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_LIBELLE, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
