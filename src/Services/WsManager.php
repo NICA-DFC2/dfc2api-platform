@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entity\User;
+use App\Services\Filter\WsFilter;
 use App\Services\Objets\CntxAdmin;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -45,6 +46,7 @@ class WsManager
     protected $publicKeyVal;
     protected $cache;
     protected $user;
+    protected $filter;
 
 
     /* #################################################
@@ -90,6 +92,20 @@ class WsManager
     private function setUrl($url)
     {
         $this->url = $url;
+    }
+
+    /**
+     * @return array
+     */
+    private function getFilter()
+    {
+        $filter = new WsFilter($this->filter);
+        return $filter->getCritSel();
+    }
+
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
     }
 
 
@@ -913,37 +929,6 @@ class WsManager
             $TTCritSel = new TTParam();
             if(!is_null($this->getUser())) {
                 $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-                $TTCritSel->addItem(new CritParam('DateDE', 'DESC', 1, '|Tri|'));
-                $this->setCritSel($TTCritSel);
-            }
-
-            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
-            return $response->decodeRetour();
-        }
-
-        /**
-         * Lecture des documents d'un client à partir d'une date
-         * @param $date : date de délimitation
-         * @param $type_prendre : type de document à lire
-         * @param $format : Indique le type de retour (Tout, Entete ou ligne)
-         * @return Objets\TTRetour|\Exception|mixed
-         */
-        public function getDocumentsByDate($date, $type_prendre=null, $format = WsParameters::FORMAT_DOCUMENT_VIDE)
-        {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
-            $TTParamAppel->addItem(new CritParam("TypePrendre", $type_prendre));
-            if ($format !== WsParameters::FORMAT_DOCUMENT_VIDE) {
-                $TTParamAppel->addItem(new CritParam("FormatDocument", $format));
-            }
-            $this->setParamAppel($TTParamAppel);
-
-            $TTCritSel = new TTParam();
-            if(!is_null($this->getUser())) {
-                $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-                $TTCritSel->addItem(new CritParam('DateDE', $date, 1));
-                $TTCritSel->addItem(new CritParam('DateDE', '>=', 2));
-                $TTCritSel->addItem(new CritParam('DateDE', 'DESC', 1, '|Tri|'));
                 $this->setCritSel($TTCritSel);
             }
 
@@ -954,7 +939,7 @@ class WsManager
 
     /* #################################################
     *
-    * MANAGE DOCUMENTS
+    * MANAGE FACTURES EN ATTENTES
     *
     ################################################# */
 
@@ -999,7 +984,7 @@ class WsManager
 
     /* #################################################
     *
-    * MANAGE DOCUMENTS
+    * MANAGE EDITION
     *
     ################################################# */
 
@@ -1035,36 +1020,54 @@ class WsManager
     *
     ################################################# */
 
-    /**
-     * Lecture des depots
-     * @return Objets\TTRetour|\Exception|mixed
-     */
-    public function getDepots()
-    {
-        $this->setParamAppel(new TTParam());
+        /**
+         * Lecture des depots
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getDepots()
+        {
+            $this->setParamAppel(new TTParam());
 
-        $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DEPOT, WsTypeContext::CONTEXT_ADMIN));
-        return $response->decodeRetour();
-    }
-
-    /**
-     * Lecture d'un depot
-     * @param $id : identifiant du depot à lire
-     * @return Objets\TTRetour|\Exception|mixed
-     */
-    public function getDepot($id)
-    {
-        $this->setParamAppel(new TTParam());
-
-        $TTCritSel = new TTParam();
-        if(!is_null($this->getUser())) {
-            $TTCritSel->addItem(new CritParam('IdDep', $id));
-            $this->setCritSel($TTCritSel);
+            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DEPOT, WsTypeContext::CONTEXT_ADMIN));
+            return $response->decodeRetour();
         }
 
-        $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DEPOT, WsTypeContext::CONTEXT_ADMIN));
-        return $response->decodeRetour();
-    }
+        /**
+         * Lecture d'un depot
+         * @param $id : identifiant du depot à lire
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getDepot($id)
+        {
+            $this->setParamAppel(new TTParam());
+
+            $TTCritSel = new TTParam();
+            if(!is_null($this->getUser())) {
+                $TTCritSel->addItem(new CritParam('IdDep', $id));
+                $this->setCritSel($TTCritSel);
+            }
+
+            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DEPOT, WsTypeContext::CONTEXT_ADMIN));
+            return $response->decodeRetour();
+        }
+
+    /* #################################################
+    *
+    * MANAGE LIBELLES
+    *
+    ################################################# */
+
+        /**
+         * Lecture des libellés
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getLibelles()
+        {
+            $this->setParamAppel(new TTParam());
+
+            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_LIBELLE, WsTypeContext::CONTEXT_ADMIN));
+            return $response->decodeRetour();
+        }
 
 
     /* #################################################
@@ -1110,12 +1113,20 @@ class WsManager
      */
     private function setCritSel(TTParam $critSel)
     {
+        $filters = $this->getFilter();
+        if(!is_null($filters) && count($filters) > 0) {
+            foreach ($filters as $param) {
+                $critSel->addItem($param);
+            }
+        }
+
         if($critSel->countItems() > 0) {
             $this->critSel = 'pijDSCritSel={"ProDataSet":{"ttParam":' . $critSel->__toString() . '}}';
         }
         else {
             $this->critSel = 'pijDSCritSel={"ProDataSet":{}}';
         }
+
         return $this->critSel;
     }
 

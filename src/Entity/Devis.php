@@ -12,8 +12,7 @@ use App\Utils\Extensions\Document;
  *
  * @ApiResource(
  *      collectionOperations={
- *          "all"={"route_name"="api_devis_items_get"},
- *          "allInLimit"={"route_name"="api_devis_limit_items_get"}
+ *          "all"={"route_name"="api_devis_items_get"}
  *      },
  *     itemOperations={
  *          "edition"={"route_name"="api_devis_edition_item_get"}

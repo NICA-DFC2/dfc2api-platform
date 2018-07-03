@@ -13,7 +13,6 @@ use App\Utils\Ligne;
  * @ApiResource(
  *      collectionOperations={
  *          "all"={"route_name"="api_bonslivraison_items_get"},
- *          "allInLimit"={"route_name"="api_bonslivraison_limit_items_get"}
  *      },
  *     itemOperations={
  *          "edition"={"route_name"="api_bonslivraison_edition_item_get"}

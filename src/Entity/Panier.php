@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 
+
+//@ApiResource
 /**
- * @ApiResource
+ *
  *
  * Entité qui représente une entête de panier. Certain champs sont hydratés par un appel aux services web GIMEL.
  *

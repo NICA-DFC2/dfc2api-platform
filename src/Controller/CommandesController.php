@@ -56,7 +56,7 @@ class CommandesController extends Controller
     }
 
     /**
-     * Liste d'entêtes des commandes pour le client connecté dans un ordre décroissant.
+     * Liste d'entêtes des commandes pour le client connecté.
      *
      * @Route(
      *     name = "api_commandes_items_get",
@@ -65,7 +65,7 @@ class CommandesController extends Controller
      * )
      * @SWG\Response(
      *     response=200,
-     *     description="Retourne une liste des commandes pour le client connecté dans un ordre décroissant",
+     *     description="Retourne une liste des commandes pour le client connecté",
      *     @SWG\Schema(
      *         type="array",
      *         @SWG\Items(ref=@Model(type=Commande::class, groups={"full"}))
@@ -74,113 +74,38 @@ class CommandesController extends Controller
      */
     public function commandesGetAction(Request $request)
     {
-        // S'il n'y a pas de paramétres dans l'url on lance un appel de tout les documents
-        if(is_null($request->getQueryString())) {
-            $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_CMDCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
+        $this->ws_manager->setFilter($request->query->all());
 
-            if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
-                if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
-                    $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
-                    $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
+        $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_CMDCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
 
-                    $list_docs = array();
-                    for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
-                        $wsDocs = $TTParamEnt->getItem($i);
-                        $doc = new Commande();
-                        $doc->parseObject($wsDocs);
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
+                $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
+                $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
 
-                        $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
-                        for ($iL = 0; $iL < count($wsLignes); $iL++) {
-                            $ligne = new Ligne();
-                            $ligne->parseObject($wsLignes[$iL]);
-                            $doc->setLignes($ligne);
-                        }
-                        array_push($list_docs, $doc);
+                $list_docs = array();
+                for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
+                    $wsDocs = $TTParamEnt->getItem($i);
+                    $doc = new Commande();
+                    $doc->parseObject($wsDocs);
+
+                    $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
+                    for ($iL = 0; $iL < count($wsLignes); $iL++) {
+                        $ligne = new Ligne();
+                        $ligne->parseObject($wsLignes[$iL]);
+                        $doc->setLignes($ligne);
                     }
+                    array_push($list_docs, $doc);
+                }
 
-                    return $this->json($list_docs);
-                }
-                else {
-                    return $this->json(array());
-                }
+                return $this->json($list_docs);
             }
-            else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
-                return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+            else {
+                return $this->json(array());
             }
         }
-        // S'il y a le paramétre 'd' dans l'url on lance un appel des documents à partir de la date limite
-        else if(strpos($request->getQueryString(), 'date_from=') !== false) {
-            return $this->commandesLimitGetAction($request->get('date_from'));
-        }
-
-        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
-    }
-
-
-    /**
-     * Liste des commandes pour le client connecté dans une limite de date (sup. au) dans un ordre décroissant.
-     *
-     * @Route(
-     *     name = "api_commandes_limit_items_get",
-     *     path = "/api/commandes?date_from={date_from}",
-     *     methods= "GET"
-     * )
-     * @SWG\Response(
-     *     response=200,
-     *     description="Retourne une liste des commandes à partir d'une date pour le client connecté dans un ordre décroissant",
-     *     @SWG\Schema(
-     *         type="array",
-     *         @SWG\Items(ref=@Model(type=Commande::class, groups={"full"}))
-     *     )
-     * )
-     */
-    public function commandesLimitGetAction($date_from)
-    {
-        try{
-            if( !preg_match ( '/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/' , $date_from ) )
-            {
-                return new JsonResponse(new ErrorRoute('La date renseignée est incorecte. (format autorisé yyyy-mm-dd)', 406), 406, array(), true);
-            }
-
-            $date = new \DateTime($date_from);
-
-            $TTRetour = $this->ws_manager->getDocumentsByDate($date->format('d-m-Y'), WsParameters::TYPE_PRENDRE_CMDCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
-
-            if(!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
-                if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
-                    $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
-                    $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
-
-                    $list_docs = array();
-                    for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
-                        $wsDocs = $TTParamEnt->getItem($i);
-                        $doc = new Commande();
-                        $doc->parseObject($wsDocs);
-
-                        $this->ws_manager->getEditions($wsDocs->getIdDocDE(), WsParameters::TYPE_PRENDRE_EDITION_CMDCLI, WsParameters::FORMAT_EDITION_BLOB);
-
-                        $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
-                        for ($iL = 0; $iL < count($wsLignes); $iL++) {
-                            $ligne = new Ligne();
-                            $ligne->parseObject($wsLignes[$iL]);
-                            $doc->setLignes($ligne);
-                        }
-                        array_push($list_docs, $doc);
-                    }
-
-                    return $this->json($list_docs);
-                }
-                else {
-                    return $this->json(array());
-                }
-            }
-            else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
-                return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
-            }
-        }
-        catch(\Exception $exception)
-        {
-            return new JsonResponse(new ErrorRoute($exception->getMessage().' Le code source coté serveur est incorrecte.', 502), 502, array(), true);
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
         }
     }
 

@@ -8,7 +8,7 @@ use App\Services\Objets\TTRetour;
 use App\Services\Parameters\WsTableNamesRetour;
 use App\Services\UserService;
 use App\Services\WsManager;
-use App\Entity\Depot;
+use App\Entity\Libelle;
 use App\Utils\ErrorRoute;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Swagger\Annotations as SWG;
 
-class DepotsController extends Controller
+class LibellesController extends Controller
 {
     /**
      * @SWG\Property(
@@ -53,91 +53,44 @@ class DepotsController extends Controller
     }
 
     /**
-     * Retourne un depot.
+     * Retourne une liste de libellés.
      *
      * @Route(
-     *     name = "api_depots_item_get",
-     *     path = "/api/depots/{id}",
-     *     methods= "GET",
-     *     requirements={"id"="\d+"}
-     * )
-     * @SWG\Response(
-     *     response=200,
-     *     description="Retourne un depot",
-     *     @SWG\Schema(
-     *         type="",
-     *         @SWG\Items(ref=@Model(type=Depot::class, groups={"full"}))
-     *     )
-     * )
-     */
-    public function depotGetAction(Request $request, $id)
-    {
-        $this->ws_manager->setFilter($request->query->all());
-
-        $TTRetour = $this->ws_manager->getDepot($id);
-
-        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
-            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DEPOT)) {
-                $TTDepot = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DEPOT);
-
-                $depot = new Depot();
-                for ($i = 0; $i < $TTDepot->countItems(); $i++) {
-                    $wsDepot = $TTDepot->getItem($i);
-                    $depot->parseObject($wsDepot);
-                }
-
-                return $this->json($depot);
-            }
-
-            return $this->json(new Depot());
-        }
-        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
-            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
-        }
-
-        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
-    }
-
-    /**
-     * Retourne la liste des dépots.
-     *
-     * @Route(
-     *     name = "api_depots_items_get",
-     *     path = "/api/depots",
+     *     name = "api_libelles_item_get",
+     *     path = "/api/libelles",
      *     methods= "GET"
      * )
      * @SWG\Response(
      *     response=200,
-     *     description="Retourne la liste des dépots",
+     *     description="Retourne une liste de libellés",
      *     @SWG\Schema(
-     *         type="array",
-     *         @SWG\Items(ref=@Model(type=Depot::class, groups={"full"}))
+     *         type="",
+     *         @SWG\Items(ref=@Model(type=Libelle::class, groups={"full"}))
      *     )
      * )
      */
-    public function depotsGetAction(Request $request)
+    public function libellesGetAction(Request $request)
     {
         $this->ws_manager->setFilter($request->query->all());
 
-        $TTRetour = $this->ws_manager->getDepots();
+        $TTRetour = $this->ws_manager->getLibelles();
 
         if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
-            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DEPOT)) {
-                $TTDepot = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DEPOT);
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_LIB)) {
+                $TTLib = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_LIB);
 
-                $list_depots = array();
-                for ($i = 0; $i < $TTDepot->countItems(); $i++) {
-                    $wsDepot = $TTDepot->getItem($i);
-                    $depot = new Depot();
-                    $depot->parseObject($wsDepot);
-                    array_push($list_depots, $depot);
+                $list_libelles = array();
+                for ($i = 0; $i < $TTLib->countItems(); $i++) {
+                    $wsLib = $TTLib->getItem($i);
+                    $libelle = new Libelle();
+                    $libelle->parseObject($wsLib);
+                    array_push($list_libelles, $libelle);
                 }
 
-                return $this->json($list_depots);
+                return $this->json($list_libelles);
             }
-            else {
-                return $this->json(array());
-            }
+
+            return $this->json(new Depot());
         }
         else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
             return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);

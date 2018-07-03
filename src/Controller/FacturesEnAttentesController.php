@@ -72,34 +72,31 @@ class FacturesEnAttentesController extends Controller
      */
     public function facturesEnAttentesGetAction(Request $request)
     {
-        // S'il n'y a pas de paramétres dans l'url on lance un appel de tout les documents
-        if(is_null($request->getQueryString())) {
-            $TTRetour = $this->ws_manager->getFacturesEnAttentes();
+        $this->ws_manager->setFilter($request->query->all());
 
-            if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
-                if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
-                    $TTFacCliAtt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
+        $TTRetour = $this->ws_manager->getFacturesEnAttentes();
 
-                    $list_docs = array();
-                    for ($i = 0; $i < $TTFacCliAtt->countItems(); $i++) {
-                        $wsFacCliAtt = $TTFacCliAtt->getItem($i);
-                        $doc = new FactureEnAttente();
-                        $doc->parseObject($wsFacCliAtt);
-                        array_push($list_docs, $doc);
-                    }
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
+                $TTFacCliAtt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
 
-                    return $this->json($list_docs);
+                $list_docs = array();
+                for ($i = 0; $i < $TTFacCliAtt->countItems(); $i++) {
+                    $wsFacCliAtt = $TTFacCliAtt->getItem($i);
+                    $doc = new FactureEnAttente();
+                    $doc->parseObject($wsFacCliAtt);
+                    array_push($list_docs, $doc);
                 }
-                else {
-                    return $this->json(array());
-                }
+
+                return $this->json($list_docs);
             }
-            else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
-                return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+            else {
+                return $this->json(array());
             }
         }
-
-        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
     }
 
 

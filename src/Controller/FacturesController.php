@@ -75,145 +75,52 @@ class FacturesController extends Controller
      */
     public function facturesGetAction(Request $request)
     {
-        // S'il n'y a pas de paramétres dans l'url on lance un appel de tout les documents
-        if(is_null($request->getQueryString())) {
-            $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_FACCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
+        $this->ws_manager->setFilter($request->query->all());
 
-            if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
-                if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
-                    $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
-                    $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
+        $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_FACCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
 
-                    $list_docs = array();
-                    for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
-                        $wsDocs = $TTParamEnt->getItem($i);
-                        $doc = new Facture();
-                        $doc->parseObject($wsDocs);
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
+                $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
+                $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
 
-                        $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
-                        for ($iL = 0; $iL < count($wsLignes); $iL++) {
-                            $ligne = new Ligne();
-                            $ligne->parseObject($wsLignes[$iL]);
-                            $doc->setLignes($ligne);
-                        }
+                $list_docs = array();
+                for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
+                    $wsDocs = $TTParamEnt->getItem($i);
+                    $doc = new Facture();
+                    $doc->parseObject($wsDocs);
 
-                        // Etat de la facture
-                        $TTRetourFacCliAtt = $this->ws_manager->getFactureEnAttente($doc->getIdDocDE());
-
-                        if (!is_null($TTRetourFacCliAtt) && $TTRetourFacCliAtt instanceof TTRetour) {
-                            if($TTRetourFacCliAtt->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
-                                $TTFacCliAtt = $TTRetourFacCliAtt->getTable(WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
-
-                                for ($i = 0; $i < $TTFacCliAtt->countItems(); $i++) {
-                                    $wsFacCliAtt = $TTFacCliAtt->getItem($i);
-                                    $etat = new EtatFacture();
-                                    $etat->parseObject($wsFacCliAtt);
-                                    $doc->setEtatFacDE($etat);
-                                }
-                            }
-                        }
-
-                        array_push($list_docs, $doc);
+                    $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
+                    for ($iL = 0; $iL < count($wsLignes); $iL++) {
+                        $ligne = new Ligne();
+                        $ligne->parseObject($wsLignes[$iL]);
+                        $doc->setLignes($ligne);
                     }
 
-                    return $this->json($list_docs);
-                }
-                else {
-                    return $this->json(array());
-                }
-            }
-        }
-        // S'il y a le paramétre 'd' dans l'url on lance un appel des documents à partir de la date limite
-        else if(strpos($request->getQueryString(), 'date_from=') !== false) {
-            return $this->facturesLimitGetAction($request->get('date_from'));
-        }
+                    // Etat de la facture
+                    $TTRetourFacCliAtt = $this->ws_manager->getFactureEnAttente($doc->getIdDocDE());
 
-        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
-    }
+                    if (!is_null($TTRetourFacCliAtt) && $TTRetourFacCliAtt instanceof TTRetour) {
+                        if($TTRetourFacCliAtt->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
+                            $TTFacCliAtt = $TTRetourFacCliAtt->getTable(WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
 
-
-    /**
-     * Liste de factures pour le client connecté dans une limite de date (sup. au) dans un ordre décroissant.
-     *
-     * @Route(
-     *     name = "api_factures_limit_items_get",
-     *     path = "/api/factures?date_from={date_from}",
-     *     methods= "GET"
-     * )
-     * @SWG\Response(
-     *     response=200,
-     *     description="Retourne une liste de factures à partir d'une date pour le client connecté dans un ordre décroissant",
-     *     @SWG\Schema(
-     *         type="array",
-     *         @SWG\Items(ref=@Model(type=Facture::class, groups={"full"}))
-     *     )
-     * )
-     */
-    public function facturesLimitGetAction($date_from)
-    {
-        try{
-            if( !preg_match ( '/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/' , $date_from ) )
-            {
-                return new JsonResponse(new ErrorRoute('La date renseignée est incorecte. (format autorisé yyyy-mm-dd)', 406), 406, array(), true);
-            }
-
-            $date = new \DateTime($date_from);
-
-            $TTRetour = $this->ws_manager->getDocumentsByDate($date->format('d-m-Y'), WsParameters::TYPE_PRENDRE_FACCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
-
-            if(!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
-                if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
-                    $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
-                    $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
-
-                    $list_docs = array();
-                    for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
-                        $wsDocs = $TTParamEnt->getItem($i);
-                        $doc = new Facture();
-                        $doc->parseObject($wsDocs);
-
-                        $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
-                        for ($iL = 0; $iL < count($wsLignes); $iL++) {
-                            $ligne = new Ligne();
-                            $ligne->parseObject($wsLignes[$iL]);
-                            $doc->setLignes($ligne);
-                        }
-
-                        // Etat de la facture
-                        $etat = new EtatFacture();
-                        $doc->setEtatFacDE($etat);
-
-                        $TTRetourFacCliAtt = $this->ws_manager->getFactureEnAttente($doc->getIdDocDE());
-
-                        if (!is_null($TTRetourFacCliAtt) && $TTRetourFacCliAtt instanceof TTRetour) {
-                            if($TTRetourFacCliAtt->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
-                                $TTFacCliAtt = $TTRetourFacCliAtt->getTable(WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
-
-                                for ($i = 0; $i < $TTFacCliAtt->countItems(); $i++) {
-                                    $wsFacCliAtt = $TTFacCliAtt->getItem($i);
-                                    $etat = new EtatFacture();
-                                    $etat->parseObject($wsFacCliAtt);
-                                    $doc->setEtatFacDE($etat);
-                                }
+                            for ($i = 0; $i < $TTFacCliAtt->countItems(); $i++) {
+                                $wsFacCliAtt = $TTFacCliAtt->getItem($i);
+                                $etat = new EtatFacture();
+                                $etat->parseObject($wsFacCliAtt);
+                                $doc->setEtatFacDE($etat);
                             }
                         }
-
-                        array_push($list_docs, $doc);
                     }
 
-                    return $this->json($list_docs);
+                    array_push($list_docs, $doc);
                 }
-                else {
-                    return $this->json(array());
-                }
+
+                return $this->json($list_docs);
             }
-            else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
-                return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+            else {
+                return $this->json(array());
             }
-        }
-        catch(\Exception $exception)
-        {
-            return new JsonResponse(new ErrorRoute($exception->getMessage().' Le code source coté serveur est incorrecte.', 502), 502, array(), true);
         }
     }
 
