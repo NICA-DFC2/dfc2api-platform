@@ -15,6 +15,7 @@ class WsStock
     private $StockDisponibleSoc = 0.0;
     private $StockPratique = 0.0;
     private $StkReelPlat1 = 0.0;
+    private $Depot = null;
 
     /**
      * Constructeur
@@ -47,7 +48,8 @@ class WsStock
         $string .= '"StockDisponible": '. $this->getStockDisponible() .', ';
         $string .= '"StockDisponibleSoc": '. $this->getStockDisponibleSoc() .', ';
         $string .= '"StockPratique": '. $this->getStockPratique() .', ';
-        $string .= '"StkReelPlat1": '. $this->getStkReelPlat1();
+        $string .= '"StkReelPlat1": '. $this->getStkReelPlat1() .', ';
+        $string .= '"Depot": '. $this->getDepot() .' ';
         $string .= '}';
 
         return $string;
@@ -228,4 +230,21 @@ class WsStock
     {
         $this->StkReelPlat1 = $StkReelPlat1;
     }
+
+    /**
+     * @return null
+     */
+    public function getDepot()
+    {
+        return $this->Depot;
+    }
+
+    /**
+     * @param null $Depot
+     */
+    public function setDepot($Depot)
+    {
+        $this->Depot = $Depot;
+    }
+
 }

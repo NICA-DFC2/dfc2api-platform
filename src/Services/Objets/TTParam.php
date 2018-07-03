@@ -31,7 +31,11 @@ class TTParam
                 $param instanceof WsArticle ||
                 $param instanceof WsStock ||
                 $param instanceof WsDocumEnt ||
-                $param instanceof WsDocumLig
+                $param instanceof WsDocumLig ||
+                $param instanceof WsFacCliAtt ||
+                $param instanceof WsEdition ||
+                $param instanceof WsLibelle ||
+                $param instanceof WsDepot
             ) {
                 $string .= ($string !== "") ? ',' : '';
                 $string .= $param->__toString();
@@ -55,7 +59,11 @@ class TTParam
             $param instanceof WsArticle ||
             $param instanceof WsStock ||
             $param instanceof WsDocumEnt ||
-            $param instanceof WsDocumLig
+            $param instanceof WsDocumLig ||
+            $param instanceof WsFacCliAtt ||
+            $param instanceof WsEdition ||
+            $param instanceof WsLibelle ||
+            $param instanceof WsDepot
         ) {
             $this->params[] = $param;
         }
@@ -72,7 +80,11 @@ class TTParam
             $param instanceof WsArticle ||
             $param instanceof WsStock ||
             $param instanceof WsDocumEnt ||
-            $param instanceof WsDocumLig
+            $param instanceof WsDocumLig ||
+            $param instanceof WsFacCliAtt ||
+            $param instanceof WsEdition ||
+            $param instanceof WsLibelle ||
+            $param instanceof WsDepot
         ) {
             $this->params->removeElement($param);
         }
@@ -110,6 +122,26 @@ class TTParam
     {
         $this->params = $params;
         return $this;
+    }
+
+    /**
+     * @param ArrayCollection $params
+     * @return array
+     */
+    public function getItemsByFilter($property, $value)
+    {
+        $itemsFind = array();
+        foreach ($this->params as $param){
+            if(property_exists($param, $property)) {
+                if($param->{$property} === $value){
+                    array_push($itemsFind, $param);
+                }
+            }
+            else {
+                break;
+            }
+        }
+        return $itemsFind;
     }
 
 }

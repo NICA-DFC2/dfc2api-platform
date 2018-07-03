@@ -1,296 +1,295 @@
 <?php
 
-namespace App\Services\Objets;
+namespace App\Utils\Extensions;
 
-class WsDocumEnt
+use App\Services\Objets\WsDocumEnt;
+use Doctrine\Common\Collections\ArrayCollection;
+
+class Document
 {
-    public $FamDocDE = "";
-    public $IdDE = 0;
+    private $FamDocDE = "";
+    private $IdDE = 0;
     public $IdDocDE = 0;
-    public $NumDE = 0;
-    public $DateDE = null;
-    public $IdSoc = 0;
-    public $EtatDE = "";
-    public $TypeDE = "";
-    public $RefDE = "";
-    public $MontTTCDE = 0;
-    public $MontHTDE = 0;
-    public $ComDE = "";
-    public $AnnotDE = "";
-    public $FlgValidDE = false;
-    public $MotsClesAutoDE = "";
-    public $EchRegDE = "";
-    public $FinMoisDE = false;
-    public $DecalRegDE = "";
-    public $JRegDE = 0;
-    public $MRegDE = "";
-    public $FlgTTCDE = false;
-    public $RemDE = 0;
-    public $TypeTvaDE = "";
-    public $IdDepCre = 0;
-    public $IdDepLiv = 0;
-    public $CodDepCre = "";
-    public $CodDepLiv = "";
-    public $CodPortDE = "";
-    public $IdCam = 0;
-    public $CodCam = "";
-    public $LibCam = "";
-    public $DateCreDE = null;
-    public $HeureCreDE = 0;
-    public $DateModDE = null;
-    public $IdDUCre = 0;
-    public $IdDUMod = 0;
-    public $MontTvaDE = 0;
-    public $MontTgapDE = 0;
-    public $MontParafDE = 0;
-    public $MontHTApRemDE = 0;
-    public $MontTvaApRemDE = 0;
-    public $MontParafApRemDE = 0;
-    public $MontTTCApRemDE = 0;
-    public $MontHTMarDE = 0;
-    public $MontRevReMarDE = 0;
-    public $MontRevConvMarDE = 0;
-    public $MontEcoTaxeDE = 0;
-    public $MontHTAvecPortDE = 0;
-    public $MontRevReDE = 0;
-    public $MontRevConvDE = 0;
-    public $TotPoidsDE = 0;
-    public $ComLivDE = "";
-    public $ZoneLivDE = "";
-    public $FlgTva2DE = false;
-    public $TotRegDE = 0;
-    public $MontHTExtDE = 0;
-    public $MontTVAExtDE = 0;
-    public $MontTTCExtDE = 0;
-    public $DateRegDE = null;
-    public $RSocDE = "";
-    public $DateHeureEditDE = null;
-    public $CodRgpt = "";
-    public $HASH = "";
-    public $IdCli = 0;
-    public $NoCli = 0;
-    public $CodCli = "";
-    public $NoComptaCli = "";
-    public $RSocCli = "";
-    public $RSocLivDE = "";
-    public $AdrLivDE = "";
-    public $CPLivDE = "";
-    public $VilleLivDE = "";
-    public $PaysLivDE = "";
-    public $TelLivDE = "";
-    public $FaxLivDE = "";
-    public $MailLivDE = "";
-    public $RSocFacDE = "";
-    public $AdrFacDE = "";
-    public $CPFacDE = "";
-    public $VilleFacDE = "";
-    public $PaysFacDE = "";
-    public $TelFacDE = "";
-    public $FaxFacDE = "";
-    public $MailFacDE = "";
-    public $IdSalVend = 0;
-    public $CodSalVend = "";
-    public $IdSalRep = 0;
-    public $CodSalRep = "";
-    public $IdCha = 0;
-    public $CodCha = "";
-    public $LibCha = "";
-    public $AdrCha = "";
-    public $CPCha = "";
-    public $VilleCha = "";
-    public $MontPortDE = 0;
-    public $DateLivDE = null;
-    public $IdTC = 0;
-    public $PrisParDE = "";
-    public $DateReacDE = null;
-    public $FlgPFDE = false;
-    public $CodOrigDE = "";
-    public $DateCloDE = null;
-    public $DateRelDE = null;
-    public $IdSalRel = 0;
-    public $NatDE = "";
-    public $DateRealDE = null;
-    public $DateFacDE = null;
-    public $CodTvaDE = array();
-    public $BaseHTDE = array();
-    public $BaseTvaDE = array();
-    public $BaseTgapDE = array();
-    public $BaseParafDE = array();
-    public $MontTgapTableDE = array();
-    public $MontParafTableDE = array();
-    public $MontTvaTableDE = array();
+    private $NumDE = 0;
+    private $DateDE = null;
+    private $IdSoc = 0;
+    private $EtatDE = "";
+    private $TypeDE = "";
+    private $RefDE = "";
+    private $MontTTCDE = 0;
+    private $MontHTDE = 0;
+    private $ComDE = "";
+    private $AnnotDE = "";
+    private $FlgValidDE = false;
+    private $MotsClesAutoDE = "";
+    private $EchRegDE = "";
+    private $FinMoisDE = false;
+    private $DecalRegDE = "";
+    private $JRegDE = 0;
+    private $MRegDE = "";
+    private $FlgTTCDE = false;
+    private $RemDE = 0;
+    private $TypeTvaDE = "";
+    private $IdDepCre = 0;
+    private $IdDepLiv = 0;
+    private $CodDepCre = "";
+    private $CodDepLiv = "";
+    private $CodPortDE = "";
+    private $IdCam = 0;
+    private $CodCam = "";
+    private $LibCam = "";
+    private $DateCreDE = null;
+    private $HeureCreDE = 0;
+    private $DateModDE = null;
+    private $IdDUCre = 0;
+    private $IdDUMod = 0;
+    private $MontTvaDE = 0;
+    private $MontTgapDE = 0;
+    private $MontParafDE = 0;
+    private $MontHTApRemDE = 0;
+    private $MontTvaApRemDE = 0;
+    private $MontParafApRemDE = 0;
+    private $MontTTCApRemDE = 0;
+    private $MontHTMarDE = 0;
+    private $MontRevReMarDE = 0;
+    private $MontRevConvMarDE = 0;
+    private $MontEcoTaxeDE = 0;
+    private $MontHTAvecPortDE = 0;
+    private $MontRevReDE = 0;
+    private $MontRevConvDE = 0;
+    private $TotPoidsDE = 0;
+    private $ComLivDE = "";
+    private $ZoneLivDE = "";
+    private $FlgTva2DE = false;
+    private $TotRegDE = 0;
+    private $MontHTExtDE = 0;
+    private $MontTVAExtDE = 0;
+    private $MontTTCExtDE = 0;
+    private $DateRegDE = null;
+    private $RSocDE = "";
+    private $DateHeureEditDE = null;
+    private $CodRgpt = "";
+    private $HASH = "";
+    private $IdCli = 0;
+    private $NoCli = 0;
+    private $CodCli = "";
+    private $NoComptaCli = "";
+    private $RSocCli = "";
+    private $RSocLivDE = "";
+    private $AdrLivDE = "";
+    private $CPLivDE = "";
+    private $VilleLivDE = "";
+    private $PaysLivDE = "";
+    private $TelLivDE = "";
+    private $FaxLivDE = "";
+    private $MailLivDE = "";
+    private $RSocFacDE = "";
+    private $AdrFacDE = "";
+    private $CPFacDE = "";
+    private $VilleFacDE = "";
+    private $PaysFacDE = "";
+    private $TelFacDE = "";
+    private $FaxFacDE = "";
+    private $MailFacDE = "";
+    private $IdSalVend = 0;
+    private $CodSalVend = "";
+    private $IdSalRep = 0;
+    private $CodSalRep = "";
+    private $IdCha = 0;
+    private $CodCha = "";
+    private $LibCha = "";
+    private $AdrCha = "";
+    private $CPCha = "";
+    private $VilleCha = "";
+    private $MontPortDE = 0;
+    private $DateLivDE = null;
+    private $IdTC = 0;
+    private $PrisParDE = "";
+    private $DateReacDE = null;
+    private $FlgPFDE = false;
+    private $CodOrigDE = "";
+    private $DateCloDE = null;
+
+    private $Edition = null;
+    private $Lignes = null;
 
     /**
-     * Constructeur
-     * Peut prendre un argument $json_object : hydrate l'objet avec la structure json passée en argument
+     * Document constructor.
      */
-    public function __construct($json_object=null) {
-        if(!is_null($json_object)) {
-            if(isset($json_object->{'DateDE'})) {
-                $this->setDateDE($json_object->{'DateDE'});
-            }
-            $this->setFamDocDE($json_object->{'FamDocDE'});
-            $this->setIdDE($json_object->{'IdDE'});
-            $this->setIdDocDE($json_object->{'IdDocDE'});
-            $this->setNumDE($json_object->{'NumDE'});
-            $this->setDateDE($json_object->{'DateDE'});
-            $this->setIdSoc($json_object->{'IdSoc'});
-            $this->setEtatDE($json_object->{'EtatDE'});
-            $this->setTypeDE($json_object->{'TypeDE'});
-            $this->setRefDE($json_object->{'RefDE'});
-            $this->setMontTTCDE($json_object->{'MontTTCDE'});
-            $this->setMontHTDE($json_object->{'MontHTDE'});
-            $this->setComDE($json_object->{'ComDE'});
-            $this->setAnnotDE($json_object->{'AnnotDE'});
-            $this->setFlgValidDE($json_object->{'FlgValidDE'});
-            $this->setMotsClesAutoDE($json_object->{'MotsClesAutoDE'});
-            $this->setEchRegDE($json_object->{'EchRegDE'});
-            $this->setFinMoisDE($json_object->{'FinMoisDE'});
-            $this->setDecalRegDE($json_object->{'DecalRegDE'});
-            $this->setJRegDE($json_object->{'JRegDE'});
-            $this->setMRegDE($json_object->{'MRegDE'});
-            $this->setFlgTTCDE($json_object->{'FlgTTCDE'});
-            $this->setRemDE($json_object->{'RemDE'});
-            $this->setTypeTvaDE($json_object->{'TypeTvaDE'});
-            $this->setIdDepCre($json_object->{'IdDepCre'});
-            $this->setIdDepLiv($json_object->{'IdDepLiv'});
-            $this->setCodDepCre($json_object->{'CodDepCre'});
-            $this->setCodDepLiv($json_object->{'CodDepLiv'});
-            $this->setCodPortDE($json_object->{'CodPortDE'});
-            $this->setIdCam($json_object->{'IdCam'});
-            $this->setCodCam($json_object->{'CodCam'});
-            $this->setLibCam($json_object->{'LibCam'});
-            $this->setDateCreDE($json_object->{'DateCreDE'});
-            $this->setHeureCreDE($json_object->{'HeureCreDE'});
-            $this->setDateModDE($json_object->{'DateModDE'});
-            $this->setIdDUCre($json_object->{'IdDUCre'});
-            $this->setIdDUMod($json_object->{'IdDUMod'});
-            $this->setMontTvaDE($json_object->{'MontTvaDE'});
-            $this->setMontTgapDE($json_object->{'MontTgapDE'});
-            $this->setMontParafDE($json_object->{'MontParafDE'});
-            $this->setMontHTApRemDE($json_object->{'MontHTApRemDE'});
-            $this->setMontTvaApRemDE($json_object->{'MontTvaApRemDE'});
-            $this->setMontParafApRemDE($json_object->{'MontParafApRemDE'});
-            $this->setMontTTCApRemDE($json_object->{'MontTTCApRemDE'});
-            $this->setMontHTMarDE($json_object->{'MontHTMarDE'});
-            $this->setMontRevReMarDE($json_object->{'MontRevReMarDE'});
-            $this->setMontRevConvMarDE($json_object->{'MontRevConvMarDE'});
-            $this->setMontEcoTaxeDE($json_object->{'MontEcoTaxeDE'});
-            $this->setMontHTAvecPortDE($json_object->{'MontHTAvecPortDE'});
-            $this->setMontRevReDE($json_object->{'MontRevReDE'});
-            $this->setMontRevConvDE($json_object->{'MontRevConvDE'});
-            $this->setTotPoidsDE($json_object->{'TotPoidsDE'});
-            $this->setComLivDE($json_object->{'ComLivDE'});
-            $this->setZoneLivDE($json_object->{'ZoneLivDE'});
-            $this->setFlgTva2DE($json_object->{'FlgTva2DE'});
-            $this->setTotRegDE($json_object->{'TotRegDE'});
-            $this->setMontHTExtDE($json_object->{'MontHTExtDE'});
-            $this->setMontTVAExtDE($json_object->{'MontTVAExtDE'});
-            $this->setMontTTCExtDE($json_object->{'MontTTCExtDE'});
-            $this->setDateRegDE($json_object->{'DateRegDE'});
-            $this->setRSocDE($json_object->{'RSocDE'});
-            $this->setDateHeureEditDE($json_object->{'DateHeureEditDE'});
-            $this->setCodRgpt($json_object->{'CodRgpt'});
-            $this->setHASH($json_object->{'HASH'});
-            $this->setIdCli($json_object->{'IdCli'});
-            $this->setNoCli($json_object->{'NoCli'});
-            $this->setCodCli($json_object->{'CodCli'});
-            $this->setNoComptaCli($json_object->{'NoComptaCli'});
-            $this->setRSocCli($json_object->{'RSocCli'});
-            $this->setRSocLivDE($json_object->{'RSocLivDE'});
-            $this->setAdrLivDE($json_object->{'AdrLivDE'});
-            $this->setCPLivDE($json_object->{'CPLivDE'});
-            $this->setVilleLivDE($json_object->{'VilleLivDE'});
-            $this->setPaysLivDE($json_object->{'PaysLivDE'});
-            $this->setTelLivDE($json_object->{'TelLivDE'});
-            $this->setFaxLivDE($json_object->{'FaxLivDE'});
-            $this->setMailLivDE($json_object->{'MailLivDE'});
-            $this->setRSocFacDE($json_object->{'RSocFacDE'});
-            $this->setAdrFacDE($json_object->{'AdrFacDE'});
-            $this->setCPFacDE($json_object->{'CPFacDE'});
-            $this->setVilleFacDE($json_object->{'VilleFacDE'});
-            $this->setPaysFacDE($json_object->{'PaysFacDE'});
-            $this->setTelFacDE($json_object->{'TelFacDE'});
-            $this->setFaxFacDE($json_object->{'FaxFacDE'});
-            $this->setMailFacDE($json_object->{'MailFacDE'});
-            $this->setIdSalVend($json_object->{'IdSalVend'});
-            $this->setCodSalVend($json_object->{'CodSalVend'});
-            $this->setIdSalRep($json_object->{'IdSalRep'});
-            $this->setCodSalRep($json_object->{'CodSalRep'});
-            $this->setIdCha($json_object->{'IdCha'});
-            $this->setCodCha($json_object->{'CodCha'});
-            $this->setLibCha($json_object->{'LibCha'});
-            $this->setAdrCha($json_object->{'AdrCha'});
-            $this->setCPCha($json_object->{'CPCha'});
-            $this->setVilleCha($json_object->{'VilleCha'});
-            $this->setMontPortDE($json_object->{'MontPortDE'});
-            $this->setDateLivDE($json_object->{'DateLivDE'});
-            $this->setIdTC($json_object->{'IdTC'});
-            $this->setPrisParDE($json_object->{'PrisParDE'});
-            $this->setDateReacDE($json_object->{'DateReacDE'});
-            $this->setFlgPFDE($json_object->{'FlgPFDE'});
-            $this->setCodOrigDE($json_object->{'CodOrigDE'});
-            $this->setDateCloDE($json_object->{'DateCloDE'});
+    public function __construct()
+    {
+        $this->Lignes = new ArrayCollection();
+    }
 
-            //DEVIS
-            if(property_exists($json_object, 'DateRelDE')) {
-                $this->setDateRelDE($json_object->{'DateRelDE'});
-            }
-            if(property_exists($json_object, 'IdSalRel')) {
-                $this->setIdSalRel($json_object->{'IdSalRel'});
-            }
-            if(property_exists($json_object, 'NatDE')) {
-                $this->setNatDE($json_object->{'NatDE'});
-            }
-            if(property_exists($json_object, 'DateRealDE')) {
-                $this->setDateRealDE($json_object->{'DateRealDE'});
-            }
+    /**
+     * @return ArrayCollection|null
+     */
+    public function getLignes()
+    {
+        return $this->Lignes;
+    }
 
-            //BL
-            if(property_exists($json_object, 'DateFacDE')) {
-                $this->setDateFacDE($json_object->{'DateFacDE'});
-            }
+    /**
+     * @return ArrayCollection|null
+     */
+    public function getLigne($i)
+    {
+        return $this->Lignes->get($i);
+    }
 
-            //FACCLI
-            if(property_exists($json_object, 'CodTvaDE')) {
-                $this->setCodTvaDE($json_object->{'CodTvaDE'});
+    /**
+     * @param mixed $ligne
+     */
+    public function setLignes($ligne)
+    {
+        $this->Lignes->add($ligne);
+    }
+
+    /**
+     * @return null
+     */
+    public function getEdition()
+    {
+        return $this->Edition;
+    }
+
+    /**
+     * @param null $Edition
+     */
+    public function setEdition($Edition)
+    {
+        $this->Edition = $Edition;
+    }
+
+
+
+    /**
+     * parseObject
+     * Prend un argument $object : hydrate l'objet avec la structure json passée en argument
+     */
+    public function parseObject(WsDocumEnt $object) {
+
+        if(!is_null($object)) {
+            if(isset($object->{'DateDE'})) {
+                $this->setDateDE($object->{'DateDE'});
             }
-            if(property_exists($json_object, 'BaseHTDE')) {
-                $this->setBaseHTDE($json_object->{'BaseHTDE'});
-            }
-            if(property_exists($json_object, 'BaseTvaDE')) {
-                $this->setBaseTvaDE($json_object->{'BaseTvaDE'});
-            }
-            if(property_exists($json_object, 'BaseTgapDE')) {
-                $this->setBaseTgapDE($json_object->{'BaseTgapDE'});
-            }
-            if(property_exists($json_object, 'BaseParafDE')) {
-                $this->setBaseParafDE($json_object->{'BaseParafDE'});
-            }
-            if(property_exists($json_object, 'MontTgapTableDE')) {
-                $this->setMontTgapTableDE($json_object->{'MontTgapTableDE'});
-            }
-            if(property_exists($json_object, 'MontParafTableDE')) {
-                $this->setMontParafTableDE($json_object->{'MontParafTableDE'});
-            }
-            if(property_exists($json_object, 'MontTvaTableDE')) {
-                $this->setMontTvaTableDE($json_object->{'MontTvaTableDE'});
-            }
+            $this->setFamDocDE($object->{'FamDocDE'});
+            $this->setIdDE($object->{'IdDE'});
+            $this->setIdDocDE($object->{'IdDocDE'});
+            $this->setNumDE($object->{'NumDE'});
+            $this->setDateDE($object->{'DateDE'});
+            $this->setIdSoc($object->{'IdSoc'});
+            $this->setEtatDE($object->{'EtatDE'});
+            $this->setTypeDE($object->{'TypeDE'});
+            $this->setRefDE($object->{'RefDE'});
+            $this->setMontTTCDE($object->{'MontTTCDE'});
+            $this->setMontHTDE($object->{'MontHTDE'});
+            $this->setComDE($object->{'ComDE'});
+            $this->setAnnotDE($object->{'AnnotDE'});
+            $this->setFlgValidDE($object->{'FlgValidDE'});
+            $this->setMotsClesAutoDE($object->{'MotsClesAutoDE'});
+            $this->setEchRegDE($object->{'EchRegDE'});
+            $this->setFinMoisDE($object->{'FinMoisDE'});
+            $this->setDecalRegDE($object->{'DecalRegDE'});
+            $this->setJRegDE($object->{'JRegDE'});
+            $this->setMRegDE($object->{'MRegDE'});
+            $this->setFlgTTCDE($object->{'FlgTTCDE'});
+            $this->setRemDE($object->{'RemDE'});
+            $this->setTypeTvaDE($object->{'TypeTvaDE'});
+            $this->setIdDepCre($object->{'IdDepCre'});
+            $this->setIdDepLiv($object->{'IdDepLiv'});
+            $this->setCodDepCre($object->{'CodDepCre'});
+            $this->setCodDepLiv($object->{'CodDepLiv'});
+            $this->setCodPortDE($object->{'CodPortDE'});
+            $this->setIdCam($object->{'IdCam'});
+            $this->setCodCam($object->{'CodCam'});
+            $this->setLibCam($object->{'LibCam'});
+            $this->setDateCreDE($object->{'DateCreDE'});
+            $this->setHeureCreDE($object->{'HeureCreDE'});
+            $this->setDateModDE($object->{'DateModDE'});
+            $this->setIdDUCre($object->{'IdDUCre'});
+            $this->setIdDUMod($object->{'IdDUMod'});
+            $this->setMontTvaDE($object->{'MontTvaDE'});
+            $this->setMontTgapDE($object->{'MontTgapDE'});
+            $this->setMontParafDE($object->{'MontParafDE'});
+            $this->setMontHTApRemDE($object->{'MontHTApRemDE'});
+            $this->setMontTvaApRemDE($object->{'MontTvaApRemDE'});
+            $this->setMontParafApRemDE($object->{'MontParafApRemDE'});
+            $this->setMontTTCApRemDE($object->{'MontTTCApRemDE'});
+            $this->setMontHTMarDE($object->{'MontHTMarDE'});
+            $this->setMontRevReMarDE($object->{'MontRevReMarDE'});
+            $this->setMontRevConvMarDE($object->{'MontRevConvMarDE'});
+            $this->setMontEcoTaxeDE($object->{'MontEcoTaxeDE'});
+            $this->setMontHTAvecPortDE($object->{'MontHTAvecPortDE'});
+            $this->setMontRevReDE($object->{'MontRevReDE'});
+            $this->setMontRevConvDE($object->{'MontRevConvDE'});
+            $this->setTotPoidsDE($object->{'TotPoidsDE'});
+            $this->setComLivDE($object->{'ComLivDE'});
+            $this->setZoneLivDE($object->{'ZoneLivDE'});
+            $this->setFlgTva2DE($object->{'FlgTva2DE'});
+            $this->setTotRegDE($object->{'TotRegDE'});
+            $this->setMontHTExtDE($object->{'MontHTExtDE'});
+            $this->setMontTVAExtDE($object->{'MontTVAExtDE'});
+            $this->setMontTTCExtDE($object->{'MontTTCExtDE'});
+            $this->setDateRegDE($object->{'DateRegDE'});
+            $this->setRSocDE($object->{'RSocDE'});
+            $this->setDateHeureEditDE($object->{'DateHeureEditDE'});
+            $this->setCodRgpt($object->{'CodRgpt'});
+            $this->setHASH($object->{'HASH'});
+            $this->setIdCli($object->{'IdCli'});
+            $this->setNoCli($object->{'NoCli'});
+            $this->setCodCli($object->{'CodCli'});
+            $this->setNoComptaCli($object->{'NoComptaCli'});
+            $this->setRSocCli($object->{'RSocCli'});
+            $this->setRSocLivDE($object->{'RSocLivDE'});
+            $this->setAdrLivDE($object->{'AdrLivDE'});
+            $this->setCPLivDE($object->{'CPLivDE'});
+            $this->setVilleLivDE($object->{'VilleLivDE'});
+            $this->setPaysLivDE($object->{'PaysLivDE'});
+            $this->setTelLivDE($object->{'TelLivDE'});
+            $this->setFaxLivDE($object->{'FaxLivDE'});
+            $this->setMailLivDE($object->{'MailLivDE'});
+            $this->setRSocFacDE($object->{'RSocFacDE'});
+            $this->setAdrFacDE($object->{'AdrFacDE'});
+            $this->setCPFacDE($object->{'CPFacDE'});
+            $this->setVilleFacDE($object->{'VilleFacDE'});
+            $this->setPaysFacDE($object->{'PaysFacDE'});
+            $this->setTelFacDE($object->{'TelFacDE'});
+            $this->setFaxFacDE($object->{'FaxFacDE'});
+            $this->setMailFacDE($object->{'MailFacDE'});
+            $this->setIdSalVend($object->{'IdSalVend'});
+            $this->setCodSalVend($object->{'CodSalVend'});
+            $this->setIdSalRep($object->{'IdSalRep'});
+            $this->setCodSalRep($object->{'CodSalRep'});
+            $this->setIdCha($object->{'IdCha'});
+            $this->setCodCha($object->{'CodCha'});
+            $this->setLibCha($object->{'LibCha'});
+            $this->setAdrCha($object->{'AdrCha'});
+            $this->setCPCha($object->{'CPCha'});
+            $this->setVilleCha($object->{'VilleCha'});
+            $this->setMontPortDE($object->{'MontPortDE'});
+            $this->setDateLivDE($object->{'DateLivDE'});
+            $this->setIdTC($object->{'IdTC'});
+            $this->setPrisParDE($object->{'PrisParDE'});
+            $this->setDateReacDE($object->{'DateReacDE'});
+            $this->setFlgPFDE($object->{'FlgPFDE'});
+            $this->setCodOrigDE($object->{'CodOrigDE'});
+            $this->setDateCloDE($object->{'DateCloDE'});
         }
     }
 
     /**
-     * __toString
-     * Retourne un JSON de l'objet
+     * parseJson
+     * Convertion de l'objet en une structure JSON personnalisée
      */
-    public function __toString()
+    public function parseJson()
     {
         $string = '{';
-        $string .= '"FamDocDE": "'.$this->getFamDocDE().'" ,';
         $string .= '"IdDE": '.$this->getIdDE().' ,';
         $string .= '"IdDocDE": '.$this->getIdDocDE().' ,';
         $string .= '"NumDE": '.$this->getNumDE().' ,';
-        $string .= '"DateDE": "'.date_format($this->getDateDE(), 'Y-m-d').'" ,';
+        $string .= '"DateDE": "'.$this->getDateDE().'" ,';
+        $string .= '"IdCli": '.$this->getIdCli().' ,';
         $string .= '"IdSoc": '.$this->getIdSoc().' ,';
         $string .= '"EtatDE": "'.$this->getEtatDE().'" ,';
         $string .= '"TypeDE": "'.$this->getTypeDE().'" ,';
@@ -298,130 +297,14 @@ class WsDocumEnt
         $string .= '"MontTTCDE": '.$this->getMontTTCDE().' ,';
         $string .= '"MontHTDE": '.$this->getMontHTDE().' ,';
         $string .= '"ComDE": "'.$this->getComDE().'" ,';
-        $string .= '"AnnotDE": "'.$this->getAnnotDE().'" ,';
+        $string .= '"DateLivrDE": "'.$this->getDateLivrDE().'" ,';
+        $string .= '"IdFac": '.$this->getIdFac().' ,';
+        $string .= '"IdDepLiv": '.$this->getIdDepLiv().' ,';
 
-        $val = ($this->isFlgValidDE()) ? 'true' : 'false';
+        $val = ($this->getFlgValidDE()) ? 'true' : 'false';
         $string .= '"FlgValidDE": '.$val.' ,';
 
-        $string .= '"MotsClesAutoDE": "'.$this->getMotsClesAutoDE().'" ,';
-        $string .= '"EchRegDE": "'.$this->getEchRegDE().'" ,';
-
-        $val = ($this->isFinMoisDE()) ? 'true' : 'false';
-        $string .= '"FinMoisDE": '.$val.' ,';
-
-        $string .= '"DecalRegDE": "'.$this->getDecalRegDE().'" ,';
-        $string .= '"JRegDE": '.$this->getJRegDE().' ,';
-        $string .= '"MRegDE": "'.$this->getMRegDE().'" ,';
-
-        $val = ($this->isFlgTTCDE()) ? 'true' : 'false';
-        $string .= '"FlgTTCDE": '.$val.' ,';
-
-        $string .= '"RemDE": '.$this->getRemDE().' ,';
-        $string .= '"TypeTvaDE": "'.$this->getTypeTvaDE().'" ,';
-        $string .= '"IdDepCre": '.$this->getIdDepCre().' ,';
-        $string .= '"IdDepLiv": '.$this->getIdDepLiv().' ,';
-        $string .= '"CodDepCre": "'.$this->getCodDepCre().'" ,';
-        $string .= '"CodDepLiv": "'.$this->getCodDepLiv().'" ,';
-        $string .= '"CodPortDE": "'.$this->getCodPortDE().'" ,';
-        $string .= '"IdCam": '.$this->getIdCam().' ,';
-        $string .= '"CodCam": "'.$this->getCodCam().'" ,';
-        $string .= '"LibCam": "'.$this->getLibCam().'" ,';
-        $string .= '"DateCreDE": "'.date_format($this->getDateCreDE(), 'Y-m-d').'" ,';
-        $string .= '"HeureCreDE": '.$this->getHeureCreDE().' ,';
-        $string .= '"DateModDE": "'.date_format($this->getDateModDE(), 'Y-m-d').'" ,';
-        $string .= '"IdDUCre": '.$this->getIdDUCre().' ,';
-        $string .= '"IdDUMod": '.$this->getIdDUMod().' ,';
-        $string .= '"MontTvaDE": '.$this->getMontTvaDE().' ,';
-        $string .= '"MontTgapDE": '.$this->getMontTgapDE().' ,';
-        $string .= '"MontParafDE": '.$this->getMontParafDE().' ,';
-        $string .= '"MontHTApRemDE": '.$this->getMontHTApRemDE().' ,';
-        $string .= '"MontTvaApRemDE": '.$this->getMontTvaApRemDE().' ,';
-        $string .= '"MontParafApRemDE": '.$this->getMontParafApRemDE().' ,';
-        $string .= '"MontTTCApRemDE": '.$this->getMontTTCApRemDE().' ,';
-        $string .= '"MontHTMarDE": '.$this->getMontHTMarDE().' ,';
-        $string .= '"MontRevReMarDE": '.$this->getMontRevReMarDE().' ,';
-        $string .= '"MontRevConvMarDE": '.$this->getMontRevConvMarDE().' ,';
-        $string .= '"MontEcoTaxeDE": '.$this->getMontEcoTaxeDE().' ,';
-        $string .= '"MontHTAvecPortDE": '.$this->getMontHTAvecPortDE().' ,';
-        $string .= '"MontRevReDE": '.$this->getMontRevReDE().' ,';
-        $string .= '"MontRevConvDE": '.$this->getMontRevConvDE().' ,';
-        $string .= '"TotPoidsDE": '.$this->getTotPoidsDE().' ,';
-        $string .= '"ComLivDE": "'.$this->getComLivDE().'" ,';
-        $string .= '"ZoneLivDE": "'.$this->getZoneLivDE().'" ,';
-
-        $val = ($this->isFlgTva2DE()) ? 'true' : 'false';
-        $string .= '"FlgTva2DE": '.$val.' ,';
-
-        $string .= '"TotRegDE": '.$this->getTotRegDE().' ,';
-        $string .= '"MontHTExtDE": '.$this->getMontHTExtDE().' ,';
-        $string .= '"MontTVAExtDE": '.$this->getMontTVAExtDE().' ,';
-        $string .= '"MontTTCExtDE": '.$this->getMontTTCExtDE().' ,';
-        $string .= '"DateRegDE": "'.date_format($this->getDateRegDE(), 'Y-m-d').'" ,';
-        $string .= '"RSocDE": "'.$this->getRSocDE().'" ,';
-        $string .= '"DateHeureEditDE": '.$this->getDateHeureEditDE().' ,';
-        $string .= '"CodRgpt": "'.$this->getCodRgpt().'" ,';
-        $string .= '"HASH": "'.$this->getHASH().'" ,';
-        $string .= '"IdCli": '.$this->getIdCli().' ,';
-        $string .= '"NoCli": '.$this->getNoCli().' ,';
-        $string .= '"CodCli": "'.$this->getCodCli().'" ,';
-        $string .= '"NoComptaCli": "'.$this->getNoComptaCli().'" ,';
-        $string .= '"RSocCli": "'.$this->getRSocCli().'" ,';
-        $string .= '"RSocLivDE": "'.$this->getRSocLivDE().'" ,';
-        $string .= '"AdrLivDE": "'.$this->getAdrLivDE().'" ,';
-        $string .= '"CPLivDE": "'.$this->getCPLivDE().'" ,';
-        $string .= '"VilleLivDE": "'.$this->getVilleLivDE().'" ,';
-        $string .= '"PaysLivDE": "'.$this->getPaysLivDE().'" ,';
-        $string .= '"TelLivDE": "'.$this->getTelLivDE().'" ,';
-        $string .= '"FaxLivDE": "'.$this->getFaxLivDE().'" ,';
-        $string .= '"MailLivDE": "'.$this->getMailLivDE().'" ,';
-        $string .= '"RSocFacDE": "'.$this->getRSocFacDE().'" ,';
-        $string .= '"AdrFacDE": "'.$this->getAdrFacDE().'" ,';
-        $string .= '"CPFacDE": "'.$this->getCPFacDE().'" ,';
-        $string .= '"VilleFacDE": "'.$this->getVilleFacDE().'" ,';
-        $string .= '"PaysFacDE": "'.$this->getPaysFacDE().'" ,';
-        $string .= '"TelFacDE": "'.$this->getTelFacDE().'" ,';
-        $string .= '"FaxFacDE": "'.$this->getFaxFacDE().'" ,';
-        $string .= '"MailFacDE": "'.$this->getMailFacDE().'" ,';
-        $string .= '"IdSalVend": '.$this->getIdSalVend().' ,';
-        $string .= '"CodSalVend": "'.$this->getCodSalVend().'" ,';
-        $string .= '"IdSalRep": '.$this->getIdSalRep().' ,';
-        $string .= '"CodSalRep": "'.$this->getCodSalRep().'" ,';
-        $string .= '"IdCha": '.$this->getIdCha().' ,';
-        $string .= '"CodCha": "'.$this->getCodCha().'" ,';
-        $string .= '"LibCha": "'.$this->getLibCha().'" ,';
-        $string .= '"AdrCha": "'.$this->getAdrCha().'" ,';
-        $string .= '"CPCha": "'.$this->getCPCha().'" ,';
-        $string .= '"VilleCha": "'.$this->getVilleCha().'" ,';
-        $string .= '"MontPortDE": '.$this->getMontPortDE().' ,';
-        $string .= '"DateLivDE": "'.date_format($this->getDateLivDE(), 'Y-m-d').'" ,';
-        $string .= '"IdTC": '.$this->getIdTC().' ,';
-        $string .= '"PrisParDE": "'.$this->getPrisParDE().'" ,';
-        $string .= '"DateReacDE": "'.date_format($this->getDateReacDE(), 'Y-m-d').'" ,';
-
-        $val = ($this->isFlgPFDE()) ? 'true' : 'false';
-        $string .= '"FlgPFDE": '.$val.' ,';
-
-        $string .= '"CodOrigDE": "'.$this->getCodOrigDE().'" ,';
-        $string .= '"DateCloDE": "'.date_format($this->getDateCloDE(), 'Y-m-d').'" ,';
-
-        //DEVIS
-        $string .= '"DateRelDE": "'.date_format($this->getDateRelDE(), 'Y-m-d').'" ,';
-        $string .= '"IdSalRel": '.$this->getIdSalRel().' ,';
-        $string .= '"NatDE": "'.$this->getNatDE().'" ,';
-        $string .= '"DateRealDE": "'.date_format($this->getDateRealDE(), 'Y-m-d').'" ,';
-
-        //BL
-        $string .= '"DateFacDE": "'.date_format($this->getDateFacDE(), 'Y-m-d').'" ,';
-
-        //FACCLI
-        $string .= '"CodTvaDE": '.$this->getCodTvaDE().' ,';
-        $string .= '"BaseHTDE": '.$this->getBaseHTDE().' ,';
-        $string .= '"BaseTvaDE": '.$this->getBaseTvaDE().' ,';
-        $string .= '"BaseTgapDE": '.$this->getBaseTgapDE().' ,';
-        $string .= '"BaseParafDE": '.$this->getBaseParafDE().' ,';
-        $string .= '"MontTgapTableDE": '.$this->getMontTgapTableDE().' ,';
-        $string .= '"MontParafTableDE": '.$this->getMontParafTableDE().' ,';
-        $string .= '"MontTvaTableDE": '.$this->getMontTvaTableDE().' ,';
+        $string .= '"MotsClesAutoDE": "'.$this->getMotsClesAutoDE().'"';
         $string .= '}';
 
         return $string;
@@ -2058,213 +1941,5 @@ class WsDocumEnt
     {
         $this->DateCloDE = $DateCloDE;
     }
-
-    /**
-     * @return null
-     */
-    public function getDateRelDE()
-    {
-        return $this->DateRelDE;
-    }
-
-    /**
-     * @param null $DateRelDE
-     */
-    public function setDateRelDE($DateRelDE)
-    {
-        $this->DateRelDE = $DateRelDE;
-    }
-
-    /**
-     * @return int
-     */
-    public function getIdSalRel()
-    {
-        return $this->IdSalRel;
-    }
-
-    /**
-     * @param int $IdSalRel
-     */
-    public function setIdSalRel($IdSalRel)
-    {
-        $this->IdSalRel = $IdSalRel;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNatDE()
-    {
-        return $this->NatDE;
-    }
-
-    /**
-     * @param string $NatDE
-     */
-    public function setNatDE($NatDE)
-    {
-        $this->NatDE = $NatDE;
-    }
-
-    /**
-     * @return null
-     */
-    public function getDateRealDE()
-    {
-        return $this->DateRealDE;
-    }
-
-    /**
-     * @param null $DateRealDE
-     */
-    public function setDateRealDE($DateRealDE)
-    {
-        $this->DateRealDE = $DateRealDE;
-    }
-
-    /**
-     * @return null
-     */
-    public function getDateFacDE()
-    {
-        return $this->DateFacDE;
-    }
-
-    /**
-     * @param null $DateFacDE
-     */
-    public function setDateFacDE($DateFacDE)
-    {
-        $this->DateFacDE = $DateFacDE;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCodTvaDE()
-    {
-        return $this->CodTvaDE;
-    }
-
-    /**
-     * @param array $CodTvaDE
-     */
-    public function setCodTvaDE($CodTvaDE)
-    {
-        $this->CodTvaDE = $CodTvaDE;
-    }
-
-    /**
-     * @return array
-     */
-    public function getBaseHTDE()
-    {
-        return $this->BaseHTDE;
-    }
-
-    /**
-     * @param array $BaseHTDE
-     */
-    public function setBaseHTDE($BaseHTDE)
-    {
-        $this->BaseHTDE = $BaseHTDE;
-    }
-
-    /**
-     * @return array
-     */
-    public function getBaseTvaDE()
-    {
-        return $this->BaseTvaDE;
-    }
-
-    /**
-     * @param array $BaseTvaDE
-     */
-    public function setBaseTvaDE($BaseTvaDE)
-    {
-        $this->BaseTvaDE = $BaseTvaDE;
-    }
-
-    /**
-     * @return array
-     */
-    public function getBaseTgapDE()
-    {
-        return $this->BaseTgapDE;
-    }
-
-    /**
-     * @param array $BaseTgapDE
-     */
-    public function setBaseTgapDE($BaseTgapDE)
-    {
-        $this->BaseTgapDE = $BaseTgapDE;
-    }
-
-    /**
-     * @return array
-     */
-    public function getBaseParafDE()
-    {
-        return $this->BaseParafDE;
-    }
-
-    /**
-     * @param array $BaseParafDE
-     */
-    public function setBaseParafDE($BaseParafDE)
-    {
-        $this->BaseParafDE = $BaseParafDE;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMontTgapTableDE()
-    {
-        return $this->MontTgapTableDE;
-    }
-
-    /**
-     * @param array $MontTgapTableDE
-     */
-    public function setMontTgapTableDE($MontTgapTableDE)
-    {
-        $this->MontTgapTableDE = $MontTgapTableDE;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMontParafTableDE()
-    {
-        return $this->MontParafTableDE;
-    }
-
-    /**
-     * @param array $MontParafTableDE
-     */
-    public function setMontParafTableDE($MontParafTableDE)
-    {
-        $this->MontParafTableDE = $MontParafTableDE;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMontTvaTableDE()
-    {
-        return $this->MontTvaTableDE;
-    }
-
-    /**
-     * @param array $MontTvaTableDE
-     */
-    public function setMontTvaTableDE($MontTvaTableDE)
-    {
-        $this->MontTvaTableDE = $MontTvaTableDE;
-    }
-
+    
 }

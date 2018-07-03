@@ -54,8 +54,16 @@ class WsParameters
     public const TYPE_PRENDRE_CMDCLI = 'DocumentCommandeClient';
     public const TYPE_PRENDRE_FACCLI = 'DocumentFactureClient';
     public const TYPE_PRENDRE_PANIER = 'DocumentPanier';
+    public const TYPE_PRENDRE_EDITION_BL = 'EditionBonLivraison';
+    public const TYPE_PRENDRE_EDITION_DEVIS = 'EditionDevis';
+    public const TYPE_PRENDRE_EDITION_CMDCLI = 'EditionCommandeClient';
+    public const TYPE_PRENDRE_EDITION_FACCLI = 'EditionFactureClient';
 
     public const FORMAT_DOCUMENT_VIDE = ' ';
     public const FORMAT_DOCUMENT_ENT = 'Ent';
     public const FORMAT_DOCUMENT_LIG = 'Lig';
+
+    public const FORMAT_EDITION_VIDE = ' ';
+    public const FORMAT_EDITION_BLOB = 'BLOB';
+    public const FORMAT_EDITION_LINK = 'LINK';
 }

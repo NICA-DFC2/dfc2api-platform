@@ -8,19 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
- * Entité qui représente une entête de document. Certain champs sont hydratés par un appel aux services web GIMEL.
+ * @ApiResource
  *
- * @ApiResource(
- *     collectionOperations = {
- *          "header" = {
- *              "route_name" = "api_document_header_items_get"
- *          }
- *     }
- * )
+ * Entité qui représente une entête de panier. Certain champs sont hydratés par un appel aux services web GIMEL.
+ *
  * @ORM\Entity
- * @ORM\Table(name="Document")
+ * @ORM\Table(name="Panier")
  */
-class Document
+class Panier
 {
     /**
      * @ORM\Column(type="integer")
@@ -115,26 +110,26 @@ class Document
     private $MotsClesAutoDE;
 
 
-    private $DocumLig;
+    private $PanierLig;
 
 
     public function __construct()
     {
-        $this->DocumLig = new ArrayCollection();
+        $this->PanierLig = new ArrayCollection();
     }
 
 
     /**
-     * @return Collection|DocumentLigne[]
+     * @return Collection|PanierLig[]
      */
-    public function getDocumLig(): Collection
+    public function getPanierLig(): Collection
     {
-        return $this->DocumLig;
+        return $this->PanierLig;
     }
 
-    public function setDocumLig(Collection $DocumLig)
+    public function setPanierLig(Collection $PanierLig)
     {
-        $this->DocumLig = $DocumLig;
+        $this->PanierLig = $PanierLig;
 
         return $this;
     }
@@ -150,7 +145,7 @@ class Document
     /**
      * @param integer $Id
      */
-    public function setId($Id): void
+    public function setId($Id)
     {
         $this->id = $Id;
     }
@@ -166,7 +161,7 @@ class Document
     /**
      * @param mixed $IdDE
      */
-    public function setIdDE($IdDE): void
+    public function setIdDE($IdDE)
     {
         $this->IdDE = $IdDE;
     }
@@ -182,7 +177,7 @@ class Document
     /**
      * @param mixed $IdDocDE
      */
-    public function setIdDocDE($IdDocDE): void
+    public function setIdDocDE($IdDocDE)
     {
         $this->IdDocDE = $IdDocDE;
     }
@@ -198,7 +193,7 @@ class Document
     /**
      * @param mixed $NumDE
      */
-    public function setNumDE($NumDE): void
+    public function setNumDE($NumDE)
     {
         $this->NumDE = $NumDE;
     }
@@ -214,7 +209,7 @@ class Document
     /**
      * @param mixed $DateDE
      */
-    public function setDateDE($DateDE): void
+    public function setDateDE($DateDE)
     {
         $this->DateDE = $DateDE;
     }
@@ -230,7 +225,7 @@ class Document
     /**
      * @param mixed $IdCli
      */
-    public function setIdCli($IdCli): void
+    public function setIdCli($IdCli)
     {
         $this->IdCli = $IdCli;
     }
@@ -246,7 +241,7 @@ class Document
     /**
      * @param mixed $IdSoc
      */
-    public function setIdSoc($IdSoc): void
+    public function setIdSoc($IdSoc)
     {
         $this->IdSoc = $IdSoc;
     }
@@ -262,7 +257,7 @@ class Document
     /**
      * @param mixed $EtatDE
      */
-    public function setEtatDE($EtatDE): void
+    public function setEtatDE($EtatDE)
     {
         $this->EtatDE = $EtatDE;
     }
@@ -278,7 +273,7 @@ class Document
     /**
      * @param mixed $TypeDE
      */
-    public function setTypeDE($TypeDE): void
+    public function setTypeDE($TypeDE)
     {
         $this->TypeDE = $TypeDE;
     }
@@ -294,7 +289,7 @@ class Document
     /**
      * @param mixed $RefDE
      */
-    public function setRefDE($RefDE): void
+    public function setRefDE($RefDE)
     {
         $this->RefDE = $RefDE;
     }
@@ -310,7 +305,7 @@ class Document
     /**
      * @param mixed $MontTTCDE
      */
-    public function setMontTTCDE($MontTTCDE): void
+    public function setMontTTCDE($MontTTCDE)
     {
         $this->MontTTCDE = $MontTTCDE;
     }
@@ -326,7 +321,7 @@ class Document
     /**
      * @param mixed $MontHTDE
      */
-    public function setMontHTDE($MontHTDE): void
+    public function setMontHTDE($MontHTDE)
     {
         $this->MontHTDE = $MontHTDE;
     }
@@ -342,7 +337,7 @@ class Document
     /**
      * @param mixed $ComDE
      */
-    public function setComDE($ComDE): void
+    public function setComDE($ComDE)
     {
         $this->ComDE = $ComDE;
     }
@@ -358,7 +353,7 @@ class Document
     /**
      * @param mixed $DateLivrDE
      */
-    public function setDateLivrDE($DateLivrDE): void
+    public function setDateLivrDE($DateLivrDE)
     {
         $this->DateLivrDE = $DateLivrDE;
     }
@@ -374,7 +369,7 @@ class Document
     /**
      * @param mixed $IdFac
      */
-    public function setIdFac($IdFac): void
+    public function setIdFac($IdFac)
     {
         $this->IdFac = $IdFac;
     }
@@ -390,7 +385,7 @@ class Document
     /**
      * @param mixed $IdDepLiv
      */
-    public function setIdDepLiv($IdDepLiv): void
+    public function setIdDepLiv($IdDepLiv)
     {
         $this->IdDepLiv = $IdDepLiv;
     }
@@ -406,7 +401,7 @@ class Document
     /**
      * @param mixed $FlgValidDE
      */
-    public function setFlgValidDE($FlgValidDE): void
+    public function setFlgValidDE($FlgValidDE)
     {
         $this->FlgValidDE = $FlgValidDE;
     }
@@ -422,7 +417,7 @@ class Document
     /**
      * @param mixed $MotsClesAutoDE
      */
-    public function setMotsClesAutoDE($MotsClesAutoDE): void
+    public function setMotsClesAutoDE($MotsClesAutoDE)
     {
         $this->MotsClesAutoDE = $MotsClesAutoDE;
     }

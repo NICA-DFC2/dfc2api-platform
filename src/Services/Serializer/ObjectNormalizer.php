@@ -7,6 +7,7 @@ use App\Entity\Article;
 use App\Entity\Document;
 use App\Entity\User;
 use App\Services\Objets\Notif;
+use App\Services\Objets\TTRetour;
 use App\Services\Parameters\WsParameters;
 use App\Services\UserService;
 use App\Services\WsManager;
@@ -87,12 +88,6 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
         if($object instanceof Article) {
             return $this->normalizeArtDet($data, $context['uri']);
         }
-        /*
-         * si data est de type Document : Hydratation d'un document
-         */
-        else if($object instanceof Document) {
-            //return $this->normalizeDoc($data, $context['uri']);
-        }
 
         return $data;
     }
@@ -171,7 +166,16 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
                 if (!is_null($stocks)) {
                     // Création d'un tableau des stocks simplifié
                     for ($i = 0; $i < $stocks->countItems(); $i++) {
-                        array_push($arrayStocks, json_decode($stocks->getItem($i)->__toString()));
+                        $wsStock = $stocks->getItem($i);
+
+                        $TTDepotRetour = $this->ws_manager->getDepot($wsStock->getIdDep());
+                        var_dump($TTDepotRetour);
+                        if(!is_null($TTDepotRetour) && $TTDepotRetour instanceof TTRetour) {
+                            $TTDepot = $TTDepotRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DEPOT);
+                            $wsDepot = $TTDepot->getItem(0);
+                            $wsStock->setDepot($wsDepot);
+                        }
+                        array_push($arrayStocks, json_decode($wsStock->__toString()));
                     }
                 }
 
@@ -203,74 +207,11 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
     }
 
     /**
-     * Fonction qui permet l'hydration d'un document
-     *
-     * @param $data
-     * @return mixed
-     * @throws \ErrorException
-     */
-    private function normalizeDoc($data, $uri) {
-
-        $TTRetour = null;
-        $flg_ws = (strpos($uri, 'ws') !== false);
-        $flg_ent = (strpos($uri, 'header') !== false);
-        $flg_lig = (strpos($uri, 'row')  !== false);
-        $flg_tout = (strpos($uri, 'all')  !== false);
-
-        // Lecture du user connecté
-        $user = $this->user_service->getCurrentUser();
-        // si user connecté et de type User
-        if($user instanceof User && $flg_ws && ($flg_tout || $flg_lig || $flg_ent)) {
-            // hydratation de l'entité User avec les informations du service web gimel
-            $user = $this->normalizeUser($user);
-            // instancie la propriété user du manager des services web gimel
-            $this->ws_manager->setUser($user);
-
-            $format = '';
-            if($flg_ent) {
-                $format = WsParameters::FORMAT_DOCUMENT_ENT;
-            }
-            else if($flg_lig) {
-                $format = WsParameters::FORMAT_DOCUMENT_LIG;
-            }
-            else if($flg_tout) {
-                $format = WsParameters::FORMAT_DOCUMENT_VIDE;
-            }
-
-            if(!empty($format)) {
-                // Appel service web d'un article par son identifiant technique IdArt et calcul du prix net si client connecté
-                $TTRetour = $this->ws_manager->getDevis($format);
-            }
-        }
-
-        // si le retour est de type Notif
-        // Message d'erreur retourné par les webservices
-        if($TTRetour instanceof Notif) {
-            throw new \ErrorException(sprintf('Il y a une erreur:  %s.', $TTRetour->__toString()), 401 ,1, __FILE__);
-        }
-
-        if(!is_null($TTRetour)) {
-            $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUMENT);
-
-            if(is_null($TTParam)) {
-                throw new \ErrorException('Il y a une erreur, objet TTParam:class null ', 401 ,1, __FILE__);
-            }
-            else if($TTParam->countItems() == 0) {
-                throw new \ErrorException(sprintf('Il y a une erreur, objet TTParam:class vide:  %s.', $TTParam->__toString()), 401 ,1, __FILE__);
-            }
-            else {
-                var_dump($TTParam);
-            }
-        }
-
-        return $data;
-    }
-
-    /**
      * Fonction qui permet l'hydration d'un User
      *
      * @param $user_data
      * @return mixed
+     * @throws
      */
     private function normalizeUser(User $user_data) {
         // Appel service web d'un client par son code client (CodCli)

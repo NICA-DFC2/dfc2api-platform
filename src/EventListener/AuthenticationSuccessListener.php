@@ -1,6 +1,7 @@
 <?php
 namespace App\EventListener;
 
+use App\Services\Objets\CntxAdmin;
 use App\Services\Objets\WsClient;
 use App\Services\Parameters\WsAlgorithmOpenSSL;
 use App\Services\Parameters\WsTableNamesRetour;
@@ -38,7 +39,7 @@ class AuthenticationSuccessListener
         $user = $event->getUser();
 
         if(!is_null($this->ws_manager)) {
-            $cntx = $this->ws_manager->getDemarre(null, null, WsAlgorithmOpenSSL::NONE);
+            $cntx = $this->ws_manager->getDemarre(WsAlgorithmOpenSSL::NONE);
 
             $TTRetour = $this->ws_manager->getClientByCodCli($user->getCode());
             if(!is_null($TTRetour)) {
@@ -60,7 +61,7 @@ class AuthenticationSuccessListener
 
     private function hydrate($data, $user, $cntx=null, WsClient $wsClient=null) {
 
-        if(!is_null($wsClient)) {
+        if(!is_null($wsClient) && $cntx instanceof CntxAdmin) {
             $data['user'] = array(
                 'id' => $user->getId(),
                 'username' => $user->getUsername(),
@@ -78,21 +79,22 @@ class AuthenticationSuccessListener
             );
         }
         else {
+            var_dump($cntx);
             $data['user'] = array(
-                'id' => $user->getId(),
-                'username' => $user->getUsername(),
-                'code' => $user->getCode(),
-                'fullname' => $user->getFullname(),
-                'email' => $user->getEmail(),
-                'last_login' => $user->getLastLogin(),
-                'code_client' => $user->getCodeClient(),
-                'raison_sociale' => $user->getRaisonSociale(),
+                'id' => null,
+                'username' => null,
+                'code' => null,
+                'fullname' => null,
+                'email' => null,
+                'last_login' => null,
+                'code_client' => null,
+                'raison_sociale' => null,
                 'id_cli' => null,
                 'no_cli' => null,
                 'id_depot_cli' => null,
                 'nom_depot_cli' => null,
-                'roles' => $user->getRoles(),
-                'cntx_valid' => (!is_null($cntx) && $cntx->isValid()) ? true : false
+                'roles' => null,
+                'cntx_valid' => false
             );
         }
 
