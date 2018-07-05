@@ -2,7 +2,7 @@
 
 use Behat\Behat\Context\Context;
 
-class ArticlesContext implements Context
+class CommandesContext implements Context
 {
     public function __construct()
     {

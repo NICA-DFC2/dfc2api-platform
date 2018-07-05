@@ -2,7 +2,7 @@
 
 use Behat\Behat\Context\Context;
 
-class ArticlesContext implements Context
+class BonsLivraisonContext implements Context
 {
     public function __construct()
     {
