@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Utils\StockDepot;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Swagger\Annotations as SWG;
@@ -12,6 +15,10 @@ use Swagger\Annotations as SWG;
  * Entité qui représente un Article. Certain champs sont hydratés par un appel aux services web GIMEL.
  *
  * @ApiResource(
+ *     attributes={
+ *     "normalization_context"={"groups"={"read"}},
+ *     "denormalization_context"={"groups"={"write"}}
+ *      },
  *     itemOperations={
  *     "get"={"method"="GET"},
  *     "logistic"={
@@ -47,7 +54,6 @@ use Swagger\Annotations as SWG;
  * })
  * @ORM\Entity
  * @ORM\Table(name="Article")
- * @ApiFilter(SearchFilter::class, properties={"IdAD": "exact", "DesiAD": "partial", "DesiPrincAD": "partial"})
  */
 class Article
 {
@@ -57,6 +63,7 @@ class Article
      * @ORM\Column(name="IdAD", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"read"})
      */
     private $IdAD;
 
@@ -64,137 +71,164 @@ class Article
      * @param integer $IdArtEvoAD A IdArt propriété - Identifiant unique d'un article dans Evolubat.
      *
      * @ORM\Column(name="IdArtEvoAD", type="integer", options={"default":-1}, nullable=true)
+     * @Groups({"read"})
      */
     private $IdArtEvoAD;
 
     /**
      * @ORM\Column(name="DesiAD", type="string", length=255, nullable=true)
+     * @Groups({"read"})
      */
     private $DesiAD;
 
     /**
      * Désignation commune à tous les articles de la même déclinaison
      * @ORM\Column(name="DesiPrincAD", type="string", length=255, nullable=true)
+     * @Groups({"read"})
      */
     private $DesiPrincAD;
 
     /**
      * @ORM\Column(name="DescriWebAD", type="text", nullable=true)
+     * @Groups({"read"})
      */
     private $DescriWebAD;
 
     /**
      * @ORM\Column(name="DescriCatalogAD", type="text", nullable=true)
+     * @Groups({"read"})
      */
     private $DescriCatalogAD;
 
     /**
      * @ORM\Column(name="MediasAD", type="text", nullable=true)
+     * @Groups({"read"})
      */
     private $MediasAD;
 
     /**
      * @ORM\Column(name="PlusAD", type="text", nullable=true)
+     * @Groups({"read"})
      */
     private $PlusAD;
 
     /**
      * @ORM\Column(name="MotsClesAD", type="string", length=255, nullable=true)
+     * @Groups({"read"})
      */
     private $MotsClesAD;
 
     /**
      * @ORM\Column(name="OrdreAD", type="integer", options={"default":0}, nullable=true)
+     * @Groups({"read"})
      */
     private $OrdreAD;
 
     /**
      * @ORM\Column(name="NumDecliAD", type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $NumDecliAD;
 
     /**
      * @ORM\Column(name="FlgAncAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgAncAD;
 
     /**
      * @ORM\Column(name="FlgCatalogAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgCatalogAD;
 
     /**
      * @ORM\Column(name="FlgPrincAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgPrincAD;
 
     /**
      * @ORM\Column(name="FlgDestockAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgDestockAD;
 
     /**
      * @ORM\Column(name="FlgHorsMarqueAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgHorsMarqueAD;
 
     /**
      * @ORM\Column(name="FlgNouvAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgNouvAD;
 
     /**
      * @ORM\Column(name="FlgPromoAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgPromoAD;
 
     /**
      * @ORM\Column(name="FlgVisibleAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgVisibleAD;
 
     /**
      * @ORM\Column(name="FlgEclBleuAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgEclBleuAD;
 
     /**
      * @ORM\Column(name="FlgEclRoseAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgEclRoseAD;
 
     /**
      * @ORM\Column(name="FlgEclVertAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgEclVertAD;
 
     /**
      * @ORM\Column(name="FlgEclOrangeAD", type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $FlgEclOrangeAD;
 
     /**
      * @ORM\Column(name="IdFourAD", type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $IdFourAD;
 
     /**
      * @ORM\Column(name="DateCreAD", type="datetime", nullable=true)
+     * @Groups({"read"})
      */
     private $DateCreAD;
 
     /**
      * @ORM\Column(name="DateModAD", type="datetime", nullable=true)
+     * @Groups({"read"})
      */
     private $DateModAD;
 
     /**
      * @ORM\Column(name="UCreAD", type="string", length=5, nullable=true)
+     * @Groups({"read"})
      */
     private $UCreAD;
 
     /**
      * @ORM\Column(name="UModAD", type="string", length=5, nullable=true)
+     * @Groups({"read"})
      */
     private $UModAD;
 
@@ -210,62 +244,72 @@ class Article
     /**
      * @var integer|null
      * @SWG\Property(description="Identifiant unique Evolubat de l'article.", type="integer")
+     * @Groups({"read", "write"})
      */
     private $IdADWS;
 
     /**
      * @var integer|null
      * @SWG\Property(description="Numéro unique Evolubat de l'article.", type="integer")
+     * @Groups({"read", "write"})
      */
     private $NoADWS;
 
     /**
      * @var string|null
      * @SWG\Property(description="Code fournisseur unique Evolubat de l'article.", type="string")
+     * @Groups({"read", "write"})
      */
     private $CodADFWS;
 
     /**
      * @var string|null
      * @SWG\Property(description="Désignation Evolubat de l'article.", type="string")
+     * @Groups({"read", "write"})
      */
     private $DesiADWS;
 
     /**
      * @var string|null
      * @SWG\Property(description="Code unique Evolubat de l'article.", type="string")
+     * @Groups({"read", "write"})
      */
     private $CodADWS;
 
     /**
      * @var string|null
      * @SWG\Property(description="Unité de vente de l'article.", type="string")
+     * @Groups({"read", "write"})
      */
     private $UVteADWS;
 
     /**
      * @var string|null
      * @SWG\Property(description="Unité de stock de l'article.", type="string")
+     * @Groups({"read", "write"})
      */
     private $UStoADWS;
 
     /**
      * @var float|null
      * @SWG\Property(description="Prix public HT de l'article.", type="decimal")
+     * @Groups({"read", "write"})
      */
     private $PrixPubADWS;
 
     /**
      * @var float|null
      * @SWG\Property(description="Prix net HT du client connecté de l'article.", type="decimal")
+     * @Groups({"read", "write"})
      */
     private $PrixNetCliADWS;
 
     /**
      * @var array
      * @SWG\Property(description="Stocks disponibles Evolubat de l'article dans les différents dépots.", type="array")
+     * @Groups({"read", "write"})
      */
-    private $Stocks = [];
+    private $Stocks = null;
 
 
     /**
@@ -273,8 +317,9 @@ class Article
      */
     public function __construct()
     {
-
+        $this->Stocks = array();
     }
+
 
     /**
      * @return mixed
@@ -287,7 +332,7 @@ class Article
     /**
      * @param mixed $IdAD
      */
-    public function setIdAD($IdAD): void
+    public function setIdAD($IdAD)
     {
         $this->IdAD = $IdAD;
     }
@@ -303,7 +348,7 @@ class Article
     /**
      * @param mixed $IdArtEvoAD
      */
-    public function setIdArtEvoAD($IdArtEvoAD): void
+    public function setIdArtEvoAD($IdArtEvoAD)
     {
         $this->IdArtEvoAD = $IdArtEvoAD;
     }
@@ -319,7 +364,7 @@ class Article
     /**
      * @param mixed $DesiAD
      */
-    public function setDesiAD($DesiAD): void
+    public function setDesiAD($DesiAD)
     {
         $this->DesiAD = $DesiAD;
     }
@@ -335,7 +380,7 @@ class Article
     /**
      * @param mixed $DesiPrincAD
      */
-    public function setDesiPrincAD($DesiPrincAD): void
+    public function setDesiPrincAD($DesiPrincAD)
     {
         $this->DesiPrincAD = $DesiPrincAD;
     }
@@ -351,7 +396,7 @@ class Article
     /**
      * @param mixed $DescriWebAD
      */
-    public function setDescriWebAD($DescriWebAD): void
+    public function setDescriWebAD($DescriWebAD)
     {
         $this->DescriWebAD = $DescriWebAD;
     }
@@ -367,7 +412,7 @@ class Article
     /**
      * @param mixed $DescriCatalogAD
      */
-    public function setDescriCatalogAD($DescriCatalogAD): void
+    public function setDescriCatalogAD($DescriCatalogAD)
     {
         $this->DescriCatalogAD = $DescriCatalogAD;
     }
@@ -383,7 +428,7 @@ class Article
     /**
      * @param mixed $MediasAD
      */
-    public function setMediasAD($MediasAD): void
+    public function setMediasAD($MediasAD)
     {
         $this->MediasAD = $MediasAD;
     }
@@ -399,7 +444,7 @@ class Article
     /**
      * @param mixed $PlusAD
      */
-    public function setPlusAD($PlusAD): void
+    public function setPlusAD($PlusAD)
     {
         $this->PlusAD = $PlusAD;
     }
@@ -415,7 +460,7 @@ class Article
     /**
      * @param mixed $MotsClesAD
      */
-    public function setMotsClesAD($MotsClesAD): void
+    public function setMotsClesAD($MotsClesAD)
     {
         $this->MotsClesAD = $MotsClesAD;
     }
@@ -431,7 +476,7 @@ class Article
     /**
      * @param mixed $OrdreAD
      */
-    public function setOrdreAD($OrdreAD): void
+    public function setOrdreAD($OrdreAD)
     {
         $this->OrdreAD = $OrdreAD;
     }
@@ -447,7 +492,7 @@ class Article
     /**
      * @param mixed $NumDecliAD
      */
-    public function setNumDecliAD($NumDecliAD): void
+    public function setNumDecliAD($NumDecliAD)
     {
         $this->NumDecliAD = $NumDecliAD;
     }
@@ -463,7 +508,7 @@ class Article
     /**
      * @param mixed $FlgAncAD
      */
-    public function setFlgAncAD($FlgAncAD): void
+    public function setFlgAncAD($FlgAncAD)
     {
         $this->FlgAncAD = $FlgAncAD;
     }
@@ -479,7 +524,7 @@ class Article
     /**
      * @param mixed $FlgCatalogAD
      */
-    public function setFlgCatalogAD($FlgCatalogAD): void
+    public function setFlgCatalogAD($FlgCatalogAD)
     {
         $this->FlgCatalogAD = $FlgCatalogAD;
     }
@@ -495,7 +540,7 @@ class Article
     /**
      * @param mixed $FlgPrincAD
      */
-    public function setFlgPrincAD($FlgPrincAD): void
+    public function setFlgPrincAD($FlgPrincAD)
     {
         $this->FlgPrincAD = $FlgPrincAD;
     }
@@ -511,7 +556,7 @@ class Article
     /**
      * @param mixed $FlgDestockAD
      */
-    public function setFlgDestockAD($FlgDestockAD): void
+    public function setFlgDestockAD($FlgDestockAD)
     {
         $this->FlgDestockAD = $FlgDestockAD;
     }
@@ -527,7 +572,7 @@ class Article
     /**
      * @param mixed $FlgHorsMarqueAD
      */
-    public function setFlgHorsMarqueAD($FlgHorsMarqueAD): void
+    public function setFlgHorsMarqueAD($FlgHorsMarqueAD)
     {
         $this->FlgHorsMarqueAD = $FlgHorsMarqueAD;
     }
@@ -543,7 +588,7 @@ class Article
     /**
      * @param mixed $FlgNouvAD
      */
-    public function setFlgNouvAD($FlgNouvAD): void
+    public function setFlgNouvAD($FlgNouvAD)
     {
         $this->FlgNouvAD = $FlgNouvAD;
     }
@@ -559,7 +604,7 @@ class Article
     /**
      * @param mixed $FlgPromoAD
      */
-    public function setFlgPromoAD($FlgPromoAD): void
+    public function setFlgPromoAD($FlgPromoAD)
     {
         $this->FlgPromoAD = $FlgPromoAD;
     }
@@ -575,7 +620,7 @@ class Article
     /**
      * @param mixed $FlgVisibleAD
      */
-    public function setFlgVisibleAD($FlgVisibleAD): void
+    public function setFlgVisibleAD($FlgVisibleAD)
     {
         $this->FlgVisibleAD = $FlgVisibleAD;
     }
@@ -591,7 +636,7 @@ class Article
     /**
      * @param mixed $FlgEclBleuAD
      */
-    public function setFlgEclBleuAD($FlgEclBleuAD): void
+    public function setFlgEclBleuAD($FlgEclBleuAD)
     {
         $this->FlgEclBleuAD = $FlgEclBleuAD;
     }
@@ -607,7 +652,7 @@ class Article
     /**
      * @param mixed $FlgEclRoseAD
      */
-    public function setFlgEclRoseAD($FlgEclRoseAD): void
+    public function setFlgEclRoseAD($FlgEclRoseAD)
     {
         $this->FlgEclRoseAD = $FlgEclRoseAD;
     }
@@ -623,7 +668,7 @@ class Article
     /**
      * @param mixed $FlgEclVertAD
      */
-    public function setFlgEclVertAD($FlgEclVertAD): void
+    public function setFlgEclVertAD($FlgEclVertAD)
     {
         $this->FlgEclVertAD = $FlgEclVertAD;
     }
@@ -639,7 +684,7 @@ class Article
     /**
      * @param mixed $FlgEclOrangeAD
      */
-    public function setFlgEclOrangeAD($FlgEclOrangeAD): void
+    public function setFlgEclOrangeAD($FlgEclOrangeAD)
     {
         $this->FlgEclOrangeAD = $FlgEclOrangeAD;
     }
@@ -655,7 +700,7 @@ class Article
     /**
      * @param mixed $IdFourAD
      */
-    public function setIdFourAD($IdFourAD): void
+    public function setIdFourAD($IdFourAD)
     {
         $this->IdFourAD = $IdFourAD;
     }
@@ -671,7 +716,7 @@ class Article
     /**
      * @param mixed $DateCreAD
      */
-    public function setDateCreAD($DateCreAD): void
+    public function setDateCreAD($DateCreAD)
     {
         $this->DateCreAD = $DateCreAD;
     }
@@ -687,7 +732,7 @@ class Article
     /**
      * @param mixed $DateModAD
      */
-    public function setDateModAD($DateModAD): void
+    public function setDateModAD($DateModAD)
     {
         $this->DateModAD = $DateModAD;
     }
@@ -703,7 +748,7 @@ class Article
     /**
      * @param mixed $UCreAD
      */
-    public function setUCreAD($UCreAD): void
+    public function setUCreAD($UCreAD)
     {
         $this->UCreAD = $UCreAD;
     }
@@ -719,7 +764,7 @@ class Article
     /**
      * @param mixed $UModAD
      */
-    public function setUModAD($UModAD): void
+    public function setUModAD($UModAD)
     {
         $this->UModAD = $UModAD;
     }
@@ -741,7 +786,7 @@ class Article
     /**
      * @param integer|null $IdADWS
      */
-    public function setIdADWS($IdADWS): void
+    public function setIdADWS($IdADWS)
     {
         $this->IdADWS = $IdADWS;
     }
@@ -757,7 +802,7 @@ class Article
     /**
      * @param integer|null $NoADWS
      */
-    public function setNoADWS($NoADWS): void
+    public function setNoADWS($NoADWS)
     {
         $this->NoADWS = $NoADWS;
     }
@@ -773,7 +818,7 @@ class Article
     /**
      * @param string|null $CodADFWS
      */
-    public function setCodADFWS($CodADFWS): void
+    public function setCodADFWS($CodADFWS)
     {
         $this->CodADFWS = $CodADFWS;
     }
@@ -789,7 +834,7 @@ class Article
     /**
      * @param string|null $DesiADWS
      */
-    public function setDesiADWS($DesiADWS): void
+    public function setDesiADWS($DesiADWS)
     {
         $this->DesiADWS = $DesiADWS;
     }
@@ -805,7 +850,7 @@ class Article
     /**
      * @param string|null $CodADWS
      */
-    public function setCodADWS($CodADWS): void
+    public function setCodADWS($CodADWS)
     {
         $this->CodADWS = $CodADWS;
     }
@@ -821,7 +866,7 @@ class Article
     /**
      * @param string|null $UVteADWS
      */
-    public function setUVteADWS($UVteADWS): void
+    public function setUVteADWS($UVteADWS)
     {
         $this->UVteADWS = $UVteADWS;
     }
@@ -837,7 +882,7 @@ class Article
     /**
      * @param string|null $UStoADWS
      */
-    public function setUStoADWS($UStoADWS): void
+    public function setUStoADWS($UStoADWS)
     {
         $this->UStoADWS = $UStoADWS;
     }
@@ -852,8 +897,8 @@ class Article
 
     /**
      * @param float|null $PrixPubADWS
-     */
-    public function setPrixPubADWS($PrixPubADWS): void
+        */
+        public function setPrixPubADWS($PrixPubADWS)
     {
         $this->PrixPubADWS = $PrixPubADWS;
     }
@@ -869,25 +914,26 @@ class Article
     /**
      * @param float|null $PrixNetCliADWS
      */
-    public function setPrixNetCliADWS($PrixNetCliADWS): void
+    public function setPrixNetCliADWS($PrixNetCliADWS)
     {
         $this->PrixNetCliADWS = $PrixNetCliADWS;
     }
 
+
     /**
-     * @return array
+     * @return array|null
      */
-    public function getStocks(): array
+    public function getStocks()
     {
         return $this->Stocks;
     }
 
     /**
-     * @param array $Stocks
+     * @param array|null $stocks
      */
-    public function setStocks(array $Stocks): void
+    public function setStocks($stocks)
     {
-        $this->Stocks = $Stocks;
+        $this->Stocks = $stocks;
     }
 
 

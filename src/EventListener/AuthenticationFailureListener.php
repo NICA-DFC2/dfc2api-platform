@@ -25,12 +25,6 @@ class AuthenticationFailureListener
         $message = $this->translator->trans($event->getResponse()->getMessage());
         $status = $event->getResponse()->getStatusCode();
 
-
-/*        $data = [
-            'status'  => '401 - accès non autorisé',
-            'message' => 'Mauvaise identification, vérifier s\'il vous plaît que username/password sont correctement renseignés',
-        ];*/
-
         $response = new JWTAuthenticationFailureResponse($message, $status);
 
         $event->setResponse($response);

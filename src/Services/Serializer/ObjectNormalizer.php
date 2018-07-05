@@ -3,16 +3,14 @@
 namespace App\Services\Serializer;
 
 use App\Entity\Article;
-
-use App\Entity\Document;
 use App\Entity\User;
 use App\Services\Objets\Notif;
 use App\Services\Objets\TTRetour;
-use App\Services\Parameters\WsParameters;
 use App\Services\UserService;
 use App\Services\WsManager;
 use App\Services\Parameters\WsTableNamesRetour;
 
+use App\Utils\StockDepot;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -26,9 +24,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Héritage des interfaces NormalizerInterface, DenormalizerInterface, SerializerAwareInterface.
  *
  */
-class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
+final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
-    private $decorated;
+    private $normalizer;
 
     /**
      * @SWG\Property(
@@ -46,9 +44,9 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
      */
     private $user_service;
 
-    public function __construct(NormalizerInterface $decorated, WsManager $wsManager, UserService $userService)
+    public function __construct(NormalizerInterface $normalizer, WsManager $wsManager, UserService $userService)
     {
-        if (!$decorated instanceof DenormalizerInterface) {
+        if (!$normalizer instanceof DenormalizerInterface) {
             throw new \InvalidArgumentException(sprintf('The decorated normalizer must implement the %s.', DenormalizerInterface::class));
         }
         else if (!$wsManager instanceof WsManager) {
@@ -58,14 +56,14 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
             throw new \InvalidArgumentException(sprintf('The userService must implement the %s.', UserService::class));
         }
 
-        $this->decorated = $decorated;
+        $this->normalizer = $normalizer;
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
     }
 
     public function supportsNormalization($data, $format = null)
     {
-        return $this->decorated->supportsNormalization($data, $format);
+        return $this->normalizer->supportsNormalization($data, $format);
     }
 
     /**
@@ -80,7 +78,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
      */
     public function normalize($object, $format = null, array $context = [])
     {
-        $data = $this->decorated->normalize($object, $format, $context);
+        $data = $this->normalizer->normalize($object, $format, $context);
 
         /*
          * si data est de type Article : Hydratation d'un article
@@ -94,20 +92,21 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
 
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $this->decorated->supportsDenormalization($data, $type, $format);
+        return $this->normalizer->supportsDenormalization($data, $type, $format);
     }
 
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        return $this->decorated->denormalize($data, $class, $format, $context);
+        return $this->normalizer->denormalize($data, $class, $format, $context);
     }
 
     public function setSerializer(SerializerInterface $serializer)
     {
-        if($this->decorated instanceof SerializerAwareInterface) {
-            $this->decorated->setSerializer($serializer);
+        if($this->normalizer instanceof SerializerAwareInterface) {
+            $this->normalizer->setSerializer($serializer);
         }
     }
+
 
     /**
      * Fonction qui permet l'hydration d'un Article
@@ -162,20 +161,22 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
                 // Lecture du tableau des stocks
                 // Le retour est complexe on doit créer un tableau simplifié
                 $stocks = $wsArticle->getStocks();
-                $arrayStocks = [];
+
+                $arrayStocks = array();
                 if (!is_null($stocks)) {
                     // Création d'un tableau des stocks simplifié
                     for ($i = 0; $i < $stocks->countItems(); $i++) {
                         $wsStock = $stocks->getItem($i);
 
                         $TTDepotRetour = $this->ws_manager->getDepot($wsStock->getIdDep());
-                        var_dump($TTDepotRetour);
                         if(!is_null($TTDepotRetour) && $TTDepotRetour instanceof TTRetour) {
                             $TTDepot = $TTDepotRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DEPOT);
                             $wsDepot = $TTDepot->getItem(0);
-                            $wsStock->setDepot($wsDepot);
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
                         }
-                        array_push($arrayStocks, json_decode($wsStock->__toString()));
                     }
                 }
 
@@ -190,18 +191,6 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
                 $data["PrixNetCliADWS"] = $wsArticle->getPrixNet();
                 $data["Stocks"] = $arrayStocks;
             }
-        }
-        else {
-            $data["IdADWS"] = null;
-            $data["NoADWS"] = null;
-            $data["CodADFWS"] = null;
-            $data["DesiADWS"] = null;
-            $data["CodADWS"] = null;
-            $data["UVteADWS"] = null;
-            $data["UStoADWS"] = null;
-            $data["PrixPubADWS"] = 0.0;
-            $data["PrixNetCliADWS"] = 0.0;
-            $data["Stocks"] = [];
         }
         return $data;
     }

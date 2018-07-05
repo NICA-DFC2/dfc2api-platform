@@ -24,7 +24,9 @@ services:
         exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
 
     App\Services\Serializer\ObjectNormalizer:
-        arguments: [ '@api_platform.serializer.normalizer.item', '@dfc2.api.manager', '@dfc2.user.service' ]
+        decorates: 'api_platform.jsonld.normalizer.item'
+        arguments: [ '@App\Services\Serializer\ObjectNormalizer.inner', '@dfc2.api.manager', '@dfc2.user.service' ]
+        autoconfigure: false
 
     # paramétrage du service mannager
     dfc2.api.manager:
@@ -48,7 +50,7 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-        arguments: [ '@dfc2.api.manager', '@dfc2.user.service' ]
+        arguments: [ '@dfc2.api.manager', '@dfc2.user.service', '@api_platform.serializer' ]
 
 
     # lexik_jwt_authentication EVENTS

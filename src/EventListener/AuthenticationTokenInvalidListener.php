@@ -26,7 +26,6 @@ class AuthenticationTokenInvalidListener
         $message = $this->translator->trans($event->getResponse()->getMessage());
         $status = $event->getResponse()->getStatusCode();
 
-
         $response = new JWTAuthenticationFailureResponse($message, $status);
 
         $event->setResponse($response);

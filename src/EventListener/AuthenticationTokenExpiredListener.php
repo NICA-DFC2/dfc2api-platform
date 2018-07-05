@@ -27,7 +27,6 @@ class AuthenticationTokenExpiredListener
         $status = $event->getResponse()->getStatusCode();
 
         $response = new JWTAuthenticationFailureResponse($message, $status);
-        //$response = new JWTAuthenticationFailureResponse('Votre token a expiré. Veuillez vous reconnecter !', 403);
 
         $event->setResponse($response);
     }

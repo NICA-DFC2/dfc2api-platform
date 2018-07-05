@@ -4,6 +4,7 @@ namespace App\Utils\Extensions;
 
 use App\Services\Objets\WsDocumEnt;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 class Document
 {

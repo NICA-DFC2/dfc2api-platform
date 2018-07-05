@@ -112,7 +112,6 @@ class FacturesController extends Controller
                             }
                         }
                     }
-
                     array_push($list_docs, $doc);
                 }
 

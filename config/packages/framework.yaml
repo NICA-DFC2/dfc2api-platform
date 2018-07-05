@@ -1,4 +1,7 @@
 framework:
+    serializer:
+        enabled: true
+
     translator: ~
     secret: '%env(APP_SECRET)%'
     default_locale: en

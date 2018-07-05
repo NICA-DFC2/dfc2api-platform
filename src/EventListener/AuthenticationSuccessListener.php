@@ -56,12 +56,36 @@ class AuthenticationSuccessListener
             $data = $this->hydrate($data, $user);
         }
 
+        if($data["code"] !== 200) {
+            $event->getResponse()->setStatusCode($data["code"]);
+        }
         $event->setData($data);
     }
 
     private function hydrate($data, $user, $cntx=null, WsClient $wsClient=null) {
 
+        $data['code'] = "503";
+        $data['message'] = "Les données du client non pas pu être chargées. Demandez de l'aide à un technicien.";
+        $data['user'] = array(
+            'id' => null,
+            'username' => null,
+            'code' => null,
+            'fullname' => null,
+            'email' => null,
+            'last_login' => null,
+            'code_client' => null,
+            'raison_sociale' => null,
+            'id_cli' => null,
+            'no_cli' => null,
+            'id_depot_cli' => null,
+            'nom_depot_cli' => null,
+            'roles' => null,
+            'cntx_valid' => false
+        );
+
         if(!is_null($wsClient) && $cntx instanceof CntxAdmin) {
+            $data['code'] = "200";
+            $data['message'] = "Connexion réussie.";
             $data['user'] = array(
                 'id' => $user->getId(),
                 'username' => $user->getUsername(),
@@ -79,23 +103,7 @@ class AuthenticationSuccessListener
             );
         }
         else {
-            var_dump($cntx);
-            $data['user'] = array(
-                'id' => null,
-                'username' => null,
-                'code' => null,
-                'fullname' => null,
-                'email' => null,
-                'last_login' => null,
-                'code_client' => null,
-                'raison_sociale' => null,
-                'id_cli' => null,
-                'no_cli' => null,
-                'id_depot_cli' => null,
-                'nom_depot_cli' => null,
-                'roles' => null,
-                'cntx_valid' => false
-            );
+            $data['token'] = '';
         }
 
         return $data;

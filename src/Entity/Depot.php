@@ -65,6 +65,26 @@ class Depot
     }
 
     /**
+     * Retourne le nom du dépot en minuscule
+     *
+     * @return string
+     */
+    public function getNomDepLower()
+    {
+        return strtolower($this->NomDep);
+    }
+
+    /**
+     * Retourne le nom du dépot avec la premiere lettre en majuscule
+     *
+     * @return string
+     */
+    public function getNomDepUCFirst()
+    {
+        return ucfirst(strtolower($this->NomDep));
+    }
+
+    /**
      * @param string $NomDep
      */
     public function setNomDep($NomDep)

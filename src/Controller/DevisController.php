@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Swagger\Annotations as SWG;
+use Symfony\Component\Serializer\Serializer;
 
 
 class DevisController extends Controller
@@ -39,10 +40,12 @@ class DevisController extends Controller
      */
     private $user_service;
 
+    private $serializer;
+
     /**
      * DevisController constructor.
      */
-    public function __construct(WsManager $wsManager, UserService $userService)
+    public function __construct(WsManager $wsManager, UserService $userService, Serializer $serializer)
     {
         if (!$wsManager instanceof WsManager) {
             throw new \InvalidArgumentException(sprintf('The wsManager must implement the %s.', WsManager::class));
@@ -53,6 +56,7 @@ class DevisController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
+        $this->serializer = $serializer;
         $this->setCurrentUser();
     }
 

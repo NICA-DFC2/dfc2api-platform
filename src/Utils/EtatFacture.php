@@ -19,6 +19,15 @@ class EtatFacture
     public $NbJoursRetard = 0;
 
     /**
+     * EtatFacture constructor.
+     * @param int $NoFacFCA
+     */
+    public function __construct()
+    {
+    }
+
+
+    /**
      * parseObject
      * Peut prendre un argument $json_object : hydrate l'objet avec la structure json passée en argument
      */

@@ -1,5 +1,9 @@
 api_platform:
     enable_fos_user: true
+    formats:
+        jsonld:  ['application/ld+json']
+        json:    ['application/json']
+        html:    ['text/html']
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
     swagger:

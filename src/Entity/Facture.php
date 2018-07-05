@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Services\Objets\WsDocumEnt;
+use App\Utils\EtatFacture;
 use App\Utils\Extensions\Document;
 use App\Utils\Ligne;
 
@@ -153,6 +154,7 @@ class Facture extends Document
             $this->setFlgPFDE($object->{'FlgPFDE'});
             $this->setCodOrigDE($object->{'CodOrigDE'});
             $this->setDateCloDE($object->{'DateCloDE'});
+            $this->setEtatFacDE(new EtatFacture());
         }
     }
 

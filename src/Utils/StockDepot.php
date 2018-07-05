@@ -1,66 +1,36 @@
 <?php
 
-namespace App\Services\Objets;
+namespace App\Utils;
 
 
-class WsStock
+class StockDepot
 {
-    public $IdDep = 0;
-    public $StkReelAD = 0.0;
-    public $StkResAD = 0.0;
-    public $StkCmdeAD = 0.0;
-    public $CodGesStkAD = "";
-    public $EtatStockAD = "";
-    public $StockDisponible = 0.0;
-    public $StockDisponibleSoc = 0.0;
-    public $StockPratique = 0.0;
-    public $StkReelPlat1 = 0.0;
+    private $IdDep = 0;
+    private $NomDep = "";
+    private $StkReelAD = 0.0;
+    private $StkResAD = 0.0;
+    private $StkCmdeAD = 0.0;
+    private $CodGesStkAD = "";
+    private $StockDisponible = 0.0;
+    private $StockDisponibleSoc = 0.0;
+    private $StockPratique = 0.0;
+    private $StkReelPlat1 = 0.0;
 
     /**
-     * Constructeur
-     * Peut prendre un argument $json_object : hydrate l'objet avec la structure json passée en argument
+     * StockDepot constructor.
      */
-    public function __construct() {
-        $ctp = func_num_args();
-        $args = func_get_args();
-
-        switch($ctp)
-        {
-            case 1:
-                $this->_construct($args[0]);
-                break;
-            default:
-                $this->_construct();
-                break;
-        }
-    }
-
-    public function __toString()
+    public function __construct()
     {
-        $string = '{';
-        $string .= '"IdDep": '. $this->getIdDep() .', ';
-        $string .= '"StkReelAD": '. $this->getStkReelAD() .', ';
-        $string .= '"StkResAD": '. $this->getStkResAD() .', ';
-        $string .= '"StkCmdeAD": '. $this->getStkCmdeAD() .', ';
-        $string .= '"CodGesStkAD": "'. $this->getCodGesStkAD() .'", ';
-        $string .= '"EtatStockAD": "'. $this->getEtatStockAD() .'", ';
-        $string .= '"StockDisponible": '. $this->getStockDisponible() .', ';
-        $string .= '"StockDisponibleSoc": '. $this->getStockDisponibleSoc() .', ';
-        $string .= '"StockPratique": '. $this->getStockPratique() .', ';
-        $string .= '"StkReelPlat1": '. $this->getStkReelPlat1() .' ';
-        $string .= '}';
-
-        return $string;
     }
 
-    public function _construct($json_object=null) {
+    public function parseObject($json_object=null, $nomDep) {
         if(!is_null($json_object)) {
             $this->setIdDep($json_object->{'IdDep'});
+            $this->setNomDep($nomDep);
             $this->setStkReelAD($json_object->{'StkReelAD'});
             $this->setStkResAD($json_object->{'StkResAD'});
             $this->setStkCmdeAD($json_object->{'StkCmdeAD'});
             $this->setCodGesStkAD($json_object->{'CodGesStkAD'});
-            $this->setEtatStockAD($json_object->{'EtatStockAD'});
             $this->setStockDisponible($json_object->{'StockDisponible'});
             $this->setStockDisponibleSoc($json_object->{'StockDisponibleSoc'});
             $this->setStockPratique($json_object->{'StockPratique'});
@@ -68,9 +38,24 @@ class WsStock
         }
     }
 
+    public function parseString()
+    {
+        return [
+            'IdDep' => $this->getIdDep(),
+            'NomDep' => $this->getNomDep(),
+            'StkReelAD' => $this->getStkReelAD(),
+            'StkResAD' => $this->getStkResAD(),
+            'StkCmdeAD' => $this->getStkCmdeAD(),
+            'CodGesStkAD' => $this->getCodGesStkAD(),
+            'StockDisponible' => $this->getStockDisponible(),
+            'StockDisponibleSoc' => $this->getStockDisponibleSoc(),
+            'StockPratique' => $this->getStockPratique(),
+            'StkReelPlat1' => $this->getStkReelPlat1()
+        ];
+    }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getIdDep()
     {
@@ -78,7 +63,7 @@ class WsStock
     }
 
     /**
-     * @param mixed $IdDep
+     * @param int $IdDep
      */
     public function setIdDep($IdDep)
     {
@@ -86,7 +71,24 @@ class WsStock
     }
 
     /**
-     * @return mixed
+     * @return string
+     */
+    public function getNomDep()
+    {
+        return $this->NomDep;
+    }
+
+    /**
+     * @param string $NomDep
+     */
+    public function setNomDep($NomDep)
+    {
+        $this->NomDep = $NomDep;
+    }
+
+
+    /**
+     * @return float
      */
     public function getStkReelAD()
     {
@@ -94,7 +96,7 @@ class WsStock
     }
 
     /**
-     * @param mixed $StkReelAD
+     * @param float $StkReelAD
      */
     public function setStkReelAD($StkReelAD)
     {
@@ -102,7 +104,7 @@ class WsStock
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getStkResAD()
     {
@@ -110,7 +112,7 @@ class WsStock
     }
 
     /**
-     * @param mixed $StkResAD
+     * @param float $StkResAD
      */
     public function setStkResAD($StkResAD)
     {
@@ -118,7 +120,7 @@ class WsStock
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getStkCmdeAD()
     {
@@ -126,7 +128,7 @@ class WsStock
     }
 
     /**
-     * @param mixed $StkCmdeAD
+     * @param float $StkCmdeAD
      */
     public function setStkCmdeAD($StkCmdeAD)
     {
@@ -134,7 +136,7 @@ class WsStock
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCodGesStkAD()
     {
@@ -142,7 +144,7 @@ class WsStock
     }
 
     /**
-     * @param mixed $CodGesStkAD
+     * @param string $CodGesStkAD
      */
     public function setCodGesStkAD($CodGesStkAD)
     {
@@ -150,23 +152,7 @@ class WsStock
     }
 
     /**
-     * @return mixed
-     */
-    public function getEtatStockAD()
-    {
-        return $this->EtatStockAD;
-    }
-
-    /**
-     * @param mixed $EtatStockAD
-     */
-    public function setEtatStockAD($EtatStockAD)
-    {
-        $this->EtatStockAD = $EtatStockAD;
-    }
-
-    /**
-     * @return mixed
+     * @return float
      */
     public function getStockDisponible()
     {
@@ -174,7 +160,7 @@ class WsStock
     }
 
     /**
-     * @param mixed $StockDisponible
+     * @param float $StockDisponible
      */
     public function setStockDisponible($StockDisponible)
     {
@@ -182,7 +168,7 @@ class WsStock
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getStockDisponibleSoc()
     {
@@ -190,7 +176,7 @@ class WsStock
     }
 
     /**
-     * @param mixed $StockDisponibleSoc
+     * @param float $StockDisponibleSoc
      */
     public function setStockDisponibleSoc($StockDisponibleSoc)
     {
@@ -198,7 +184,7 @@ class WsStock
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getStockPratique()
     {
@@ -206,7 +192,7 @@ class WsStock
     }
 
     /**
-     * @param mixed $StockPratique
+     * @param float $StockPratique
      */
     public function setStockPratique($StockPratique)
     {
@@ -214,7 +200,7 @@ class WsStock
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getStkReelPlat1()
     {
@@ -222,11 +208,12 @@ class WsStock
     }
 
     /**
-     * @param mixed $StkReelPlat1
+     * @param float $StkReelPlat1
      */
     public function setStkReelPlat1($StkReelPlat1)
     {
         $this->StkReelPlat1 = $StkReelPlat1;
     }
+
 
 }
