@@ -5,7 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
- * Entité qui représente les edition des documents. Certain champs sont hydratés par un appel aux services web GIMEL.
+ * Entité qui représente les dépots. Certain champs sont hydratés par un appel aux services web GIMEL.
  *
  * @ApiResource(
  *      collectionOperations={

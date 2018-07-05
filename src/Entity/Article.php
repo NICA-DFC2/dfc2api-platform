@@ -16,8 +16,8 @@ use Swagger\Annotations as SWG;
  *
  * @ApiResource(
  *     attributes={
- *     "normalization_context"={"groups"={"read"}},
- *     "denormalization_context"={"groups"={"write"}}
+ *          "normalization_context"={"groups"={"read"}},
+ *          "denormalization_context"={"groups"={"write"}}
  *      },
  *     itemOperations={
  *     "get"={"method"="GET"},

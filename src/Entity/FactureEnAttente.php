@@ -10,7 +10,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ApiResource(
  *      collectionOperations={
  *          "all"={"route_name"="api_factures_en_attentes_items_get"}
- *      }
+ *      },
+ *     itemOperations={}
  * )
  *
  */

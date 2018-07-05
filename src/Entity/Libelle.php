@@ -10,7 +10,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ApiResource(
  *      collectionOperations={
  *          "all"={"route_name"="api_libelles_item_get"}
- *      }
+ *      },
+ *     itemOperations={}
  * )
  *
  */
