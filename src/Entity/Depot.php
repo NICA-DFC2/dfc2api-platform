@@ -33,7 +33,7 @@ class Depot
 
         if(!is_null($json_object)) {
             $this->setIdDep($json_object->{'IdDep'});
-            $this->setNomDep($json_object->{'NomDep'});
+            $this->setNomDep(str_replace('²', '2', $json_object->{'NomDep'}));
             $this->setCodDep($json_object->{'CodDep'});
             $this->setFlgPlateformeDep($json_object->{'FlgPlateformeDep'});
             $this->setFlgActifDep($json_object->{'FlgActifDep'});

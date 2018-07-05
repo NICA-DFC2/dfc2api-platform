@@ -91,21 +91,22 @@ class FacturesController extends Controller
                     $doc->parseObject($wsDocs);
 
                     $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
-                    for ($iL = 0; $iL < count($wsLignes); $iL++) {
-                        $ligne = new Ligne();
-                        $ligne->parseObject($wsLignes[$iL]);
-                        $doc->setLignes($ligne);
+                    if(!is_null($wsLignes)) {
+                        for ($iL = 0; $iL < count($wsLignes); $iL++) {
+                            $ligne = new Ligne();
+                            $ligne->parseObject($wsLignes[$iL]);
+                            $doc->setLignes($ligne);
+                        }
                     }
 
                     // Etat de la facture
                     $TTRetourFacCliAtt = $this->ws_manager->getFactureEnAttente($doc->getIdDocDE());
-
                     if (!is_null($TTRetourFacCliAtt) && $TTRetourFacCliAtt instanceof TTRetour) {
                         if($TTRetourFacCliAtt->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
                             $TTFacCliAtt = $TTRetourFacCliAtt->getTable(WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
 
-                            for ($i = 0; $i < $TTFacCliAtt->countItems(); $i++) {
-                                $wsFacCliAtt = $TTFacCliAtt->getItem($i);
+                            for ($iFA = 0; $iFA < $TTFacCliAtt->countItems(); $iFA++) {
+                                $wsFacCliAtt = $TTFacCliAtt->getItem($iFA);
                                 $etat = new EtatFacture();
                                 $etat->parseObject($wsFacCliAtt);
                                 $doc->setEtatFacDE($etat);

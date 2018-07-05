@@ -982,6 +982,7 @@ class WsManager
             $TTCritSel->addItem(new CritParam('IdFac', $id));
             $this->setCritSel($TTCritSel);
 
+
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_FACCLIATT, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour();
         }
