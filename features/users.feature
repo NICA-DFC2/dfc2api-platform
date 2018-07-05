@@ -50,28 +50,30 @@ Feature: User
     And the JSON should be equal to:
     """
       {
-          "token": "eyJhbGciOiJSUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1JFQURFUiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6Ik5JQ0EiLCJpYXQiOjE1Mjg3OTI0ODgsImV4cCI6MTUyODc5NjA4OH0.lq-ew9huUlGbL8j-DkZi4H7Z-wa_Lnv64PQXlOZ9O_pFs_2jzz44djWMd528Ifq-5-S42nWwTiOAnSqWhlyETC_9bhYrd48LEorxluTt9t9Ikog3dJhAlu_QKnJms2QaebW6FrW_1HGiEEbZl-Wj_hxx-bw93oFHLJpur8vGisOMaE7QM_GBho8cO6IzGyk3ryKw3IC9XpwCwifAeAm9PxiLRmN8Ab7-KoZ9cqiz-L2hFg9EbPRlaUGdELEwtOPNXQhIbniOeLS8hwFhSVRGhbRLpNObMX9xw0tHBXrTBhVwlhZUftEdRAwKHQ3c2sAdpnVkp-wLy64ABNTI1UFkrSqnQ9wIAQwM5Dgiti8KKo2P6YuA5wplqABQwDIwVf12L_1bAEHTyhg9FJyWzxpn6P3Y7e_OLX1nMMiM0Lgd608hdr8d7ihkxIn0hBI4k2UoheNREY_pneM9EwcrZHJPgk_w91LWDO9doJKiYdh0sQEypkUdaDxSFlqwdXPDiyK0VDMypt-YjF7Pf4B-18dQUIQR7Iu6c3Ne4KkzQ-BZRVodmyfmpOZ0ZKB4RCl4keJdqj9yuNOuXOV40ZeCANLRgFl3TssXkBMu0dztkQYfyliBdKA9DhxRMeRP7qfgB0Cx5URsJpvR9JKhAvYLVXwVY5fTlWXo2zUwPWW1OAShKHE",
-          "user": {
-              "id": 3,
-              "username": "NICA",
-              "code": "PERSO124",
-              "fullname": "Nicolas Cartier",
-              "email": "n.cartier@dfc2.biz",
-              "last_login": {
-                  "date": "2018-06-12 08:34:48.048883",
-                  "timezone_type": 3,
-                  "timezone": "UTC"
-              },
-              "raison_sociale": "Cartier Nicolas",
-              "id_cli": 56610,
-              "no_cli": 3850,
-              "id_depot_cli": 1,
-              "nom_depot_cli": "DFC² NANTES",
-              "roles": [
-                  "ROLE_READER",
-                  "ROLE_USER"
-              ],
-              "cntx_valid": true
-          }
-      }
+    "token": "eyJhbGciOiJSUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1JFQURFUiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6Ik5JQ0EiLCJpYXQiOjE1MzA3OTM0NDYsImV4cCI6MTUzMDc5NzA0Nn0.EdWaX620cf7nLKO_1lZqJozVrk34UhClPD4YgWY_rWRb2yq0lBc2v3xEo4RmasPuIYbepnYpOEG0Go8whE9ED503ouJQwvDjrx1WYHXyU1twRsT7FRkd2j-_-50V174Wz0czAfpvyzgaCihogfGpxGJPYpuj1CpZ8Y9N52e0NXXrJj1z374Nyhg9EM_bGKFoU-TaXbJeyKpl7rZwgFJ5VkNmnixlpFhgqRMCSuKMr9nLesei-2frAgXNbDbLyXrHiIr6HsJmz59RZg4MurGa5olCRUGyAKj86zrYC-uY712G0T_PDNcde5yUtMFQ1PESZxJa7Rl2hNgSG8cjP1eEeZC3_tRBHgbB5n8kMhQBiG0P9ls6_JEem3T3-YlP0lnXQLQlEJOM6JVJZSUwmX-t98guLqjXUl85XXw1sLmypU1DsEhkVpefQiP6Cl6lVqIovtpBfr1vNWwtBpiQSUWLFLLC0IUUEM3tYTGySwolavh1LvSVgGJ0OEbMelsZXdIyp1ieqggWVWXYwRB7QBTwBhBNN7QGrjeY7kfDDk8NGVcJePpF9xlVWYPzii6a82oZIMgNOyerMEif6-eC1TKr5m8BE1lRaAEmmqXJE4LiVWcYNh7D6nfQ_WXhMW80i8bQZ4BpfnDjadpV5hHx1og_t9KvFZORIU_ckfnYyPq6Tjk",
+    "code": "200",
+    "message": "Connexion réussie.",
+    "user": {
+        "id": 3,
+        "username": "NICA",
+        "code": "CMB1",
+        "fullname": "Nicolas Cartier",
+        "email": "n.cartier@dfc2.biz",
+        "last_login": {
+            "date": "2018-07-05 12:24:06.508788",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "raison_sociale": "Cartier Nicolas",
+        "id_cli": 112999,
+        "no_cli": 100945,
+        "id_depot_cli": 1,
+        "nom_depot_cli": "VERTOU",
+        "roles": [
+            "ROLE_READER",
+            "ROLE_USER"
+        ],
+        "cntx_valid": true
+    }
+}
     """
