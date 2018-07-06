@@ -53,3 +53,8 @@ var/log/*
 ###/behat
 ###/behat.bat
 ###< behat/symfony2-extension ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
