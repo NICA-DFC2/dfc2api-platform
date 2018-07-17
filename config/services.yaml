@@ -38,6 +38,7 @@ services:
             $wsAdminPassword: '%dfc2.api.admin_password%'
 
     dfc2.user.service:
+        public: true
         class: App\Services\UserService
         arguments: [ '@security.token_storage' ]
 

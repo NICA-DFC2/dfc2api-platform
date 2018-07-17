@@ -116,7 +116,6 @@ class WsManager
     public function setCache(FilesystemCache $cache)
     {
         $this->cache = $cache;
-        $this->cache->clear();
     }
 
 
@@ -244,7 +243,17 @@ class WsManager
             }
         }
 
-        $context = $this->getCntxAdmin($this->wsAdminUser, $this->wsAdminPassword, $algorithme);
+        $publicKeyNumber = $this->getValPublicKeyNumber();
+
+        $TTparam = new TTParam();
+        $TTparam->addItem(new CritParam('Login', (!is_null($this->wsAdminUser)) ? $this->encryptByOpenSSL($this->wsAdminUser, $algorithme) : ''));
+        $TTparam->addItem(new CritParam('MotDePasse', (!is_null($this->wsAdminPassword)) ? $this->encryptByOpenSSL($this->wsAdminPassword, $algorithme) : ''));
+        $TTparam->addItem(new CritParam('Algorithme', $algorithme));
+        $TTparam->addItem(new CritParam('NumClePublique', $publicKeyNumber));
+        $this->setParamAppel($TTparam);
+
+        $responseDecode = new ResponseDecode($this->call_get(WsParameters::MODULE_DEMARRE));
+        $context = $responseDecode->decodeCntxAdmin();
         if ($context instanceof CntxAdmin) {
             // met en cache le contexte de connexion
             $this->cache->set($this->cache_key_admin, $context->__toValsString());
@@ -258,7 +267,7 @@ class WsManager
      * @param        $password
      * @param string $algorithme
      * @return ResponseDecode
-     */
+
     private function login($login, $password, $algorithme = WsAlgorithmOpenSSL::NONE)
     {
         $publicKeyNumber = $this->getValPublicKeyNumber();
@@ -271,7 +280,7 @@ class WsManager
         $this->setParamAppel($TTparam);
 
         return new ResponseDecode($this->call_get(WsParameters::MODULE_DEMARRE));
-    }
+    }     */
 
     /**
      * @param $value : valeur à crypter
@@ -322,13 +331,13 @@ class WsManager
      * @param $password
      * @param $algorithme
      * @return Objets\CntxAdmin|\Exception|mixed
-     */
+
     private function getCntxAdmin($login, $password, $algorithme)
     {
         return $this->login($login, $password, $algorithme)->decodeCntxAdmin();
     }
 
-
+     */
 
     /**
      * @return string
