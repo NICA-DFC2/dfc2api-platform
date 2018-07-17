@@ -14,6 +14,7 @@ class Edition
     private $LienEdi = "";
     private $LienLocalEdi = "";
     private $DataEdi = "";
+    private $IsFilled = false;
 
     /**
      * parseObject
@@ -21,6 +22,7 @@ class Edition
      */
     public function parseObject($json_object=null) {
 
+        $this->setIsFilled(false);
         if(!is_null($json_object)) {
             $this->setIdEdi($json_object->{'IdEdi'});
             $this->setIdDocDE($json_object->{'IdDocDE'});
@@ -28,7 +30,25 @@ class Edition
             $this->setLienEdi($json_object->{'LienEdi'});
             $this->setLienLocalEdi($json_object->{'LienLocalEdi'});
             $this->setDataEdi($json_object->{'DataEdi'});
+            $this->setIsFilled(true);
         }
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFilled()
+    {
+        return $this->IsFilled;
+    }
+
+    /**
+     * @param boolean $isFilled
+     */
+    public function setIsFilled($isFilled)
+    {
+        $this->IsFilled = $isFilled;
     }
 
     /**

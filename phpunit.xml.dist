@@ -14,6 +14,13 @@
         <env name="APP_DEBUG" value="1" />
         <env name="APP_SECRET" value="s$cretf0rt3st" />
         <env name="SHELL_VERBOSITY" value="-1" />
+
+        <env name="WSADMIN_USER" value="WS01" />
+        <env name="WSADMIN_PASSWORD" value="WS01" />
+
+        <env name="JWT_PRIVATE_KEY_PATH" value="config/jwt-test/private-test.pem" />
+        <env name="JWT_PUBLIC_KEY_PATH" value="config/jwt-test/public-test.pem" />
+        <env name="JWT_PASSPHRASE" value="4edabc6b7a62efc046150dbfbffb12ee" />
         <!-- define your env variables for the test env here -->
     </php>
 

@@ -28,21 +28,20 @@ class WsManager
      ################################################# */
     private $cache_key_admin = 'dfc2.api.contexte.admin';
 
+    protected $requestStack;
+    protected $wsAdminUser;
+    protected $wsAdminPassword;
+
     protected $httpheaders = array(
         'Accept' => WsParameters::ACCEPT,
         'Content-type' => WsParameters::CONTENT_TYPE,
         'Origin' => WsParameters::ORIGIN,
         'Referer' => WsParameters::REFERER);
+
     protected $baseUrl;
     protected $url;
-    protected $environement;
-    protected $requestStack;
-    protected $encryptor;
     protected $paramAppel;
     protected $critSel;
-    protected $wsAdminUser;
-    protected $wsAdminPassword;
-    protected $session;
     protected $publicKeyVal;
     protected $cache;
     protected $user;
@@ -55,16 +54,14 @@ class WsManager
      *
      ################################################# */
 
-    public function __construct($env, RequestStack $requestStack, SessionInterface $session, string $wsAdminUser, string $wsAdminPassword) {
-        $this->environement = $env;
-        $this->wsAdminUser = $wsAdminUser;
-        $this->wsAdminPassword = $wsAdminPassword;
-        $this->requestStack = $requestStack;
-        $this->session = $session;
-        $this->baseUrl = $requestStack->getCurrentRequest()->getBaseUrl() . WsParameters::URL_SUFFIX;
+    public function __construct(RequestStack $requestStack, string $wsAdminUser, string $wsAdminPassword) {
+        $this->setWsAdminUser($wsAdminUser);
+        $this->setWsAdminPassword($wsAdminPassword);
+        $this->setRequestStack($requestStack);
         $this->setBaseUrl();
-        $this->cache = new FilesystemCache();
+        $this->setCache(new FilesystemCache());
     }
+
 
 
 
@@ -74,11 +71,76 @@ class WsManager
      *
      ################################################# */
 
+
+    /**
+     * @return RequestStack
+     */
+    public function getRequestStack()
+    {
+        return $this->requestStack;
+    }
+
+    /**
+     * @param RequestStack $requestStack
+     */
+    public function setRequestStack(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWsAdminUser()
+    {
+        return $this->wsAdminUser;
+    }
+
+    /**
+     * @param string $wsAdminUser
+     */
+    public function setWsAdminUser(string $wsAdminUser)
+    {
+        $this->wsAdminUser = $wsAdminUser;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWsAdminPassword()
+    {
+        return $this->wsAdminPassword;
+    }
+
+    /**
+     * @param string $wsAdminPassword
+     */
+    public function setWsAdminPassword(string $wsAdminPassword)
+    {
+        $this->wsAdminPassword = $wsAdminPassword;
+    }
+
+    /**
+     * @return FilesystemCache
+     */
+    public function getCache(): FilesystemCache
+    {
+        return $this->cache;
+    }
+
+    /**
+     * @param FilesystemCache $cache
+     */
+    public function setCache(FilesystemCache $cache)
+    {
+        $this->cache = $cache;
+        $this->cache->clear();
+    }
+
+
     private function setBaseUrl()
     {
-        if ($this->environement == 'dev') {
-            $this->baseUrl = 'http://www.dfc2.fr' . WsParameters::URL_SUFFIX;
-        }
+        $this->baseUrl = 'http://www.dfc2.fr' . WsParameters::URL_SUFFIX;
     }
 
     /**
@@ -370,7 +432,7 @@ class WsManager
      */
     public function getClient()
     {
-        if(!is_null($this->getUser())) {
+        if($this->getUser()->getIdCli() > 0) {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
             $this->setParamAppel($TTParamAppel);
@@ -464,7 +526,7 @@ class WsManager
          */
         public function getPrixNetByNoAD($no_ad)
         {
-            if(!is_null($this->getUser())) {
+            if($this->getUser()->getIdCli() > 0) {
                 $TTParamAppel = new TTParam();
                 $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_WEB));
                 $TTParamAppel->addItem(new CritParam("CalculPrixNet", "yes"));
@@ -489,7 +551,7 @@ class WsManager
          */
         public function getPrixNetByIdAD($id_ad)
         {
-            if(!is_null($this->getUser())) {
+            if($this->getUser()->getIdCli() > 0) {
                 $TTParamAppel = new TTParam();
                 $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_WEB));
                 $TTParamAppel->addItem(new CritParam("CalculPrixNet", "yes"));
@@ -514,7 +576,7 @@ class WsManager
          */
         public function getPrixNetByCodAD($cod_ad)
         {
-            if(!is_null($this->getUser())) {
+            if($this->getUser()->getIdCli() > 0) {
                 $TTParamAppel = new TTParam();
                 $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_WEB));
                 $TTParamAppel->addItem(new CritParam("CalculPrixNet", "yes"));
@@ -530,128 +592,6 @@ class WsManager
             }
 
             return 0.0;
-        }
-
-
-        /* #################################################
-         * DETAIL ARTICLE WEB
-         ################################################# */
-
-        /**
-         * Lecture des informations d'un article par son numéro
-         * @param $no_ad
-         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
-         * @param $onlyPlateform : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme
-         * @param $onlyPlateformAndDepCli : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme et le dépôt du client connecté
-         * @return Objets\TTRetour|\Exception|mixed
-         */
-        public function getArticleWebByNoAD($no_ad, $calculPrixNet = false, $onlyPlateform = false, $onlyPlateformAndDepCli = false)
-        {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_WEB));
-            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
-            if(!is_null($this->getUser()) && $calculPrixNet) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-            }
-            $this->setParamAppel($TTParamAppel);
-
-            $TTCritSel = new TTParam();
-            $TTCritSel->addItem(new CritParam('NoAD', $no_ad));
-            $this->setCritSel($TTCritSel);
-
-            $filter_depots = array();
-            if(!is_null($this->getUser()) && $onlyPlateform) {
-                $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-            }
-            else if(!is_null($this->getUser()) && $onlyPlateformAndDepCli) {
-                if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-                }
-                else {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME, intval($this->getUser()->getIdDepotCli()));
-                }
-            }
-
-            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_ARTICLE, WsTypeContext::CONTEXT_ADMIN));
-            return $response->decodeRetour($filter_depots);
-        }
-
-        /**
-         * Lecture des informations d'un article par son identifiant unique
-         * @param $id_ad
-         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
-         * @param $onlyPlateform : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme
-         * @param $onlyPlateformAndDepCli : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme et le dépôt du client connecté
-         * @return Objets\TTRetour|\Exception|mixed
-         */
-        public function getArticleWebByIdAD($id_ad, $calculPrixNet = false, $onlyPlateform = false, $onlyPlateformAndDepCli = false)
-        {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_WEB));
-            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
-            if(!is_null($this->getUser()) && $calculPrixNet) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-            }
-            $this->setParamAppel($TTParamAppel);
-
-            $TTCritSel = new TTParam();
-            $TTCritSel->addItem(new CritParam('IdAD', $id_ad));
-            $this->setCritSel($TTCritSel);
-
-            $filter_depots = array();
-            if(!is_null($this->getUser()) && $onlyPlateform) {
-                $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-            }
-            else if(!is_null($this->getUser()) && $onlyPlateformAndDepCli) {
-                if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-                }
-                else {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME, intval($this->getUser()->getIdDepotCli()));
-                }
-            }
-
-            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_ARTICLE, WsTypeContext::CONTEXT_ADMIN));
-            return $response->decodeRetour($filter_depots);
-        }
-
-        /**
-         * Lecture des informations d'un article par son code
-         * @param $cod_ad
-         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
-         * @param $onlyPlateform : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme
-         * @param $onlyPlateformAndDepCli : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme et le dépôt du client connecté
-         * @return Objets\TTRetour|\Exception|mixed
-         */
-        public function getArticleWebByCodAD($cod_ad, $calculPrixNet = false, $onlyPlateform = false, $onlyPlateformAndDepCli = false)
-        {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_WEB));
-            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
-            if(!is_null($this->getUser()) && $calculPrixNet) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-            }
-            $this->setParamAppel($TTParamAppel);
-
-            $TTCritSel = new TTParam();
-            $TTCritSel->addItem(new CritParam('CodAD', $cod_ad));
-            $this->setCritSel($TTCritSel);
-
-            $filter_depots = array();
-            if(!is_null($this->getUser()) && $onlyPlateform) {
-                $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-            }
-            else if(!is_null($this->getUser()) && $onlyPlateformAndDepCli) {
-                if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-                }
-                else {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME, intval($this->getUser()->getIdDepotCli()));
-                }
-            }
-
-            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_ARTICLE, WsTypeContext::CONTEXT_ADMIN));
-            return $response->decodeRetour($filter_depots);
         }
 
 
@@ -673,7 +613,7 @@ class WsManager
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
             $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
-            if(!is_null($this->getUser()) && $calculPrixNet) {
+            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
                 $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
             }
             $this->setParamAppel($TTParamAppel);
@@ -683,10 +623,10 @@ class WsManager
             $this->setCritSel($TTCritSel);
 
             $filter_depots = array();
-            if(!is_null($this->getUser()) && $onlyPlateform) {
+            if($this->getUser()->getIdCli() > 0 && $onlyPlateform) {
                 $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
             }
-            else if(!is_null($this->getUser()) && $onlyPlateformAndDepCli) {
+            else if($this->getUser()->getIdCli() > 0 && $onlyPlateformAndDepCli) {
                 if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
                     $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
                 }
@@ -712,7 +652,7 @@ class WsManager
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
             $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
-            if(!is_null($this->getUser()) && $calculPrixNet) {
+            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
                 $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
             }
             $this->setParamAppel($TTParamAppel);
@@ -722,10 +662,10 @@ class WsManager
             $this->setCritSel($TTCritSel);
 
             $filter_depots = array();
-            if(!is_null($this->getUser()) && $onlyPlateform) {
+            if($this->getUser()->getIdCli() > 0 && $onlyPlateform) {
                 $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
             }
-            else if(!is_null($this->getUser()) && $onlyPlateformAndDepCli) {
+            else if($this->getUser()->getIdCli() > 0 && $onlyPlateformAndDepCli) {
                 if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
                     $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
                 }
@@ -752,7 +692,7 @@ class WsManager
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
             $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
 
-            if(!is_null($this->getUser()) && $calculPrixNet) {
+            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
                 $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
             }
             $this->setParamAppel($TTParamAppel);
@@ -762,10 +702,10 @@ class WsManager
             $this->setCritSel($TTCritSel);
 
             $filter_depots = array();
-            if(!is_null($this->getUser()) && $onlyPlateform) {
+            if($this->getUser()->getIdCli() > 0 && $onlyPlateform) {
                 $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
             }
-            else if(!is_null($this->getUser()) && $onlyPlateformAndDepCli) {
+            else if($this->getUser()->getIdCli() > 0 && $onlyPlateformAndDepCli) {
                 if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
                     $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
                 }
@@ -791,7 +731,7 @@ class WsManager
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
             $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
-            if(!is_null($this->getUser()) && $calculPrixNet) {
+            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
                 $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
             }
             $this->setParamAppel($TTParamAppel);
@@ -801,10 +741,10 @@ class WsManager
             $this->setCritSel($TTCritSel);
 
             $filter_depots = array();
-            if(!is_null($this->getUser()) && $onlyPlateform) {
+            if($this->getUser()->getIdCli() > 0 && $onlyPlateform) {
                 $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
             }
-            else if(!is_null($this->getUser()) && $onlyPlateformAndDepCli) {
+            else if($this->getUser()->getIdCli() > 0 && $onlyPlateformAndDepCli) {
                 if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
                     $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
                 }
@@ -812,49 +752,6 @@ class WsManager
                     $filter_depots = array(WsParameters::ID_DEP_PLATEFORME, intval($this->getUser()->getIdDepotCli()));
                 }
             }
-
-            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_ARTICLE, WsTypeContext::CONTEXT_ADMIN));
-            return $response->decodeRetour($filter_depots);
-        }
-
-
-
-
-        /* #################################################
-         * DETAILS ARTICLES COMMANDES POUR LE CLIENT CONNECTE
-         ################################################# */
-
-        /**
-         * Lecture des informations des articles commandés avec le stock pour le client connecté
-         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
-         * @param $onlyPlateform : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme
-         * @param $onlyPlateformAndDepCli : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme et le dépôt du client connecté
-         * @return Objets\TTRetour|\Exception|mixed
-         */
-        public function getArtsCmdesForCntxClient($calculPrixNet = false, $onlyPlateform = false, $onlyPlateformAndDepCli = false)
-        {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_WEB));
-            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
-            $TTParamAppel->addItem(new CritParam("TypeRecherche", WsParameters::TYPE_RECHERCHE_ARTDET));
-            if(!is_null($this->getUser()) && $calculPrixNet) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-            }
-            $this->setParamAppel($TTParamAppel);
-
-            $filter_depots = array();
-            if(!is_null($this->getUser()) && $onlyPlateform) {
-                $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-            }
-            else if(!is_null($this->getUser()) && $onlyPlateformAndDepCli) {
-                if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-                }
-                else {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME, intval($this->getUser()->getIdDepotCli()));
-                }
-            }
-            $this->setCritSel(new TTParam());
 
             $response = new ResponseDecode($this->call_get(WsParameters::MODULE_ARTICLE, WsTypeContext::CONTEXT_ADMIN));
             return $response->decodeRetour($filter_depots);
@@ -870,43 +767,43 @@ class WsManager
          * Lecture d'un nouveau panier
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getPanier()
-        {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
-            $TTParamAppel->addItem(new CritParam("TypePrendre", WsParameters::TYPE_PRENDRE_PANIER));
-
-            if(!is_null($this->getUser())) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-            }
-            $this->setParamAppel($TTParamAppel);
-
-            $this->setCritSel(new TTParam());
-
-            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
-            return $response->decodeRetour();
-        }
+//        public function getPanier()
+//        {
+//            $TTParamAppel = new TTParam();
+//            $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
+//            $TTParamAppel->addItem(new CritParam("TypePrendre", WsParameters::TYPE_PRENDRE_PANIER));
+//
+//            if(!is_null($this->getUser())) {
+//                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+//            }
+//            $this->setParamAppel($TTParamAppel);
+//
+//            $this->setCritSel(new TTParam());
+//
+//            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
+//            return $response->decodeRetour();
+//        }
 
         /**
          * Lecture d'un nouveau panier
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function putPanier()
-        {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
-            $TTParamAppel->addItem(new CritParam("TypePrendre", WsParameters::TYPE_PRENDRE_PANIER));
-
-            if(!is_null($this->getUser())) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-            }
-            $this->setParamAppel($TTParamAppel);
-
-            $this->setCritSel(new TTParam());
-
-            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
-            return $response->decodeRetour();
-        }
+//        public function putPanier()
+//        {
+//            $TTParamAppel = new TTParam();
+//            $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
+//            $TTParamAppel->addItem(new CritParam("TypePrendre", WsParameters::TYPE_PRENDRE_PANIER));
+//
+//            if(!is_null($this->getUser())) {
+//                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+//            }
+//            $this->setParamAppel($TTParamAppel);
+//
+//            $this->setCritSel(new TTParam());
+//
+//            $response = new ResponseDecode($this->call_get(WsParameters::MODULE_DOCUMENT, WsTypeContext::CONTEXT_ADMIN));
+//            return $response->decodeRetour();
+//        }
 
 
     /* #################################################
@@ -932,7 +829,7 @@ class WsManager
             $this->setParamAppel($TTParamAppel);
 
             $TTCritSel = new TTParam();
-            if(!is_null($this->getUser())) {
+            if($this->getUser()->getIdCli() > 0) {
                 $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
             }
             $this->setCritSel($TTCritSel);
@@ -957,7 +854,7 @@ class WsManager
             $this->setParamAppel(new TTParam());
 
             $TTCritSel = new TTParam();
-            if(!is_null($this->getUser())) {
+            if($this->getUser()->getIdCli() > 0) {
                 $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
             }
             $this->setCritSel($TTCritSel);
@@ -976,7 +873,7 @@ class WsManager
             $this->setParamAppel(new TTParam());
 
             $TTCritSel = new TTParam();
-            if(!is_null($this->getUser())) {
+            if($this->getUser()->getIdCli() > 0) {
                 $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
             }
             $TTCritSel->addItem(new CritParam('IdFac', $id));

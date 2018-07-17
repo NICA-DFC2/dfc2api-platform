@@ -34,9 +34,7 @@ services:
         autowire: true
         public: true
         arguments:
-            $env: '%kernel.environment%'
             $requestStack: '@request_stack'
-            $session: '@session'
             $wsAdminUser: '%dfc2.api.admin_user%'
             $wsAdminPassword: '%dfc2.api.admin_password%'
 
