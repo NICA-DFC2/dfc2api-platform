@@ -34,22 +34,16 @@ class WsManagerTest extends WebTestCase
     }
 
     private function createUser() {
-        $headers = array("Content-Type"=>"application/json",
-            "Accept"=>"application/json");
-
-        // connecter un utilisateur
-        $reponse = Unirest\Request::post("http://127.0.0.1:8000/login_check", $headers, '{"username":"NICA","password":"test"}');
-
         $user = new User();
-        $user->setCode($reponse->body->user->code);
-        $user->setEmail($reponse->body->user->email);
-        $user->setFullname($reponse->body->user->fullname);
-        $user->setIdCli($reponse->body->user->id_cli);
-        $user->setIdDepotCli($reponse->body->user->id_depot_cli);
-        $user->setNoCli($reponse->body->user->no_cli);
-        $user->setNomDepotCli($reponse->body->user->nom_depot_cli);
-        $user->setRaisonSociale($reponse->body->user->raison_sociale);
-        $user->setUsername($reponse->body->user->username);
+        $user->setCode('PERSO124');
+        $user->setEmail('test@test.com');
+        $user->setFullname('test test');
+        $user->setIdCli(56610);
+        $user->setIdDepotCli(5);
+        $user->setNoCli(3850);
+        $user->setNomDepotCli('VERTOU');
+        $user->setRaisonSociale('test');
+        $user->setUsername('NICA');
 
         $this->setUser($user);
     }
