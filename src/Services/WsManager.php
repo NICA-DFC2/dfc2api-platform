@@ -28,7 +28,6 @@ class WsManager
      ################################################# */
     private $cache_key_admin = 'dfc2.api.contexte.admin';
 
-    protected $requestStack;
     protected $wsAdminUser;
     protected $wsAdminPassword;
 
@@ -54,10 +53,9 @@ class WsManager
      *
      ################################################# */
 
-    public function __construct(RequestStack $requestStack, string $wsAdminUser, string $wsAdminPassword) {
+    public function __construct(string $wsAdminUser, string $wsAdminPassword) {
         $this->setWsAdminUser($wsAdminUser);
         $this->setWsAdminPassword($wsAdminPassword);
-        $this->setRequestStack($requestStack);
         $this->setBaseUrl();
         $this->setCache(new FilesystemCache());
     }
@@ -71,22 +69,6 @@ class WsManager
      *
      ################################################# */
 
-
-    /**
-     * @return RequestStack
-     */
-    public function getRequestStack()
-    {
-        return $this->requestStack;
-    }
-
-    /**
-     * @param RequestStack $requestStack
-     */
-    public function setRequestStack(RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
-    }
 
     /**
      * @return string

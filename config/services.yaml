@@ -34,7 +34,6 @@ services:
         autowire: true
         public: true
         arguments:
-            $requestStack: '@request_stack'
             $wsAdminUser: '%dfc2.api.admin_user%'
             $wsAdminPassword: '%dfc2.api.admin_password%'
 
