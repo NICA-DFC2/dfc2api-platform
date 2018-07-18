@@ -146,9 +146,6 @@ class ResponseDecode
 
                 $ttRetour = new TTRetour();
 
-                if(isset($pojDSRetour->ProDataSet->ttParam)) {
-                    $ttRetour->addTable($this->decodeRetourTTParam($pojDSRetour->ProDataSet->ttParam), WsTableNamesRetour::TABLENAME_TT_PARAM);
-                }
                 if(isset($pojDSRetour->ProDataSet->ttDepot)) {
                     $ttRetour->addTable($this->decodeRetourTTDepot($pojDSRetour->ProDataSet->ttDepot), WsTableNamesRetour::TABLENAME_TT_DEPOT);
                 }
@@ -206,21 +203,6 @@ class ResponseDecode
             }
         }
         return null;
-    }
-
-    //******
-    // NON TERMINEE
-    private function decodeRetourTTParam($ttParam){
-        $ttReturn = new TTParam();
-        dump($ttParam);
-/*        foreach ($ttParam as $item){
-            $critParam = new CritParam($item->{'NomPar'}, $item->{'ValPar'}, $item->{'IndPar'}, $item->{'FamPar'});
-            $ttReturn->addItem($critParam);
-        }
-
-        $notif = $this->decodeNotif(__FUNCTION__);
-        $ttReturn->setNotif($notif);*/
-        return $ttReturn;
     }
 
     /**
@@ -316,8 +298,11 @@ class ResponseDecode
         return $article_current;
     }
 
-    //******
-    // NON TERMINEE
+    /**
+     * Decode la collection des factures client en attentes de la réponse
+     * @param $ttDocumEnt
+     * @return TTParam
+     */
     private function decodeRetourTTFacCliAtt($ttFacCliAtt){
         $ttReturn = new TTParam();
         foreach ($ttFacCliAtt as $item){
@@ -360,7 +345,6 @@ class ResponseDecode
     // NON TERMINEE
     private function decodeRetourTTEdition($ttEdition){
         $ttReturn = new TTParam();
-        dump($ttEdition);
         foreach ($ttEdition as $item){
             $lig = new WsEdition($item);
             $ttReturn->addItem($lig);
