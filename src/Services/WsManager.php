@@ -66,6 +66,13 @@ class WsManager
         return $this->caller;
     }
 
+    /**
+     * @param CallerService $caller
+     */
+    public function setCaller(CallerService $caller)
+    {
+        $this->caller = $caller;
+    }
 
     /**
      * @return string
@@ -135,7 +142,7 @@ class WsManager
     /**
      * @return User
      */
-    private function getUser()
+    public function getUser()
     {
         return $this->user;
     }
