@@ -31,23 +31,10 @@ class WsManager
 
     protected $wsAdminUser;
     protected $wsAdminPassword;
-
-    protected $httpheaders = array(
-        'Accept' => WsParameters::ACCEPT,
-        'Content-type' => WsParameters::CONTENT_TYPE,
-        'Origin' => WsParameters::ORIGIN,
-        'Referer' => WsParameters::REFERER);
-
-    protected $baseUrl;
-    protected $url;
-    protected $paramAppel;
-    protected $critSel;
     protected $publicKeyObject;
     protected $cache;
     protected $user;
     protected $filter;
-
-
     protected $caller = null;
 
 
