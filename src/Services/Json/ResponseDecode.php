@@ -29,8 +29,25 @@ class ResponseDecode
      */
     public function __construct($response)
     {
+        $this->setResponse($response);
+    }
+
+    /**
+     * @return Response
+     */
+    public function getResponse(): Response
+    {
+        return $this->response;
+    }
+
+    /**
+     * @param Response $response
+     */
+    public function setResponse(Response $response): void
+    {
         $this->response = $response;
     }
+
 
     /**
      * Decode le paramètre ParamRetour de la réponse
@@ -38,10 +55,10 @@ class ResponseDecode
      * @return TTParam|Notif|null
      */
     public function decodeParamRetour() {
-        if(isset($this->response->body)) {
-            if(isset($this->response->body->response->pojDSParamRetour)) {
+        if(isset($this->getResponse()->body)) {
+            if(isset($this->getResponse()->body->response->pojDSParamRetour)) {
 
-                $pojDSParamRetour= json_decode($this->response->body->response->pojDSParamRetour, false);
+                $pojDSParamRetour= json_decode($this->getResponse()->body->response->pojDSParamRetour, false);
 
                 if(isset($pojDSParamRetour->ProDataSet->ttParam)) {
                     $ttParam = new TTParam();
@@ -65,9 +82,9 @@ class ResponseDecode
      * @return CntxAdmin|Notif|null
      */
     public function decodeCntxAdmin() {
-        if(isset($this->response->body)) {
-            if(isset($this->response->body->response->pojDSCntxClient)) {
-                $pojDSCntxClient= json_decode($this->response->body->response->pojDSCntxClient, false);
+        if(isset($this->getResponse()->body)) {
+            if(isset($this->getResponse()->body->response->pojDSCntxClient)) {
+                $pojDSCntxClient= json_decode($this->getResponse()->body->response->pojDSCntxClient, false);
 
                 if(isset($pojDSCntxClient->ProDataSet->ttParam)) {
                     $ttparam = $pojDSCntxClient->ProDataSet->ttParam[0];
@@ -98,10 +115,10 @@ class ResponseDecode
      * @return Notif|null
      */
     public function decodeNotif($call_method) {
-        if(isset($this->response->body)) {
-            if(isset($this->response->body->response->pojDSNotif)) {
+        if(isset($this->getResponse()->body)) {
+            if(isset($this->getResponse()->body->response->pojDSNotif)) {
 
-                $pojDSNotif= json_decode($this->response->body->response->pojDSNotif, false);
+                $pojDSNotif= json_decode($this->getResponse()->body->response->pojDSNotif, false);
 
                 if(isset($pojDSNotif->ProDataSet->ttParam)) {
                     if(count($pojDSNotif->ProDataSet->ttParam) > 0) {
@@ -130,9 +147,9 @@ class ResponseDecode
      * @return TTRetour|Notif|null
      */
     public function decodeRetour($filter_depots = array()) {
-        if(isset($this->response->body)) {
-            if(isset($this->response->body->response->pojDSNotif)) {
-                $pojDSNotif= json_decode($this->response->body->response->pojDSNotif, false);
+        if(isset($this->getResponse()->body)) {
+            if(isset($this->getResponse()->body->response->pojDSNotif)) {
+                $pojDSNotif= json_decode($this->getResponse()->body->response->pojDSNotif, false);
 
                 if(isset($pojDSNotif->ProDataSet->ttParam)) {
                     if (count($pojDSNotif->ProDataSet->ttParam) > 0) {
@@ -140,9 +157,8 @@ class ResponseDecode
                     }
                 }
             }
-
-            if(isset($this->response->body->response->pojDSRetour)) {
-                $pojDSRetour= json_decode($this->response->body->response->pojDSRetour, false);
+            if(isset($this->getResponse()->body->response->pojDSRetour)) {
+                $pojDSRetour= json_decode($this->getResponse()->body->response->pojDSRetour, false);
 
                 $ttRetour = new TTRetour();
 
@@ -191,9 +207,9 @@ class ResponseDecode
      * @return mixed|Notif|null
      */
     public function decodeRetourPrixNet() {
-        if(isset($this->response->body)) {
-            if(isset($this->response->body->response->pojDSRetour)) {
-                $pojDSRetour= json_decode($this->response->body->response->pojDSRetour, false);
+        if(isset($this->getResponse()->body)) {
+            if(isset($this->getResponse()->body->response->pojDSRetour)) {
+                $pojDSRetour= json_decode($this->getResponse()->body->response->pojDSRetour, false);
 
                 if(isset($pojDSRetour->ProDataSet->ttArtDet)) {
                     return $this->decodeRetourTTArtDetPrixNet($pojDSRetour->ProDataSet->ttArtDet);
