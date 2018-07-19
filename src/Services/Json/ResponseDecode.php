@@ -58,11 +58,23 @@ class ResponseDecode
         if(isset($this->getResponse()->body)) {
             if(isset($this->getResponse()->body->response->pojDSParamRetour)) {
 
-                $pojDSParamRetour= json_decode($this->getResponse()->body->response->pojDSParamRetour, false);
+                if(!is_object($this->getResponse()->body->response->pojDSParamRetour)) {
+                    $pojDSParamRetour= json_decode($this->getResponse()->body->response->pojDSParamRetour, false);
+                }
+                else {
+                    $pojDSParamRetour = $this->getResponse()->body->response->pojDSParamRetour;
+                }
 
-                if(isset($pojDSParamRetour->ProDataSet->ttParam)) {
+                if(!is_object($pojDSParamRetour->ProDataSet)) {
+                    $ProDataSet= json_decode($pojDSParamRetour->ProDataSet, false);
+                }
+                else {
+                    $ProDataSet= $pojDSParamRetour->ProDataSet;
+                }
+
+                if(isset($ProDataSet->ttParam)) {
                     $ttParam = new TTParam();
-                    foreach ($pojDSParamRetour->ProDataSet->ttParam as $item){
+                    foreach ($ProDataSet->ttParam as $item){
                         $critParam = new CritParam($item->{'NomPar'}, $item->{'ValPar'}, $item->{'IndPar'}, $item->{'FamPar'});
                         $ttParam->addItem($critParam);
                     }
@@ -84,10 +96,23 @@ class ResponseDecode
     public function decodeCntxAdmin() {
         if(isset($this->getResponse()->body)) {
             if(isset($this->getResponse()->body->response->pojDSCntxClient)) {
-                $pojDSCntxClient= json_decode($this->getResponse()->body->response->pojDSCntxClient, false);
 
-                if(isset($pojDSCntxClient->ProDataSet->ttParam)) {
-                    $ttparam = $pojDSCntxClient->ProDataSet->ttParam[0];
+                if(!is_object($this->getResponse()->body->response->pojDSCntxClient)) {
+                    $pojDSCntxClient= json_decode($this->getResponse()->body->response->pojDSCntxClient, false);
+                }
+                else {
+                    $pojDSCntxClient = $this->getResponse()->body->response->pojDSCntxClient;
+                }
+
+                if(!is_object($pojDSCntxClient->ProDataSet)) {
+                    $ProDataSet= json_decode($pojDSCntxClient->ProDataSet, false);
+                }
+                else {
+                    $ProDataSet= $pojDSCntxClient->ProDataSet;
+                }
+
+                if(isset($ProDataSet->ttParam)) {
+                    $ttparam = $ProDataSet->ttParam[0];
                     $CntxAdmin = new CntxAdmin(
                         $ttparam->{'IdCais'},
                         $ttparam->{'IdDep'},
@@ -118,11 +143,24 @@ class ResponseDecode
         if(isset($this->getResponse()->body)) {
             if(isset($this->getResponse()->body->response->pojDSNotif)) {
 
-                $pojDSNotif= json_decode($this->getResponse()->body->response->pojDSNotif, false);
+                if(!is_object($this->getResponse()->body->response->pojDSNotif)) {
+                    $pojDSNotif = json_decode($this->getResponse()->body->response->pojDSNotif, false);
+                }
+                else {
+                    $pojDSNotif = $this->getResponse()->body->response->pojDSNotif;
+                }
 
-                if(isset($pojDSNotif->ProDataSet->ttParam)) {
-                    if(count($pojDSNotif->ProDataSet->ttParam) > 0) {
-                        $tt = $pojDSNotif->ProDataSet->ttParam;
+                if(!is_object($pojDSNotif->ProDataSet)) {
+                    $ProDataSet= json_decode($pojDSNotif->ProDataSet, false);
+                }
+                else {
+                    $ProDataSet= $pojDSNotif->ProDataSet;
+                }
+
+                if(isset($ProDataSet->ttParam)) {
+
+                    if(count($ProDataSet->ttParam) > 0) {
+                        $tt = $ProDataSet->ttParam;
                         $texte = '';
                         foreach ($tt as $param) {
                             $texte .= $param->{'Texte'} . '. ';
@@ -149,50 +187,80 @@ class ResponseDecode
     public function decodeRetour($filter_depots = array()) {
         if(isset($this->getResponse()->body)) {
             if(isset($this->getResponse()->body->response->pojDSNotif)) {
-                $pojDSNotif= json_decode($this->getResponse()->body->response->pojDSNotif, false);
 
-                if(isset($pojDSNotif->ProDataSet->ttParam)) {
-                    if (count($pojDSNotif->ProDataSet->ttParam) > 0) {
+                if(!is_object($this->getResponse()->body->response->pojDSNotif)) {
+                    $pojDSNotif = json_decode($this->getResponse()->body->response->pojDSNotif, false);
+                }
+                else {
+                    $pojDSNotif = $this->getResponse()->body->response->pojDSNotif;
+                }
+
+                if(!is_object($pojDSNotif->ProDataSet)) {
+                    $ProDataSet= json_decode($pojDSNotif->ProDataSet, false);
+                }
+                else {
+                    $ProDataSet= $pojDSNotif->ProDataSet;
+                }
+
+                if(isset($ProDataSet->ttParam)) {
+                    if (count($ProDataSet->ttParam) > 0) {
                         return $this->decodeNotif(__FUNCTION__);
                     }
                 }
             }
+
             if(isset($this->getResponse()->body->response->pojDSRetour)) {
-                $pojDSRetour= json_decode($this->getResponse()->body->response->pojDSRetour, false);
+                if(!is_object($this->getResponse()->body->response->pojDSRetour)) {
+                    $pojDSRetour= json_decode($this->getResponse()->body->response->pojDSRetour, false);
+                }
+                else {
+                    $pojDSRetour= $this->getResponse()->body->response->pojDSRetour;
+                }
+
+                if(!is_object($pojDSRetour->ProDataSet)) {
+                    $ProDataSet= json_decode($pojDSRetour->ProDataSet, false);
+                }
+                else {
+                    $ProDataSet= $pojDSRetour->ProDataSet;
+                }
 
                 $ttRetour = new TTRetour();
 
-                if(isset($pojDSRetour->ProDataSet->ttDepot)) {
-                    $ttRetour->addTable($this->decodeRetourTTDepot($pojDSRetour->ProDataSet->ttDepot), WsTableNamesRetour::TABLENAME_TT_DEPOT);
+
+                if(isset($ProDataSet->ttDepot)) {
+                    $ttRetour->addTable($this->decodeRetourTTDepot($ProDataSet->ttDepot), WsTableNamesRetour::TABLENAME_TT_DEPOT);
                 }
-                if(isset($pojDSRetour->ProDataSet->ttCli)) {
-                    $ttRetour->addTable($this->decodeRetourTTCli($pojDSRetour->ProDataSet->ttCli), WsTableNamesRetour::TABLENAME_TT_CLI);
+                if(isset($ProDataSet->ttCli)) {
+                    $ttRetour->addTable($this->decodeRetourTTCli($ProDataSet->ttCli), WsTableNamesRetour::TABLENAME_TT_CLI);
                 }
-                if(isset($pojDSRetour->ProDataSet->ttArtDet)) {
-                    $ttRetour->addTable($this->decodeRetourTTArtDet($pojDSRetour->ProDataSet->ttArtDet), WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                if(isset($ProDataSet->ttArtDet)) {
+                    $ttRetour->addTable($this->decodeRetourTTArtDet($ProDataSet->ttArtDet), WsTableNamesRetour::TABLENAME_TT_ARTDET);
                 }
-                if(isset($pojDSRetour->ProDataSet->ttStock)) {
+                if(isset($ProDataSet->ttStock)) {
                     $ttArtDet = $ttRetour->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
-                    $article = $ttArtDet->getItem(0);
-                    $ttRetour->setTable($this->decodeRetourTTStock($pojDSRetour->ProDataSet->ttStock, $article, $filter_depots), WsTableNamesRetour::TABLENAME_TT_STOCK);
+                    $article = new WsArticle();
+                    if($ttArtDet->countItems() > 0) {
+                        $article = $ttArtDet->getItem(0);
+                    }
+                    $ttRetour->setTable($this->decodeRetourTTStock($ProDataSet->ttStock, $article, $filter_depots), WsTableNamesRetour::TABLENAME_TT_STOCK);
                 }
-                if(isset($pojDSRetour->ProDataSet->ttFacCliAtt)) {
-                    $ttRetour->addTable($this->decodeRetourTTFacCliAtt($pojDSRetour->ProDataSet->ttFacCliAtt), WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
+                if(isset($ProDataSet->ttFacCliAtt)) {
+                    $ttRetour->addTable($this->decodeRetourTTFacCliAtt($ProDataSet->ttFacCliAtt), WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
                 }
-                if(isset($pojDSRetour->ProDataSet->ttDocumEnt)) {
-                    $ttRetour->addTable($this->decodeRetourTTDocumEnt($pojDSRetour->ProDataSet->ttDocumEnt), WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
+                if(isset($ProDataSet->ttDocumEnt)) {
+                    $ttRetour->addTable($this->decodeRetourTTDocumEnt($ProDataSet->ttDocumEnt), WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
                 }
                 if(isset($pojDSRetour->ProDataSet->ttDocumLig)) {
-                    $ttRetour->addTable($this->decodeRetourTTDocumLig($pojDSRetour->ProDataSet->ttDocumLig), WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
+                    $ttRetour->addTable($this->decodeRetourTTDocumLig($ProDataSet->ttDocumLig), WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
                 }
-                if(isset($pojDSRetour->ProDataSet->ttEdition)) {
-                    $ttRetour->addTable($this->decodeRetourTTEdition($pojDSRetour->ProDataSet->ttEdition), WsTableNamesRetour::TABLENAME_TT_EDITION);
+                if(isset($ProDataSet->ttEdition)) {
+                    $ttRetour->addTable($this->decodeRetourTTEdition($ProDataSet->ttEdition), WsTableNamesRetour::TABLENAME_TT_EDITION);
                 }
-                if(isset($pojDSRetour->ProDataSet->ttSal)) {
-                    $ttRetour->addTable($this->decodeRetourTTSal($pojDSRetour->ProDataSet->ttSal), WsTableNamesRetour::TABLENAME_TT_SAL);
+                if(isset($ProDataSet->ttSal)) {
+                    $ttRetour->addTable($this->decodeRetourTTSal($ProDataSet->ttSal), WsTableNamesRetour::TABLENAME_TT_SAL);
                 }
-                if(isset($pojDSRetour->ProDataSet->ttLib)) {
-                    $ttRetour->addTable($this->decodeRetourTTLib($pojDSRetour->ProDataSet->ttLib), WsTableNamesRetour::TABLENAME_TT_LIB);
+                if(isset($ProDataSet->ttLib)) {
+                    $ttRetour->addTable($this->decodeRetourTTLib($ProDataSet->ttLib), WsTableNamesRetour::TABLENAME_TT_LIB);
                 }
 
                 return $ttRetour;
@@ -209,10 +277,23 @@ class ResponseDecode
     public function decodeRetourPrixNet() {
         if(isset($this->getResponse()->body)) {
             if(isset($this->getResponse()->body->response->pojDSRetour)) {
-                $pojDSRetour= json_decode($this->getResponse()->body->response->pojDSRetour, false);
 
-                if(isset($pojDSRetour->ProDataSet->ttArtDet)) {
-                    return $this->decodeRetourTTArtDetPrixNet($pojDSRetour->ProDataSet->ttArtDet);
+                if(!is_object($this->getResponse()->body->response->pojDSRetour)) {
+                    $pojDSRetour = json_decode($this->getResponse()->body->response->pojDSRetour, false);
+                }
+                else {
+                    $pojDSRetour = $this->getResponse()->body->response->pojDSRetour;
+                }
+
+                if(!is_object($pojDSRetour->ProDataSet)) {
+                    $ProDataSet= json_decode($pojDSRetour->ProDataSet, false);
+                }
+                else {
+                    $ProDataSet= $pojDSRetour->ProDataSet;
+                }
+
+                if(isset($ProDataSet->ttArtDet)) {
+                    return $this->decodeRetourTTArtDetPrixNet($ProDataSet->ttArtDet);
                 }
 
                 return $this->decodeNotif(__FUNCTION__);
@@ -372,7 +453,6 @@ class ResponseDecode
     // NON TERMINEE
     private function decodeRetourTTSal($ttSal){
         $ttReturn = new TTParam();
-        dump($ttSal);
 /*        foreach ($ttSal as $item){
             $critParam = new CritParam($item->{'NomPar'}, $item->{'ValPar'}, $item->{'IndPar'}, $item->{'FamPar'});
             $ttReturn->addItem($critParam);

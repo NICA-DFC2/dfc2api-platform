@@ -42,6 +42,7 @@ class AuthenticationSuccessListener
             $cntx = $this->ws_manager->getDemarre(WsAlgorithmOpenSSL::NONE);
 
             $TTRetour = $this->ws_manager->getClientByCodCli($user->getCode());
+
             if(!is_null($TTRetour)) {
                 $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
                 $wsClient = $TTParam->getItem(0);

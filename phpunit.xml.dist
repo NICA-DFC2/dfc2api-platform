@@ -26,7 +26,12 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>tests/</directory>
+            <directory>tests/Utils/</directory>
+            <directory>tests/Entity/</directory>
+            <directory>tests/EventListener/</directory>
+            <directory>tests/WsManagerTest.php</directory>
+            <directory>tests/Services/Filter/</directory>
+            <directory>tests/Services/Json/</directory>
         </testsuite>
     </testsuites>
 

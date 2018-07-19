@@ -190,10 +190,12 @@ class WsManager
             if($this->getCache()->has($this->cache_key_admin)) {
                 $cntxAdmin =  new Objets\CntxAdmin();
                 $cntxAdmin->__parse($this->getCache()->get($this->cache_key_admin));
+
                 if($cntxAdmin->isValid()) {
                     return $cntxAdmin;
                 }
             }
+
 
             $publicKeyNumber = $this->getValPublicKeyNumber();
 
@@ -213,8 +215,10 @@ class WsManager
 
             $responseDecode = new ResponseDecode($response);
             $context = $responseDecode->decodeCntxAdmin();
+            var_dump($context);
             if ($context instanceof CntxAdmin) {
                 // met en cache le contexte de connexion
+                $this->getCache()->clear();
                 $this->getCache()->set($this->cache_key_admin, $context->__toValsString());
             }
 

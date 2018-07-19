@@ -105,8 +105,10 @@ class CallerService
             $data = $this->cache->get($this->cache_key_admin);
             $contexte = new CntxAdmin();
             if($contexte->__parse($data)) {
-                $this->context = 'pijDSCntxClient=' . $contexte->__toString();
-                return $this->context;
+                if($contexte->isValid()) {
+                    $this->context = 'pijDSCntxClient=' . $contexte->__toString();
+                    return $this->context;
+                }
             }
         }
         return $this->context;
@@ -293,7 +295,8 @@ class CallerService
      * @return Unirest\Response
      */
     public function get() {
-        return Unirest\Request::get($this->getUrl(), $this->getHeaders(), null);
+        $response = Unirest\Request::get($this->getUrl(), $this->getHeaders(), null);
+        return $response;
     }
 
     /**
@@ -301,6 +304,7 @@ class CallerService
      * @return Unirest\Response
      */
     public function put() {
-        return Unirest\Request::put($this->getUrl(), $this->getHeaders(), $this->getBody());
+        $response = Unirest\Request::put($this->getUrl(), $this->getHeaders(), $this->getBody());
+        return $response;
     }
 }
