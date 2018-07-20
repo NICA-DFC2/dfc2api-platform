@@ -37,6 +37,10 @@ class CallerService
      * @var string
      */
     protected $modif = '';
+    /**
+     * @var string
+     */
+    protected $url = '';
 
     /**
      * @var array
@@ -151,6 +155,7 @@ class CallerService
     private function getCritsSelect(): string
     {
         $filters = $this->getFilter();
+
         if(!is_null($filters) && count($filters) > 0) {
             foreach ($filters as $param) {
                 $this->critsSelect->addItem($param);
@@ -258,27 +263,36 @@ class CallerService
     /**
      * @return string
      */
-    private function getUrl(): string
+    public function getUrl(): string
     {
-        $url = $this->getBaseUrl(). '?' . 'picModule=' . $this->getModule();
+        return $this->url;
+    }
+
+    /**
+     * @return string
+     */
+    private function setUrl()
+    {
+        $this->url = $this->getBaseUrl(). '?' . 'picModule=' . $this->getModule();
 
         switch($this->getContext()) {
             case WsTypeContext::CONTEXT_NONE:
                 break;
             default:
-                $url .= '&' . $this->getContext();
+                $this->url .= '&' . $this->getContext();
                 break;
         }
 
         if (!empty($this->getParamsAppel())){
-            $url .= '&' . $this->getParamsAppel();
+            $this->url .= '&' . $this->getParamsAppel();
         }
 
-        if (!empty($this->getCritsSelect())){
-            $url .= '&' . $this->getCritsSelect();
+        $critsSelect = $this->getCritsSelect();
+        if (!empty($critsSelect)){
+            $this->url .= '&' . $critsSelect;
         }
 
-        return $url;
+        return $this->url;
     }
 
     /**
@@ -295,6 +309,7 @@ class CallerService
      * @return Unirest\Response
      */
     public function get() {
+        $this->setUrl();
         $response = Unirest\Request::get($this->getUrl(), $this->getHeaders(), null);
         return $response;
     }
@@ -304,6 +319,7 @@ class CallerService
      * @return Unirest\Response
      */
     public function put() {
+        $this->setUrl();
         $response = Unirest\Request::put($this->getUrl(), $this->getHeaders(), $this->getBody());
         return $response;
     }

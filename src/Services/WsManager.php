@@ -563,6 +563,29 @@ class WsManager
          ################################################# */
 
         /**
+         * Lecture des informations des articles
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getArticles()
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET));
+            $TTParamAppel->addItem(new CritParam("CalculPrixNet", "no"));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_ARTICLE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect(new TTParam())
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
+
+        /**
          * Lecture des informations d'un article avec le stock par son numéro
          * @param $no_ad
          * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté

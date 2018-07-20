@@ -256,8 +256,8 @@ class ResponseDecode
                 if(isset($ProDataSet->ttEdition)) {
                     $ttRetour->addTable($this->decodeRetourTTEdition($ProDataSet->ttEdition), WsTableNamesRetour::TABLENAME_TT_EDITION);
                 }
-                if(isset($ProDataSet->ttSal)) {
-                    $ttRetour->addTable($this->decodeRetourTTSal($ProDataSet->ttSal), WsTableNamesRetour::TABLENAME_TT_SAL);
+                if(isset($ProDataSet->ttStat)) {
+                    $ttRetour->addTable($this->decodeRetourTTStat($ProDataSet->ttStat), WsTableNamesRetour::TABLENAME_TT_STAT);
                 }
                 if(isset($ProDataSet->ttLib)) {
                     $ttRetour->addTable($this->decodeRetourTTLib($ProDataSet->ttLib), WsTableNamesRetour::TABLENAME_TT_LIB);
@@ -451,7 +451,7 @@ class ResponseDecode
 
     //******
     // NON TERMINEE
-    private function decodeRetourTTSal($ttSal){
+    private function decodeRetourTTStat($ttStat){
         $ttReturn = new TTParam();
 /*        foreach ($ttSal as $item){
             $critParam = new CritParam($item->{'NomPar'}, $item->{'ValPar'}, $item->{'IndPar'}, $item->{'FamPar'});

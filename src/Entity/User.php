@@ -19,7 +19,6 @@ use Swagger\Annotations as SWG;
  *     "denormalization_context"={"groups"={"user", "user-write"}}
  * })
  */
-
 class User extends BaseUser
 {
     /**
