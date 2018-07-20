@@ -7,10 +7,13 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Services\Objets\WsArticle;
 use App\Utils\StockDepot;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Swagger\Annotations as SWG;
+use Gedmo\Mapping\Annotation as Gedmo;
+use App\Validator\Constraints as ApiAssert;
 
 /**
  * Entité qui représente un Article. Certain champs sont hydratés par un appel aux services web GIMEL.
@@ -88,6 +91,12 @@ class Article
      * @ORM\Column(name="DesiPrincAD", type="string", length=255, nullable=true)
      */
     private $DesiPrincAD;
+
+    /**
+     * @Gedmo\Slug(fields={"DesiAD"})
+     * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     */
+    private $slug;
 
     /**
      * @ORM\Column(name="DescriWebAD", type="text", nullable=true)
@@ -209,6 +218,16 @@ class Article
      */
     private $UModAD;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="ArticleCategorie", mappedBy="articles", cascade={"persist"})
+     * @ORM\JoinTable(name="article_category")
+     *
+     * @ApiAssert\ArticleCategorieOfArticleHaveNoChildren()
+     */
+    private $articleCategories;
+
+
+
 
 
 
@@ -278,13 +297,13 @@ class Article
      */
     private $Stocks = null;
 
-
     /**
      * ArtDet constructor.
      */
     public function __construct()
     {
         $this->Stocks = array();
+        $this->articleCategories = new ArrayCollection();
     }
 
     /**
@@ -385,6 +404,24 @@ class Article
     {
         $this->DesiAD = $DesiAD;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+
 
     /**
      * @return mixed
@@ -786,6 +823,34 @@ class Article
         $this->UModAD = $UModAD;
     }
 
+    /**
+     * @return Collection|ArticleCategorie[]
+     */
+    public function getArticleCategories(): Collection
+    {
+        return $this->articleCategories;
+    }
+
+    public function addArticleCategory(ArticleCategorie $articleCategory): self
+    {
+        if (!$this->articleCategories->contains($articleCategory)) {
+            $this->articleCategories[] = $articleCategory;
+            $articleCategory->addArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleCategory(ArticleCategorie $articleCategory): self
+    {
+        if ($this->articleCategories->contains($articleCategory)) {
+            $this->articleCategories->removeElement($articleCategory);
+            $articleCategory->removeArticle($this);
+        }
+
+        return $this;
+    }
+
     /* ***********************
 
     DEBUT :: A HYDRATER AVEC API WEB SERVICE
@@ -952,7 +1017,6 @@ class Article
     {
         $this->Stocks = $stocks;
     }
-
 
 
     /* ***********************
