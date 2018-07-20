@@ -31,7 +31,6 @@ class WsFilter
      */
     public function __construct($filter)
     {
-        $this->criteres_selection = array();
         $this->setCritSel($filter);
     }
 
@@ -51,7 +50,9 @@ class WsFilter
      * @param $filter
      * @return array
      */
-    private function setCritSel($filter) {
+    public function setCritSel($filter) {
+        $this->criteres_selection = array();
+
         if(!is_null($filter) && is_array($filter)){
             // boucle dans les paramètres d'URL
             foreach($filter as $property => $value_property) {
@@ -73,7 +74,6 @@ class WsFilter
 
                 // la valeur est de type array
                 else if(is_array($value_property)){
-
                     // boucle dans les paramètres d'URL qui sont des tableaux (exemple: DateDE[after]=2017-12-14)
                     foreach($value_property as $type_filter => $value_filter) {
 

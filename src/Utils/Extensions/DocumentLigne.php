@@ -116,6 +116,7 @@ class DocumentLigne
     private $CvVteVteDL = 0;
     private $GrpTarSeuDL = "";
     private $MargReelDL = 0;
+    private $IsFilled = false;
 
 
     /**
@@ -125,6 +126,7 @@ class DocumentLigne
      * @param WsDocumLig $object
      */
     public function parseObject(WsDocumLig $object) {
+        $this->setIsFilled(false);
         if(!is_null($object)) {
             $this->setIdDL($object->{'IdDL'});
             $this->setIdDE($object->{'IdDE'});
@@ -235,141 +237,26 @@ class DocumentLigne
             $this->setCvVteVteDL($object->{'CvVteVteDL'});
             $this->setGrpTarSeuDL($object->{'GrpTarSeuDL'});
             $this->setMargReelDL($object->{'MargReelDL'});
+            $this->setIsFilled(true);
         }
+        return $this;
+    }
+
+
+    /**
+     * @return boolean
+     */
+    public function isFilled()
+    {
+        return $this->IsFilled;
     }
 
     /**
-     * parseJson
-     * Convertion de l'objet en une structure JSON personnalisée
+     * @param boolean $isFilled
      */
-    private function parseJson()
+    public function setIsFilled($isFilled)
     {
-        $string = '{';
-        $string .= '"IdDL": '.$this->getIdDL().' ,';
-        $string .= '"IdDE": '.$this->getIdDE().' ,';
-        $string .= '"IdDocDL": '.$this->getIdDocDL().' ,';
-        $string .= '"IdDocDE": '.$this->getIdDocDE().' ,';
-        $string .= '"IdDocSecDE": '.$this->getIdDocSecDE().' ,';
-        $string .= '"IdAD": '.$this->getIdAD().' ,';
-        $string .= '"NumDL": '.$this->getNumDL().' ,';
-        $string .= '"NbUStoDL": '.$this->getNbUStoDL().' ,';
-        $string .= '"UStoDL": "'.$this->getUStoDL().'" ,';
-        $string .= '"MontHTDL": '.$this->getMontHTDL().' ,';
-        $string .= '"MontTTCDL": '.$this->getMontTTCDL().' ,';
-        $string .= '"PrixNetDL": '.$this->getPrixNetDL().' ,';
-        $string .= '"NbUVteDL": '.$this->getNbUVteDL().' ,';
-        $string .= '"UVteDL": "'.$this->getUVteDL().'" ,';
-        $string .= '"ComDL": "'.$this->getComDL().'" ,';
-        $string .= '"CodEcoTaxeDL": "'.$this->getCodEcoTaxeDL().'" ,';
-        $string .= '"CodTgapDL": "'.$this->getCodTgapDL().'" ,';
-        $string .= '"PoidsUVteDL": '.$this->getPoidsUVteDL().' ,';
-        $string .= '"MontTVADL": '.$this->getMontTVADL().' ,';
-        $string .= '"MontTgapDL": '.$this->getMontTgapDL().' ,';
-        $string .= '"MontParafDL": '.$this->getMontParafDL().' ,';
-        $string .= '"NbUCondDL": '.$this->getNbUCondDL().' ,';
-
-        $val = ($this->isFlgBonniDL()) ? 'true' : 'false';
-        $string .= '"FlgBonniDL": ' . $val . ' ,';
-
-        $string .= '"TypeQteDL": "'.$this->getTypeQteDL().'" ,';
-        $string .= '"IdPTA": '.$this->getIdPTA().' ,';
-        $string .= '"IdCel": '.$this->getIdCel().' ,';
-        $string .= '"MontTTCComDL": '.$this->getMontTTCComDL().' ,';
-        $string .= '"MontHTComDL": '.$this->getMontHTComDL().' ,';
-        $string .= '"NbUVteComDL": '.$this->getNbUVteComDL().' ,';
-
-        $val = ($this->isFlgVarDL()) ? 'true' : 'false';
-        $string .= '"FlgVarDL": ' . $val . ' ,';
-
-        $string .= '"NbUStoComDL": '.$this->getNbUStoComDL().' ,';
-        $string .= '"IdTA": '.$this->getIdTA().' ,';
-        $string .= '"NoAD": '.$this->getNoAD().' ,';
-        $string .= '"CodAD": "'.$this->getCodAD().'" ,';
-        $string .= '"CodADDL": "'.$this->getCodADDL().'" ,';
-        $string .= '"RefDL": "'.$this->getRefDL().'" ,';
-        $string .= '"DesignationAD": "'.$this->getDesignationAD().'" ,';
-        $string .= '"Desi2Art": "'.$this->getDesi2Art().'" ,';
-        $string .= '"HASH": "'.$this->getHASH().'" ,';
-        $string .= '"TypePrixDL": "'.$this->getTypePrixDL().'" ,';
-        $string .= '"ComCel": "'.$this->getComCel().'" ';
-
-        $string .= '"IdExtDL": '.$this->getIdExtDL().' ,';
-        $string .= '"IdFour": '.$this->getIdFour().' ,';
-        $string .= '"NbUAchDL": '.$this->getNbUAchDL().' ,';
-        $string .= '"DateModDL": "'.$this->getDateModDL().'" ,';
-        $string .= '"IdTC": '.$this->getIdTC().' ,';
-        $string .= '"IdDep": '.$this->getIdDep().' ,';
-        $string .= '"EtatDL": "'.$this->getEtatDL().'" ,';
-        $string .= '"CodTVADL": "'.$this->getCodTVADL().'" ,';
-        $string .= '"UAchDL": "'.$this->getUAchDL().'" ,';
-
-        $val = ($this->isTypCvAchVteDL()) ? 'true' : 'false';
-        $string .= '"TypCvAchVteDL": "'.$val.'" ,';
-
-        $string .= '"CvAchVteDL": '.$this->getCvAchVteDL().' ,';
-        $string .= '"PrixAchDevDL": '.$this->getPrixAchDevDL().' ,';
-        $string .= '"PrixAchDL": '.$this->getPrixAchDL().' ,';
-        $string .= '"PrixDepConvDL": '.$this->getPrixDepConvDL().' ,';
-        $string .= '"PrixDepReelDL": '.$this->getPrixDepReelDL().' ,';
-        $string .= '"PrixNetConvDL": '.$this->getPrixNetConvDL().' ,';
-        $string .= '"PrixNetReelDL": '.$this->getPrixNetReelDL().' ,';
-        $string .= '"PrixRevConvDL": '.$this->getPrixRevConvDL().' ,';
-        $string .= '"PrixRevReelDL": '.$this->getPrixRevReelDL().' ,';
-        $string .= '"NbDecPNetDL": '.$this->getNbDecPNetDL().' ,';
-        $string .= '"NbDecPDepDL": '.$this->getNbDecPDepDL().' ,';
-        $string .= '"NbDecPrixRendDL": '.$this->getNbDecPrixRendDL().' ,';
-        $string .= '"NbDecPrixRevDL": '.$this->getNbDecPrixRevDL().' ,';
-        $string .= '"CodDevDL": "'.$this->getCodDevDL().'" ,';
-        $string .= '"PoidsUAchDL": '.$this->getPoidsUAchDL().' ,';
-        $string .= '"VolUAchDL": '.$this->getVolUAchDL().' ,';
-        $string .= '"TypePRDL": "'.$this->getTypePRDL().'" ,';
-        $string .= '"IdPort": '.$this->getIdPort().' ,';
-        $string .= '"IdEch": '.$this->getIdEch().' ,';
-        $string .= '"LargDL": '.$this->getLargDL().' ,';
-        $string .= '"LongDL": '.$this->getLongDL().' ,';
-        $string .= '"EpaisDL": '.$this->getEpaisDL().' ,';
-        $string .= '"CvStoVteDL": "'.$this->getCvStoVteDL().'" ,';
-
-        $val = ($this->isTypCvStoVteDL()) ? 'true' : 'false';
-        $string .= '"TypCvStoVteDL": "'.$val.'" ,';
-
-        $string .= '"NbUStoCondVteDL": '.$this->getNbUStoCondVteDL().' ,';
-        $string .= '"CodParafDL": "'.$this->getCodParafDL().'" ,';
-        $string .= '"CondVteDL": "'.$this->getCondVteDL().'" ,';
-        $string .= '"TypeLongDL": "'.$this->getTypeLongDL().'" ,';
-        $string .= '"MontEcoTaxeDL": '.$this->getMontEcoTaxeDL().' ,';
-        $string .= '"PrixTTCDL": '.$this->getPrixTTCDL().' ,';
-        $string .= '"MontRevConvDL": '.$this->getMontRevConvDL().' ,';
-        $string .= '"MontRevReDL": '.$this->getMontRevReDL().' ,';
-        $string .= '"MontHTAvecPortDL": '.$this->getMontHTAvecPortDL().' ,';
-        $string .= '"IdTar": '.$this->getIdTar().' ,';
-        $string .= '"IdTarPre": '.$this->getIdTarPre().' ,';
-        $string .= '"TypeTarDL": "'.$this->getTypeTarDL().'" ,';
-        $string .= '"CodMethDL": "'.$this->getCodMethDL().'" ,';
-        $string .= '"TypeSeuTarDL": "'.$this->getTypeSeuTarDL().'" ,';
-        $string .= '"PRCAutoDL": '.$this->getPRCAutoDL().' ,';
-        $string .= '"PRRAutoDL": '.$this->getPRRAutoDL().' ,';
-        $string .= '"PrixTarDL": '.$this->getPrixTarDL().' ,';
-        $string .= '"IdTarComp": '.$this->getIdTarComp().' ,';
-        $string .= '"IdTarComp2": '.$this->getIdTarComp2().' ,';
-        $string .= '"IdCas": '.$this->getIdCas().' ,';
-        $string .= '"RemValDL": '.$this->getRemValDL().' ,';
-        $string .= '"PrixPubDL": '.$this->getPrixPubDL().' ,';
-        $string .= '"CoefDL": '.$this->getCoefDL().' ,';
-        $string .= '"Remise1DL": '.$this->getRemise1DL().' ,';
-        $string .= '"Remise2DL": '.$this->getRemise2DL().' ,';
-        $string .= '"Remise3DL": '.$this->getRemise3DL().' ,';
-        $string .= '"ComModPRDL": "'.$this->getComModPRDL().'" ,';
-        $string .= '"DateModPRDL": "'.$this->getDateModPRDL().'" ,';
-        $string .= '"IdUModPRDL": '.$this->getIdUModPRDL().' ,';
-        $string .= '"PrixPortDL": '.$this->getPrixPortDL().' ,';
-        $string .= '"MargConvDL": '.$this->getMargConvDL().' ,';
-        $string .= '"CvVteVteDL": '.$this->getCvVteVteDL().' ,';
-        $string .= '"GrpTarSeuDL": "'.$this->getGrpTarSeuDL().'" ,';
-        $string .= '"MargReelDL": '.$this->getMargReelDL().' ';
-        $string .= '}';
-
-        return $string;
+        $this->IsFilled = $isFilled;
     }
 
     /**

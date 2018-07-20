@@ -113,6 +113,7 @@ class Document
 
     private $Edition = null;
     private $Lignes = null;
+    private $IsFilled = false;
 
     /**
      * Document constructor.
@@ -162,6 +163,21 @@ class Document
         $this->Edition = $Edition;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isFilled()
+    {
+        return $this->IsFilled;
+    }
+
+    /**
+     * @param boolean $isFilled
+     */
+    public function setIsFilled($isFilled)
+    {
+        $this->IsFilled = $isFilled;
+    }
 
 
     /**
@@ -170,6 +186,7 @@ class Document
      */
     public function parseObject(WsDocumEnt $object) {
 
+        $this->setIsFilled(false);
         if(!is_null($object)) {
             if(isset($object->{'DateDE'})) {
                 $this->setDateDE($object->{'DateDE'});
@@ -276,40 +293,11 @@ class Document
             $this->setFlgPFDE($object->{'FlgPFDE'});
             $this->setCodOrigDE($object->{'CodOrigDE'});
             $this->setDateCloDE($object->{'DateCloDE'});
+            $this->setIsFilled(true);
         }
+        return $this;
     }
 
-    /**
-     * parseJson
-     * Convertion de l'objet en une structure JSON personnalisée
-     */
-    public function parseJson()
-    {
-        $string = '{';
-        $string .= '"IdDE": '.$this->getIdDE().' ,';
-        $string .= '"IdDocDE": '.$this->getIdDocDE().' ,';
-        $string .= '"NumDE": '.$this->getNumDE().' ,';
-        $string .= '"DateDE": "'.$this->getDateDE().'" ,';
-        $string .= '"IdCli": '.$this->getIdCli().' ,';
-        $string .= '"IdSoc": '.$this->getIdSoc().' ,';
-        $string .= '"EtatDE": "'.$this->getEtatDE().'" ,';
-        $string .= '"TypeDE": "'.$this->getTypeDE().'" ,';
-        $string .= '"RefDE": "'.$this->getRefDE().'" ,';
-        $string .= '"MontTTCDE": '.$this->getMontTTCDE().' ,';
-        $string .= '"MontHTDE": '.$this->getMontHTDE().' ,';
-        $string .= '"ComDE": "'.$this->getComDE().'" ,';
-        $string .= '"DateLivrDE": "'.$this->getDateLivrDE().'" ,';
-        $string .= '"IdFac": '.$this->getIdFac().' ,';
-        $string .= '"IdDepLiv": '.$this->getIdDepLiv().' ,';
-
-        $val = ($this->getFlgValidDE()) ? 'true' : 'false';
-        $string .= '"FlgValidDE": '.$val.' ,';
-
-        $string .= '"MotsClesAutoDE": "'.$this->getMotsClesAutoDE().'"';
-        $string .= '}';
-
-        return $string;
-    }
 
     /**
      * @return string
@@ -1942,5 +1930,8 @@ class Document
     {
         $this->DateCloDE = $DateCloDE;
     }
-    
+
+
+
+
 }
