@@ -38,23 +38,27 @@ class ArticleCategorie
 
     /**
      * One Category has Many children ArticleCategories.
-     * @OneToMany(targetEntity="ArticleCategorie", mappedBy="parent")
+     * @OneToMany(targetEntity="ArticleCategorie", mappedBy="parent", cascade={"persist"})
      */
     private $children;
 
     /**
      * Many ArticleCategories have One parent ArticleCategory.
-     * @ManyToOne(targetEntity="ArticleCategorie", inversedBy="children")
+     * @ManyToOne(targetEntity="ArticleCategorie", inversedBy="children", cascade={"persist"})
      * @JoinColumn(name="parent_id", referencedColumnName="id")
      * @ApiAssert\ParentArticleCategorieIsEmpty()
      */
     private $parent;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Article", inversedBy="articleCategories")
+     * @ORM\ManyToMany(targetEntity="Article", inversedBy="articleCategories", cascade={"persist"})
+     * @ORM\JoinTable(name="article_category",
+     *      joinColumns={@JoinColumn(name="category_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="article_id", referencedColumnName="IdAD")}
+     *      )
      */
     private $articles;
-    // ...
+
 
     public function __construct() {
         $this->children = new ArrayCollection();

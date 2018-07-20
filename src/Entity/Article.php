@@ -219,7 +219,9 @@ class Article
     private $UModAD;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\ArticleCategorie", mappedBy="articles")
+     * @ORM\ManyToMany(targetEntity="ArticleCategorie", mappedBy="articles", cascade={"persist"})
+     * @ORM\JoinTable(name="article_category")
+     *
      * @ApiAssert\ArticleCategorieOfArticleHaveNoChildren()
      */
     private $articleCategories;
@@ -821,6 +823,34 @@ class Article
         $this->UModAD = $UModAD;
     }
 
+    /**
+     * @return Collection|ArticleCategorie[]
+     */
+    public function getArticleCategories(): Collection
+    {
+        return $this->articleCategories;
+    }
+
+    public function addArticleCategory(ArticleCategorie $articleCategory): self
+    {
+        if (!$this->articleCategories->contains($articleCategory)) {
+            $this->articleCategories[] = $articleCategory;
+            $articleCategory->addArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleCategory(ArticleCategorie $articleCategory): self
+    {
+        if ($this->articleCategories->contains($articleCategory)) {
+            $this->articleCategories->removeElement($articleCategory);
+            $articleCategory->removeArticle($this);
+        }
+
+        return $this;
+    }
+
     /* ***********************
 
     DEBUT :: A HYDRATER AVEC API WEB SERVICE
@@ -987,35 +1017,6 @@ class Article
     {
         $this->Stocks = $stocks;
     }
-
-    /**
-     * @return Collection|ArticleCategorie[]
-     */
-    public function getArticleCategories(): Collection
-    {
-        return $this->articleCategories;
-    }
-
-    public function addArticleCategory(ArticleCategorie $articleCategory): self
-    {
-        if (!$this->articleCategories->contains($articleCategory)) {
-            $this->articleCategories[] = $articleCategory;
-            $articleCategory->addArticle($this);
-        }
-
-        return $this;
-    }
-
-    public function removeArticleCategory(ArticleCategorie $articleCategory): self
-    {
-        if ($this->articleCategories->contains($articleCategory)) {
-            $this->articleCategories->removeElement($articleCategory);
-            $articleCategory->removeArticle($this);
-        }
-
-        return $this;
-    }
-
 
 
     /* ***********************
