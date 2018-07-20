@@ -1,8 +1,8 @@
 lexik_jwt_authentication:
     # ssh private key path
-    private_key_path: '%kernel.project_dir%/config/jwt-test/private2-test.pem'
+    secret_key: '%kernel.project_dir%/config/jwt-test/private2-test.pem'
     # ssh public key path
-    public_key_path: '%kernel.project_dir%/config/jwt-test/public-test.pem'
+    public_key: '%kernel.project_dir%/config/jwt-test/public-test.pem'
     # ssh key pass phrase
     pass_phrase: '%env(JWT_PASSPHRASE)%'
 

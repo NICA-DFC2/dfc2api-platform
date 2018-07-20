@@ -19,7 +19,6 @@ use Swagger\Annotations as SWG;
  *     "denormalization_context"={"groups"={"user", "user-write"}}
  * })
  */
-
 class User extends BaseUser
 {
     /**
@@ -116,6 +115,7 @@ class User extends BaseUser
     protected $nom_depot_cli;
 
 
+
     public function setFullname($fullname): void
     {
         $this->fullname = $fullname;
@@ -201,7 +201,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getIdCli(): int
     {
@@ -209,7 +209,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param string $id_cli
+     * @param integer $id_cli
      */
     public function setIdCli(int $id_cli): void
     {
@@ -217,7 +217,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getNoCli(): int
     {
@@ -225,7 +225,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param string $no_cli
+     * @param integer $no_cli
      */
     public function setNoCli(int $no_cli): void
     {

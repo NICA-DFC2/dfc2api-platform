@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Services\Objets\WsArticle;
 use App\Utils\StockDepot;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,10 +19,6 @@ use App\Validator\Constraints as ApiAssert;
  * Entité qui représente un Article. Certain champs sont hydratés par un appel aux services web GIMEL.
  *
  * @ApiResource(
- *     attributes={
- *          "normalization_context"={"groups"={"read"}},
- *          "denormalization_context"={"groups"={"write"}}
- *      },
  *     itemOperations={
  *     "get"={"method"="GET"},
  *     "logistic"={
@@ -54,7 +51,15 @@ use App\Validator\Constraints as ApiAssert;
  *         "requirements"={"id"="\d+"},
  *         "access_control"="is_granted('ROLE_USER')"
  *     }
- * })
+ * },
+ *     collectionOperations={
+        "articleslist"={
+ *         "method"="GET",
+ *         "path"="/articles/list",
+ *         "access_control"="is_granted('ROLE_USER')"
+ *      }
+ * }
+ *     )
  * @ORM\Entity
  * @ORM\Table(name="Article")
  */
@@ -66,7 +71,6 @@ class Article
      * @ORM\Column(name="IdAD", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"read"})
      */
     private $IdAD;
 
@@ -74,20 +78,17 @@ class Article
      * @param integer $IdArtEvoAD A IdArt propriété - Identifiant unique d'un article dans Evolubat.
      *
      * @ORM\Column(name="IdArtEvoAD", type="integer", options={"default":-1}, nullable=true)
-     * @Groups({"read"})
      */
     private $IdArtEvoAD;
 
     /**
      * @ORM\Column(name="DesiAD", type="string", length=255, nullable=true)
-     * @Groups({"read"})
      */
     private $DesiAD;
 
     /**
      * Désignation commune à tous les articles de la même déclinaison
      * @ORM\Column(name="DesiPrincAD", type="string", length=255, nullable=true)
-     * @Groups({"read"})
      */
     private $DesiPrincAD;
 
@@ -99,145 +100,121 @@ class Article
 
     /**
      * @ORM\Column(name="DescriWebAD", type="text", nullable=true)
-     * @Groups({"read"})
      */
     private $DescriWebAD;
 
     /**
      * @ORM\Column(name="DescriCatalogAD", type="text", nullable=true)
-     * @Groups({"read"})
      */
     private $DescriCatalogAD;
 
     /**
      * @ORM\Column(name="MediasAD", type="text", nullable=true)
-     * @Groups({"read"})
      */
     private $MediasAD;
 
     /**
      * @ORM\Column(name="PlusAD", type="text", nullable=true)
-     * @Groups({"read"})
      */
     private $PlusAD;
 
     /**
      * @ORM\Column(name="MotsClesAD", type="string", length=255, nullable=true)
-     * @Groups({"read"})
      */
     private $MotsClesAD;
 
     /**
      * @ORM\Column(name="OrdreAD", type="integer", options={"default":0}, nullable=true)
-     * @Groups({"read"})
      */
     private $OrdreAD;
 
     /**
      * @ORM\Column(name="NumDecliAD", type="integer", nullable=true)
-     * @Groups({"read"})
      */
     private $NumDecliAD;
 
     /**
      * @ORM\Column(name="FlgAncAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgAncAD;
 
     /**
      * @ORM\Column(name="FlgCatalogAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgCatalogAD;
 
     /**
      * @ORM\Column(name="FlgPrincAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgPrincAD;
 
     /**
      * @ORM\Column(name="FlgDestockAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgDestockAD;
 
     /**
      * @ORM\Column(name="FlgHorsMarqueAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgHorsMarqueAD;
 
     /**
      * @ORM\Column(name="FlgNouvAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgNouvAD;
 
     /**
      * @ORM\Column(name="FlgPromoAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgPromoAD;
 
     /**
      * @ORM\Column(name="FlgVisibleAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgVisibleAD;
 
     /**
      * @ORM\Column(name="FlgEclBleuAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgEclBleuAD;
 
     /**
      * @ORM\Column(name="FlgEclRoseAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgEclRoseAD;
 
     /**
      * @ORM\Column(name="FlgEclVertAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgEclVertAD;
 
     /**
      * @ORM\Column(name="FlgEclOrangeAD", type="boolean", nullable=true)
-     * @Groups({"read"})
      */
     private $FlgEclOrangeAD;
 
     /**
      * @ORM\Column(name="IdFourAD", type="integer", nullable=true)
-     * @Groups({"read"})
      */
     private $IdFourAD;
 
     /**
      * @ORM\Column(name="DateCreAD", type="datetime", nullable=true)
-     * @Groups({"read"})
      */
     private $DateCreAD;
 
     /**
      * @ORM\Column(name="DateModAD", type="datetime", nullable=true)
-     * @Groups({"read"})
      */
     private $DateModAD;
 
     /**
      * @ORM\Column(name="UCreAD", type="string", length=5, nullable=true)
-     * @Groups({"read"})
      */
     private $UCreAD;
 
     /**
      * @ORM\Column(name="UModAD", type="string", length=5, nullable=true)
-     * @Groups({"read"})
      */
     private $UModAD;
 
@@ -261,70 +238,60 @@ class Article
     /**
      * @var integer|null
      * @SWG\Property(description="Identifiant unique Evolubat de l'article.", type="integer")
-     * @Groups({"read", "write"})
      */
     private $IdADWS;
 
     /**
      * @var integer|null
      * @SWG\Property(description="Numéro unique Evolubat de l'article.", type="integer")
-     * @Groups({"read", "write"})
      */
     private $NoADWS;
 
     /**
      * @var string|null
      * @SWG\Property(description="Code fournisseur unique Evolubat de l'article.", type="string")
-     * @Groups({"read", "write"})
      */
     private $CodADFWS;
 
     /**
      * @var string|null
      * @SWG\Property(description="Désignation Evolubat de l'article.", type="string")
-     * @Groups({"read", "write"})
      */
     private $DesiADWS;
 
     /**
      * @var string|null
      * @SWG\Property(description="Code unique Evolubat de l'article.", type="string")
-     * @Groups({"read", "write"})
      */
     private $CodADWS;
 
     /**
      * @var string|null
      * @SWG\Property(description="Unité de vente de l'article.", type="string")
-     * @Groups({"read", "write"})
      */
     private $UVteADWS;
 
     /**
      * @var string|null
      * @SWG\Property(description="Unité de stock de l'article.", type="string")
-     * @Groups({"read", "write"})
      */
     private $UStoADWS;
 
     /**
      * @var float|null
      * @SWG\Property(description="Prix public HT de l'article.", type="decimal")
-     * @Groups({"read", "write"})
      */
     private $PrixPubADWS;
 
     /**
      * @var float|null
      * @SWG\Property(description="Prix net HT du client connecté de l'article.", type="decimal")
-     * @Groups({"read", "write"})
      */
     private $PrixNetCliADWS;
 
     /**
      * @var array
      * @SWG\Property(description="Stocks disponibles Evolubat de l'article dans les différents dépots.", type="array")
-     * @Groups({"read", "write"})
      */
     private $Stocks = null;
 
@@ -335,6 +302,56 @@ class Article
     {
         $this->Stocks = array();
         $this->articleCategories = new ArrayCollection();
+    }
+
+    /**
+     * parseObject
+     * Prend un argument $object : hydrate l'objet avec la structure json passée en argument
+     */
+    public function parseObject(WsArticle $json_object) {
+        if(!is_null($json_object)) {
+            $this->setIdAD($json_object->{'IdAD'});
+            $this->setIdArtEvoAD($json_object->{'IdArt'});
+//            $this->setIdDep($json_object->{'IdDep'});
+            $this->setNoADWS($json_object->{'NoAD'});
+            $this->setCodADWS($json_object->{'CodAD'});
+            $this->setDesiAD($json_object->{'DesiAutoAD'});
+//            $this->setStkReelAD($json_object->{'StkReelAD'});
+//            $this->setStkResAD($json_object->{'StkResAD'});
+//            $this->setStkCmdeAD($json_object->{'StkCmdeAD'});
+//            $this->setStockDisponible($json_object->{'StockDisponible'});
+//            $this->setStockDisponibleSoc($json_object->{'StockDisponibleSoc'});
+//            $this->setStockPratique($json_object->{'StockPratique'});
+//            $this->setStkReelPlat1($json_object->{'StkReelPlat1'});
+//            $this->setUVteArt($json_object->{'UVteArt'});
+//            $this->setUStoArt($json_object->{'UStoArt'});
+//            $this->setPrixPubUCondVte($json_object->{'PrixPubUCondVte'});
+//            $this->setPrixNetUCondVte($json_object->{'PrixNetUCondVte'});
+
+            // Champs qui n'existe pas dans les articles de ttStock
+            if (isset($json_object->{'NbrDecArt'})) {
+//                $this->setLongAD($json_object->{'LongAD'});
+//                $this->setLargAD($json_object->{'LargAD'});
+//                $this->setEpaisAD($json_object->{'EpaisAD'});
+//                $this->setCondVteAD($json_object->{'CondVteAD'});
+//                $this->setFlgDecondAD($json_object->{'FlgDecondAD'});
+//                $this->setDesi2Art($json_object->{'Desi2Art'});
+//                $this->setIdFour($json_object->{'IdFour'});
+//                $this->setNomDep($json_object->{'NomDep'});
+//                $this->setCodSuspAD($json_object->{'CodSuspAD'});
+//                $this->setGenCodAD($json_object->{'GenCodAD'});
+//                $this->setCodADF($json_object->{'CodADF'});
+//                $this->setGenCod1ADF($json_object->{'GenCod1ADF'});
+//                $this->setGenCod2ADF($json_object->{'GenCod2ADF'});
+            }
+
+//            $this->setPrixNet($json_object->{'PrixNet'});
+//            $this->setPrixPubCli($json_object->{'PrixPubCli'});
+//            $this->setPrixPubAD($json_object->{'PrixPubAD'});
+//            $this->setPrixRevConvAD($json_object->{'PrixRevConvAD'});
+//            $this->setCoefPRCAD($json_object->{'CoefPRCAD'});
+//            $this->setMargeConvAD($json_object->{'MargeConvAD'});
+        }
     }
 
 

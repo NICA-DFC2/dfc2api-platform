@@ -17,6 +17,7 @@ class EtatFacture
     public $ResteDuFCA = 0;
     public $AnnotFCA = "";
     public $NbJoursRetard = 0;
+    private $IsFilled = false;
 
     /**
      * EtatFacture constructor.
@@ -32,7 +33,7 @@ class EtatFacture
      * Peut prendre un argument $json_object : hydrate l'objet avec la structure json passée en argument
      */
     public function parseObject($json_object=null) {
-
+        $this->setIsFilled(false);
         if(!is_null($json_object)) {
             $this->setNoFacFCA($json_object->{'NoFacFCA'});
             $this->setDateFacFCA($json_object->{'DateFacFCA'});
@@ -43,7 +44,25 @@ class EtatFacture
             $this->setResteDuFCA($json_object->{'ResteDuFCA'});
             $this->setAnnotFCA($json_object->{'AnnotFCA'});
             $this->setNbJoursRetard($json_object->{'NbJoursRetard'});
+            $this->setIsFilled(true);
         }
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFilled()
+    {
+        return $this->IsFilled;
+    }
+
+    /**
+     * @param boolean $isFilled
+     */
+    public function setIsFilled($isFilled)
+    {
+        $this->IsFilled = $isFilled;
     }
 
     /**

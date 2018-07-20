@@ -45,6 +45,7 @@ install:
 # Run script
 script:
   - bin/behat
+  - bin/phpunit
 
 # After a build, send email notification with the build results
 notifications:

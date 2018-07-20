@@ -43,6 +43,7 @@ class WsParameters
 
     public const TYPE_DONNEE_ARTDET_STOCK = 'ArtDetStock';
     public const TYPE_DONNEE_ARTDET_WEB = 'ArtDetWeb';
+    public const TYPE_DONNEE_ARTDET = 'ArtDet';
 
     public const TYPE_RECHERCHE_ARTDET = 'ArticleCommandes';
 
