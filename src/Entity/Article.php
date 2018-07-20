@@ -356,6 +356,56 @@ class Article
         }
     }
 
+    /**
+     * parseObject
+     * Prend un argument $object : hydrate l'objet avec la structure json passée en argument
+     */
+    public function parseObject(WsArticle $json_object) {
+        if(!is_null($json_object)) {
+            $this->setIdAD($json_object->{'IdAD'});
+            $this->setIdArtEvoAD($json_object->{'IdArt'});
+//            $this->setIdDep($json_object->{'IdDep'});
+            $this->setNoADWS($json_object->{'NoAD'});
+            $this->setCodADWS($json_object->{'CodAD'});
+            $this->setDesiAD($json_object->{'DesiAutoAD'});
+//            $this->setStkReelAD($json_object->{'StkReelAD'});
+//            $this->setStkResAD($json_object->{'StkResAD'});
+//            $this->setStkCmdeAD($json_object->{'StkCmdeAD'});
+//            $this->setStockDisponible($json_object->{'StockDisponible'});
+//            $this->setStockDisponibleSoc($json_object->{'StockDisponibleSoc'});
+//            $this->setStockPratique($json_object->{'StockPratique'});
+//            $this->setStkReelPlat1($json_object->{'StkReelPlat1'});
+//            $this->setUVteArt($json_object->{'UVteArt'});
+//            $this->setUStoArt($json_object->{'UStoArt'});
+//            $this->setPrixPubUCondVte($json_object->{'PrixPubUCondVte'});
+//            $this->setPrixNetUCondVte($json_object->{'PrixNetUCondVte'});
+
+            // Champs qui n'existe pas dans les articles de ttStock
+            if (isset($json_object->{'NbrDecArt'})) {
+//                $this->setLongAD($json_object->{'LongAD'});
+//                $this->setLargAD($json_object->{'LargAD'});
+//                $this->setEpaisAD($json_object->{'EpaisAD'});
+//                $this->setCondVteAD($json_object->{'CondVteAD'});
+//                $this->setFlgDecondAD($json_object->{'FlgDecondAD'});
+//                $this->setDesi2Art($json_object->{'Desi2Art'});
+//                $this->setIdFour($json_object->{'IdFour'});
+//                $this->setNomDep($json_object->{'NomDep'});
+//                $this->setCodSuspAD($json_object->{'CodSuspAD'});
+//                $this->setGenCodAD($json_object->{'GenCodAD'});
+//                $this->setCodADF($json_object->{'CodADF'});
+//                $this->setGenCod1ADF($json_object->{'GenCod1ADF'});
+//                $this->setGenCod2ADF($json_object->{'GenCod2ADF'});
+            }
+
+//            $this->setPrixNet($json_object->{'PrixNet'});
+//            $this->setPrixPubCli($json_object->{'PrixPubCli'});
+//            $this->setPrixPubAD($json_object->{'PrixPubAD'});
+//            $this->setPrixRevConvAD($json_object->{'PrixRevConvAD'});
+//            $this->setCoefPRCAD($json_object->{'CoefPRCAD'});
+//            $this->setMargeConvAD($json_object->{'MargeConvAD'});
+        }
+    }
+
 
     /**
      * @return mixed
