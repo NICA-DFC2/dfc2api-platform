@@ -3,6 +3,8 @@
 namespace App\Utils;
 
 
+use App\Services\Objets\WsStock;
+
 class StockDepot
 {
     private $IdDep = 0;
@@ -15,6 +17,7 @@ class StockDepot
     private $StockDisponibleSoc = 0.0;
     private $StockPratique = 0.0;
     private $StkReelPlat1 = 0.0;
+    private $IsFilled = false;
 
     /**
      * StockDepot constructor.
@@ -23,7 +26,8 @@ class StockDepot
     {
     }
 
-    public function parseObject($json_object=null, $nomDep) {
+    public function parseObject(WsStock $json_object=null, $nomDep) {
+        $this->setIsFilled(false);
         if(!is_null($json_object)) {
             $this->setIdDep($json_object->{'IdDep'});
             $this->setNomDep($nomDep);
@@ -35,7 +39,9 @@ class StockDepot
             $this->setStockDisponibleSoc($json_object->{'StockDisponibleSoc'});
             $this->setStockPratique($json_object->{'StockPratique'});
             $this->setStkReelPlat1($json_object->{'StkReelPlat1'});
+            $this->setIsFilled(true);
         }
+        return $this;
     }
 
     public function parseString()
@@ -52,6 +58,22 @@ class StockDepot
             'StockPratique' => $this->getStockPratique(),
             'StkReelPlat1' => $this->getStkReelPlat1()
         ];
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFilled()
+    {
+        return $this->IsFilled;
+    }
+
+    /**
+     * @param boolean $isFilled
+     */
+    public function setIsFilled($isFilled)
+    {
+        $this->IsFilled = $isFilled;
     }
 
     /**

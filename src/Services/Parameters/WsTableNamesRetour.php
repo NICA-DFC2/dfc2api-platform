@@ -13,6 +13,6 @@ class WsTableNamesRetour
     public const TABLENAME_TT_DOCUM_ENT = 'ttDocumEnt';
     public const TABLENAME_TT_DOCUM_LIG = 'ttDocumLig';
     public const TABLENAME_TT_EDITION = 'ttEdition';
-    public const TABLENAME_TT_SAL = 'ttSal';
+    public const TABLENAME_TT_STAT = 'ttStat';
     public const TABLENAME_TT_DEPOT = 'ttDepot';
 }

@@ -89,6 +89,9 @@
             "ref": "2ea6070ecf365f9a801ccaed4b31d4a3b7af5693"
         }
     },
+    "doctrine/event-manager": {
+        "version": "v1.0.0"
+    },
     "doctrine/inflector": {
         "version": "v1.3.0"
     },
@@ -100,6 +103,12 @@
     },
     "doctrine/orm": {
         "version": "v2.6.1"
+    },
+    "doctrine/persistence": {
+        "version": "v1.0.0"
+    },
+    "doctrine/reflection": {
+        "version": "v1.0.0"
     },
     "egulias/email-validator": {
         "version": "2.1.4"
@@ -118,6 +127,9 @@
     },
     "justinrainbow/json-schema": {
         "version": "5.2.7"
+    },
+    "lcobucci/jwt": {
+        "version": "3.2.2"
     },
     "lexik/jwt-authentication-bundle": {
         "version": "2.3",
@@ -343,6 +355,9 @@
     },
     "symfony/templating": {
         "version": "v4.1.0"
+    },
+    "symfony/test-pack": {
+        "version": "v1.0.2"
     },
     "symfony/thanks": {
         "version": "v1.0.7"

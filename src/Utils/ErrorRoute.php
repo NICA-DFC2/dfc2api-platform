@@ -15,8 +15,8 @@ class ErrorRoute
      */
     public function __construct($error, $status_code=null)
     {
-        $this->error = $error;
-        $this->status_code = $status_code;
+        $this->setError($error);
+        $this->setStatusCode($status_code);
     }
 
     /**
