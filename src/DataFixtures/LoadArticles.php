@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 
 use App\Entity\Article;
+use App\Entity\ArticleCategorie;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -16,6 +17,11 @@ class LoadArticles extends Fixture implements OrderedFixtureInterface
     {
         $faker = Faker\Factory::create('fr_FR');
         for($i = 0; $i < 50; $i++){
+            $category = new ArticleCategorie();
+            $childrenCategory = new ArticleCategorie();
+            $childrenCategory->setName ($faker->text (10));
+            $category->addChildren ($childrenCategory);
+            $category->setName ($faker->text (10));
             $article = new Article();
             $article->setIdArtEvoAD($faker->numberBetween(10000,39999));
             $article->setDesiAD($faker->text(50));
@@ -41,6 +47,7 @@ class LoadArticles extends Fixture implements OrderedFixtureInterface
             $article->setFlgEclVertAD($faker->boolean());
             $article->setDateCreAD($faker->dateTimeBetween('-5 years','-2 years'));
             $article->setDateModAD($faker->dateTimeBetween('-2 years', 'now'));
+            $article->addArticleCategory ($childrenCategory);
             $manager->persist($article);
             $manager->flush();
             $manager->clear();
