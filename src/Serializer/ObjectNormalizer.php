@@ -151,11 +151,11 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
             // instancie la propriété user du manager des services web gimel
             $this->ws_manager->setUser($user);
             // Appel service web d'un article par son identifiant technique IdArt et calcul du prix net si client connecté
-            $TTRetour = $this->ws_manager->getArticleByIdArt2($IdArtEvoAD, $flg_prixnet, $depots);
+            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD, $flg_prixnet, $depots);
         }
         else {
             // Appel service web d'un article par son identifiant technique IdArt
-            $TTRetour = $this->ws_manager->getArticleByIdArt2($IdArtEvoAD, false, $depots);
+            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD, false, $depots);
         }
 
         // si le retour est de type Notif

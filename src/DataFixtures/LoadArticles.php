@@ -23,7 +23,7 @@ class LoadArticles extends Fixture implements OrderedFixtureInterface
             $category->addChildren ($childrenCategory);
             $category->setName ($faker->text (10));
             $article = new Article();
-            $article->setIdArtEvoAD($faker->numberBetween(10000,39999));
+            $article->setIdArtEvoAD(271507); // IdArt qui existe
             $article->setDesiAD($faker->text(50));
             $article->setDesiPrincAD($faker->text(50));
             $article->setDescriWebAD($faker->text(200));
