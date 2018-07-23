@@ -7,5 +7,5 @@ fos_user:
 
 app.swagger_ui:
     path: /api/doc
-    methods: GET
+    methods: [GET, POST, DELETE, PUT]
     defaults: { _controller: nelmio_api_doc.controller.swagger_ui }

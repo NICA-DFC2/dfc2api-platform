@@ -186,6 +186,7 @@ class ResponseDecode
      */
     public function decodeRetour($filter_depots = array()) {
         if(isset($this->getResponse()->body)) {
+
             if(isset($this->getResponse()->body->response->pojDSNotif)) {
 
                 if(!is_object($this->getResponse()->body->response->pojDSNotif)) {
@@ -238,11 +239,17 @@ class ResponseDecode
                 }
                 if(isset($ProDataSet->ttStock)) {
                     $ttArtDet = $ttRetour->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
-                    $article = new WsArticle();
-                    if($ttArtDet->countItems() > 0) {
-                        $article = $ttArtDet->getItem(0);
+                    for ($iTTArtDet=0;$iTTArtDet<$ttArtDet->countItems();$iTTArtDet++){
+                        $wsArticle = $ttArtDet->getItem($iTTArtDet);
+                        $wsArticle->setStocks($this->decodeRetourTTStock($ProDataSet->ttStock, $wsArticle, $filter_depots));
+                        $ttArtDet->setItem($iTTArtDet, $wsArticle);
                     }
-                    $ttRetour->setTable($this->decodeRetourTTStock($ProDataSet->ttStock, $article, $filter_depots), WsTableNamesRetour::TABLENAME_TT_STOCK);
+
+//                    $article = new WsArticle();
+//                    if($ttArtDet->countItems() > 0) {
+//                        $article = $ttArtDet->getItem(0);
+//                    }
+//                    $ttRetour->setTable($this->decodeRetourTTStock($ProDataSet->ttStock, $article, $filter_depots), WsTableNamesRetour::TABLENAME_TT_STOCK);
                 }
                 if(isset($ProDataSet->ttFacCliAtt)) {
                     $ttRetour->addTable($this->decodeRetourTTFacCliAtt($ProDataSet->ttFacCliAtt), WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
@@ -376,23 +383,26 @@ class ResponseDecode
     /**
      * Decode la collection d'articles avec le stock par dépot de la réponse
      * @param $ttStock
-     * @return WsArticle
+     * @return array
      */
     private function decodeRetourTTStock($ttStock, WsArticle $article_current, $filter_depots){
-        $ttReturn = new TTParam();
+        $stocks = array();
         foreach ($ttStock as $item){
             $stock = new WsStock($item);
-            if(count($filter_depots) > 0) {
-                if (in_array(intval($stock->getIdDep()), $filter_depots)) {
-                    $ttReturn->addItem($stock);
+
+            if(intval($article_current->getIdArt()) === intval($item->{"IdArt"}))
+            {
+                if(count($filter_depots) > 0) {
+                    if (in_array(intval($stock->getIdDep()), $filter_depots)) {
+                        array_push($stocks, $stock);
+                    }
+                }
+                else {
+                    array_push($stocks, $stock);
                 }
             }
-            else {
-                $ttReturn->addItem($stock);
-            }
         }
-        $article_current->setStocks($ttReturn);
-        return $article_current;
+        return $stocks;
     }
 
     /**
