@@ -59,6 +59,7 @@ class WsParameters
     public const TYPE_PRENDRE_EDITION_DEVIS = 'EditionDevis';
     public const TYPE_PRENDRE_EDITION_CMDCLI = 'EditionCommandeClient';
     public const TYPE_PRENDRE_EDITION_FACCLI = 'EditionFactureClient';
+    public const TYPE_PRENDRE_CONTACTWEB = 'ContactWeb';
 
     public const FORMAT_DOCUMENT_VIDE = ' ';
     public const FORMAT_DOCUMENT_ENT = 'Ent';

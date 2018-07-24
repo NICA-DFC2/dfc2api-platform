@@ -364,6 +364,33 @@ class WsManager
             return '{}';
         }
 
+
+        /**
+         * Lecture des informations des clients d'un représentant
+         * @param $id_rep
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getClientsWithRep($id_rep)
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
+
+            $TTCritSel = new TTParam();
+            $TTCritSel->addItem(new CritParam('IdSal', $id_rep));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_CLIENT)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
+
         /**
          * Lecture des informations d'un client par son identifiant unique
          * @param $id_cli
@@ -443,7 +470,42 @@ class WsManager
         }
 
 
+    /* #################################################
+     *
+     * MANAGE CONTACTS
+     *
+     ################################################# */
 
+        /**
+         * Lecture des informations des contacts d'un client
+         * @param $id_cli
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getContacts($id_cli)
+        {
+            if($id_cli > 0) {
+                $TTParamAppel = new TTParam();
+                $TTParamAppel->addItem(new CritParam('TypePrendre', WsParameters::TYPE_PRENDRE_CONTACTWEB));
+
+                $TTCritSel = new TTParam();
+                $TTCritSel->addItem(new CritParam('IdCli', $id_cli));
+                $TTCritSel->addItem(new CritParam('CodLogWebAdr', 'ContactWeb'));
+
+                $response = $this->getCaller()
+                    ->setCache($this->getCache())
+                    ->setModule(WsParameters::MODULE_CONTACT)
+                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                    ->setFilter($this->getFilter())
+                    ->setParamsAppel($TTParamAppel)
+                    ->setCritsSelect($TTCritSel)
+                    ->get();
+
+                $responseDecode = new ResponseDecode($response);
+                return $responseDecode->decodeRetour();
+            }
+
+            return '{}';
+        }
 
     /* #################################################
      *

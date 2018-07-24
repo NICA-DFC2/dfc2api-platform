@@ -1,120 +1,127 @@
 <?php
 
-namespace App\Services\Objets;
+namespace App\Entity;
 
-class WsClient
+
+use App\Services\Objets\WsClient;
+use Doctrine\Common\Collections\ArrayCollection;
+
+class Client
 {
-    public $IdCli = 0;
-    public $IdSal = 0;
-    public $IdSoc = 0;
-    public $RgpCli = "";
-    public $NoCli = 0;
-    public $CodCli = "";
-    public $RSocCli = "";
-    public $IdDep = 0;
-    public $NomDep = "";
-    public $SiretCli = 0;
-    public $SirenCli = "";
-    public $LivNonFact = 0.0;
-    public $IdAdr = 0;
-    public $RSocAdr = "";
-    public $CorpsAdr = "";
-    public $CPAdr = "";
-    public $VilleAdr = "";
-    public $PaysAdr = "";
-    public $TypeAdr = "";
-    public $LibTypeAdr = "";
-    public $MailAdr = "";
-    public $Tel1Adr = "";
-    public $Tel2Adr = "";
-    public $FaxAdr = "";
-    public $ComCmrxCli = "";
-    public $IdCpt = 0;
-    public $IdTC = 0;
-    public $CodTC = "";
-    public $LibTC = "";
-    public $TypeCli = "";
-    public $LibTypeCli = "";
-    public $IdCliSoc = 0;
-    public $IdCSS = 0;
-    public $CodSuspCli = "";
-    public $LibCodSuspCli = "";
-    public $CauseSuspCli = "";
-    public $EchRegCli = "";
-    public $FraisFactCli = "";
-    public $JRegCli = 0;
-    public $MRegCli = "";
-    public $ModeReg = "";
-    public $Echeances = 0.0;
-    public $SectGeoCli = "";
-    public $LstJourLivCli = "";
-    public $TypeTvaCli = "";
-    public $LibTypeTvaCli = "";
-    public $NoComptaCli = "";
-    public $CSPCli = "";
-    public $CSP2Cli = "";
-    public $TypeLimiteCredit = "";
-    public $LimiteCredit = 0.0;
-    public $DateLimiteCredit = "";
-    public $LimiteTmpCredit = 0.0;
-    public $DateLimiteTmpCredit = "";
-    public $MontantAssure = 0.0;
-    public $DateMontantAssure = "";
-    public $DateDebMontantAssure = "";
-    public $DateFinMontantAssure = "";
-    public $RisqueInterne = 0.0;
-    public $EncoursRetard = 0.0;
-    public $EncoursTotal = 0.0;
-    public $EncoursDisponible = 0.0;
-    public $EncoursCommande = 0.0;
-    public $CalcEncCmdCliSoc = 0.0;
-    public $EdPxNetCli = "";
-    public $ComConcCli = "";
-    public $ComSfacCliSoc = "";
-    public $ComLimCliSoc = "";
-    public $ComLimComplCliSoc = "";
-    public $NumTvaCli = "";
-    public $FlgAssujettiTvaCli = false;
-    public $TypeVCDCli = "";
-    public $TypeObjCli = "";
-    public $DateLimFoncCli = "";
-    public $StrucFactCli = "";
-    public $SocieteAssurance = false;
-    public $RelFMCli = false;
-    public $FinMoisCli = false;
-    public $DecalRegCli = "";
-    public $Jour1factCli = 0;
-    public $Jour2factCli = 0;
-    public $ChiffBLCli = "";
-    public $IdTG = 0;
-    public $FlgTTCCli = false;
-    public $CodPortCli = "";
-    public $FlgEncCmdAncCliSoc = false;
-    public $FlgFacPayCli = false;
-    public $VFrancoCli = 0;
-    public $UFrancoCli = "";
-    public $TypEdtFacCli = "";
-    public $CodGroupeCli = "";
-    public $DatSuspCli = "";
-    public $FlgComptaCli = false;
-    public $FlgExclureAnoCli = false;
-    public $MotPasseCli = "";
-    public $MontFFCliSoc = 0.0;
+
+    private $IdCli;
+    private $IdSal;
+    private $IdSoc;
+    private $RgpCli;
+    private $NoCli;
+    private $CodCli;
+    private $RSocCli;
+    private $IdDep;
+    private $NomDep;
+    private $SiretCli;
+    private $SirenCli;
+    private $LivNonFact;
+    private $IdAdr;
+    private $RSocAdr;
+    private $CorpsAdr;
+    private $CPAdr;
+    private $VilleAdr;
+    private $PaysAdr;
+    private $TypeAdr;
+    private $LibTypeAdr;
+    private $MailAdr;
+    private $Tel1Adr;
+    private $Tel2Adr;
+    private $FaxAdr;
+    private $ComCmrxCli;
+    private $IdCpt;
+    private $IdTC;
+    private $CodTC;
+    private $LibTC;
+    private $TypeCli;
+    private $LibTypeCli;
+    private $IdCliSoc;
+    private $IdCSS;
+    private $CodSuspCli;
+    private $LibCodSuspCli;
+    private $CauseSuspCli;
+    private $EchRegCli;
+    private $FraisFactCli;
+    private $JRegCli;
+    private $MRegCli;
+    private $ModeReg;
+    private $Echeances;
+    private $SectGeoCli;
+    private $LstJourLivCli;
+    private $TypeTvaCli;
+    private $LibTypeTvaCli;
+    private $NoComptaCli;
+    private $CSPCli;
+    private $CSP2Cli;
+    private $TypeLimiteCredit;
+    private $LimiteCredit;
+    private $DateLimiteCredit;
+    private $LimiteTmpCredit;
+    private $DateLimiteTmpCredit;
+    private $MontantAssure;
+    private $DateMontantAssure;
+    private $DateDebMontantAssure;
+    private $DateFinMontantAssure;
+    private $RisqueInterne;
+    private $EncoursRetard;
+    private $EncoursTotal;
+    private $EncoursDisponible;
+    private $EncoursCommande;
+    private $CalcEncCmdCliSoc;
+    private $EdPxNetCli;
+    private $ComConcCli;
+    private $ComSfacCliSoc;
+    private $ComLimCliSoc;
+    private $ComLimComplCliSoc;
+    private $NumTvaCli;
+    private $FlgAssujettiTvaCli;
+    private $TypeVCDCli;
+    private $TypeObjCli;
+    private $DateLimFoncCli;
+    private $StrucFactCli;
+    private $SocieteAssurance;
+    private $RelFMCli;
+    private $FinMoisCli;
+    private $DecalRegCli;
+    private $Jour1factCli;
+    private $Jour2factCli;
+    private $ChiffBLCli;
+    private $IdTG;
+    private $FlgTTCCli;
+    private $CodPortCli;
+    private $FlgEncCmdAncCliSoc;
+    private $FlgFacPayCli;
+    private $VFrancoCli;
+    private $UFrancoCli;
+    private $TypEdtFacCli;
+    private $CodGroupeCli;
+    private $DatSuspCli;
+    private $FlgComptaCli;
+    private $FlgExclureAnoCli;
+    private $MotPasseCli;
+    private $MontFFCliSoc;
+    
+    private $Contacts;
+
 
     /**
-     * Constructeur
-     * Peut prendre un argument $json_object : hydrate l'objet avec la structure json passée en argument
+     * Client constructor.
      */
-    public function __construct($json_object=null) {
+    public function __construct()
+    {
+        $this->Contacts = new ArrayCollection();
+    }
 
-        $this->setDateDebMontantAssure('1970-01-01');
-        $this->setDateFinMontantAssure('1970-01-01');
-        $this->setDateLimFoncCli('1970-01-01');
-        $this->setDateLimiteCredit('1970-01-01');
-        $this->setDateLimiteTmpCredit('1970-01-01');
-        $this->setDateMontantAssure('1970-01-01');
-        $this->setDatSuspCli('1970-01-01');
-
+    /**
+     * parseObject
+     * Prend un argument $object : hydrate l'objet avec la structure json passée en argument
+     */
+    public function parseObject(WsClient $json_object=null) {
         if(!is_null($json_object)) {
             $this->setIdCli($json_object->{'IdCli'});
             $this->setIdSal($json_object->{'IdSal'});
@@ -153,6 +160,7 @@ class WsClient
             $this->setLibCodSuspCli($json_object->{'LibCodSuspCli'});
             $this->setCauseSuspCli($json_object->{'CauseSuspCli'});
             $this->setEchRegCli($json_object->{'EchRegCli'});
+            $this->setFraisFactCli($json_object->{'FraisFactCli'});
             $this->setJRegCli($json_object->{'JRegCli'});
             $this->setMRegCli($json_object->{'MRegCli'});
             $this->setModeReg($json_object->{'ModeReg'});
@@ -213,141 +221,14 @@ class WsClient
             $this->setMontFFCliSoc($json_object->{'MontFFCliSoc'});
         }
     }
-
-    public function __toString()
-    {
-        $string = '{';
-        $string .= '"IdCli": '.$this->getIdCli().' ,';
-        $string .= '"IdSal": '.$this->getIdSal().' ,';
-        $string .= '"IdSoc": '.$this->getIdSoc().' ,';
-        $string .= '"RgpCli": "'.$this->getRgpCli().'" ,';
-        $string .= '"NoCli": '.$this->getNoCli().' ,';
-        $string .= '"CodCli": "'.$this->getCodCli().'" ,';
-        $string .= '"RSocCli": "'.$this->getRSocCli().'" ,';
-        $string .= '"IdDep": '.$this->getIdDep().' ,';
-        $string .= '"NomDep": "'.$this->getNomDep().'" ,';
-        $string .= '"SiretCli": '.$this->getSiretCli().' ,';
-        $string .= '"SirenCli": "'.$this->getSirenCli().'" ,';
-        $string .= '"LivNonFact": '.$this->getLivNonFact().' ,';
-        $string .= '"IdAdr": '.$this->getIdAdr().' ,';
-        $string .= '"RSocAdr": "'.$this->getRSocAdr().'" ,';
-        $string .= '"CorpsAdr": "'.$this->getCorpsAdr().'" ,';
-        $string .= '"CPAdr": "'.$this->getCPAdr().'" ,';
-        $string .= '"VilleAdr": "'.$this->getVilleAdr().'" ,';
-        $string .= '"PaysAdr": "'.$this->getPaysAdr().'" ,';
-        $string .= '"TypeAdr": "'.$this->getTypeAdr().'" ,';
-        $string .= '"LibTypeAdr": "'.$this->getLibTypeAdr().'" ,';
-        $string .= '"MailAdr": "'.$this->getMailAdr().'" ,';
-        $string .= '"Tel1Adr": "'.$this->getTel1Adr().'" ,';
-        $string .= '"Tel2Adr": "'.$this->getTel2Adr().'" ,';
-        $string .= '"FaxAdr": "'.$this->getFaxAdr().'" ,';
-        $string .= '"ComCmrxCli": "'.$this->getComCmrxCli().'" ,';
-        $string .= '"IdCpt": '.$this->getIdCpt().' ,';
-        $string .= '"IdTC": '.$this->getIdTC().' ,';
-        $string .= '"CodTC": "'.$this->getCodTC().'" ,';
-        $string .= '"LibTC": "'.$this->getLibTC().'" ,';
-        $string .= '"TypeCli": "'.$this->getTypeCli().'" ,';
-        $string .= '"LibTypeCli": "'.$this->getLibTypeCli().'" ,';
-        $string .= '"IdCliSoc": '.$this->getIdCliSoc().' ,';
-        $string .= '"IdCSS": '.$this->getIdCSS().' ,';
-        $string .= '"CodSuspCli": "'.$this->getCodSuspCli().'" ,';
-        $string .= '"LibCodSuspCli": "'.$this->getLibCodSuspCli().'" ,';
-        $string .= '"CauseSuspCli": "'.$this->getCauseSuspCli().'" ,';
-        $string .= '"EchRegCli": "'.$this->getEchRegCli().'" ,';
-        $string .= '"FraisFactCli": "'.$this->getFraisFactCli().'" ,';
-        $string .= '"JRegCli": '.$this->getJRegCli().' ,';
-        $string .= '"MRegCli": "'.$this->getMRegCli().'" ,';
-        $string .= '"ModeReg": "'.$this->getModeReg().'" ,';
-        $string .= '"Echeances": '.$this->getEcheances().' ,';
-        $string .= '"SectGeoCli": "'.$this->getSectGeoCli().'" ,';
-        $string .= '"LstJourLivCli": "'.implode(',', $this->getLstJourLivCli()).'" ,';
-        $string .= '"TypeTvaCli": "'.$this->getTypeTvaCli().'" ,';
-        $string .= '"LibTypeTvaCli": "'.$this->getLibTypeTvaCli().'" ,';
-        $string .= '"NoComptaCli": "'.$this->getNoComptaCli().'" ,';
-        $string .= '"CSPCli": "'.$this->getCSPCli().'" ,';
-        $string .= '"CSP2Cli": "'.$this->getCSP2Cli().'" ,';
-        $string .= '"TypeLimiteCredit": "'.$this->getTypeLimiteCredit().'" ,';
-        $string .= '"LimiteCredit": '.$this->getLimiteCredit().' ,';
-        $string .= '"DateLimiteCredit": "'.date_format($this->getDateLimiteCredit(),'Y-m-d').'" ,';
-        $string .= '"LimiteTmpCredit": '.$this->getLimiteTmpCredit().' ,';
-        $string .= '"DateLimiteTmpCredit": "'.date_format($this->getDateLimiteTmpCredit(), 'Y-m-d').'" ,';
-        $string .= '"MontantAssure": '.$this->getMontantAssure().' ,';
-        $string .= '"DateMontantAssure": "'.date_format($this->getDateMontantAssure(), 'Y-m-d').'" ,';
-        $string .= '"DateDebMontantAssure": "'.date_format($this->getDateDebMontantAssure(), 'Y-m-d').'" ,';
-        $string .= '"DateFinMontantAssure": "'.date_format($this->getDateFinMontantAssure(), 'Y-m-d').'" ,';
-        $string .= '"RisqueInterne": '.$this->getRisqueInterne().' ,';
-        $string .= '"EncoursRetard": '.$this->getEncoursRetard().' ,';
-        $string .= '"EncoursTotal": '.$this->getEncoursTotal().' ,';
-        $string .= '"EncoursDisponible": '.$this->getEncoursDisponible().' ,';
-        $string .= '"EncoursCommande": '.$this->getEncoursCommande().' ,';
-        $string .= '"CalcEncCmdCliSoc": "'.$this->getCalcEncCmdCliSoc().'" ,';
-        $string .= '"EdPxNetCli": "'.$this->getEdPxNetCli().'" ,';
-        $string .= '"ComConcCli": "'.$this->getComConcCli().'" ,';
-        $string .= '"ComSfacCliSoc": "'.$this->getComSfacCliSoc().'" ,';
-        $string .= '"ComLimCliSoc": "'.$this->getComLimCliSoc().'" ,';
-        $string .= '"ComLimComplCliSoc": "'.$this->getComLimComplCliSoc().'" ,';
-        $string .= '"NumTvaCli": "'.$this->getNumTvaCli().'" ,';
-
-        $val = ($this->getFlgAssujettiTvaCli()) ? 'true' : 'false';
-        $string .= '"FlgAssujettiTvaCli": ' . $val . ' ,';
-
-        $string .= '"TypeVCDCli": "'.$this->getTypeVCDCli().'" ,';
-        $string .= '"TypeObjCli": "'.$this->getTypeObjCli().'" ,';
-        $string .= '"DateLimFoncCli": "'.date_format($this->getDateLimFoncCli(), 'Y-m-d').'" ,';
-        $string .= '"StrucFactCli": "'.$this->getStrucFactCli().'" ,';
-
-        $val = ($this->getSocieteAssurance()) ? 'true' : 'false';
-        $string .= '"SocieteAssurance": '.$val.' ,';
-
-        $val = ($this->getRelFMCli()) ? 'true' : 'false';
-        $string .= '"RelFMCli": '.$val.' ,';
-
-        $val = ($this->getFinMoisCli()) ? 'true' : 'false';
-        $string .= '"FinMoisCli": '.$val.' ,';
-
-        $string .= '"DecalRegCli": "'.$this->getDecalRegCli().'" ,';
-        $string .= '"Jour1factCli": '.$this->getJour1factCli().' ,';
-        $string .= '"Jour2factCli": '.$this->getJour2factCli().' ,';
-        $string .= '"ChiffBLCli": "'.$this->getChiffBLCli().'" ,';
-        $string .= '"IdTG": '.$this->getIdTG().' ,';
-
-        $val = ($this->getFlgTTCCli()) ? 'true' : 'false';
-        $string .= '"FlgTTCCli": ' . $val . ' ,';
-
-        $string .= '"CodPortCli": "'.$this->getCodPortCli().'" ,';
-
-        $val = ($this->getFlgEncCmdAncCliSoc()) ? 'true' : 'false';
-        $string .= '"FlgEncCmdAncCliSoc": ' . $val . ' ,';
-
-        $val = ($this->getFlgFacPayCli()) ? 'true' : 'false';
-        $string .= '"FlgFacPayCli": ' . $val . ' ,';
-
-        $string .= '"VFrancoCli": '.$this->getVFrancoCli().' ,';
-        $string .= '"UFrancoCli": "'.$this->getUFrancoCli().'" ,';
-        $string .= '"TypEdtFacCli": "'.$this->getTypEdtFacCli().'" ,';
-        $string .= '"CodGroupeCli": "'.$this->getCodGroupeCli().'" ,';
-        $string .= '"DatSuspCli": "'.date_format($this->getDatSuspCli(), 'Y-m-d').'" ,';
-
-        $val = ($this->getFlgComptaCli()) ? 'true' : 'false';
-        $string .= '"FlgComptaCli": ' . $val . ' ,';
-
-        $val = ($this->getFlgExclureAnoCli()) ? 'true' : 'false';
-        $string .= '"FlgExclureAnoCli": ' . $val . ' , ';
-
-        $string .= '"MotPasseCli": "'.$this->getMotPasseCli().'" , ';
-        $string .= '"MontFFCliSoc": '.$this->getMontFFCliSoc();
-        $string .= '}';
-
-        return $string;
-    }
-
-
+    
+    
     /**
      * @return mixed
      */
     public function getIdCli()
     {
-        return intval($this->IdCli);
+        return $this->IdCli;
     }
 
     /**
@@ -355,7 +236,7 @@ class WsClient
      */
     public function setIdCli($IdCli)
     {
-        $this->IdCli = intval($IdCli);
+        $this->IdCli = $IdCli;
     }
 
     /**
@@ -363,7 +244,7 @@ class WsClient
      */
     public function getIdSal()
     {
-        return intval($this->IdSal);
+        return $this->IdSal;
     }
 
     /**
@@ -371,7 +252,7 @@ class WsClient
      */
     public function setIdSal($IdSal)
     {
-        $this->IdSal = intval($IdSal);
+        $this->IdSal = $IdSal;
     }
 
     /**
@@ -379,7 +260,7 @@ class WsClient
      */
     public function getIdSoc()
     {
-        return intval($this->IdSoc);
+        return $this->IdSoc;
     }
 
     /**
@@ -387,7 +268,7 @@ class WsClient
      */
     public function setIdSoc($IdSoc)
     {
-        $this->IdSoc = intval($IdSoc);
+        $this->IdSoc = $IdSoc;
     }
 
     /**
@@ -411,7 +292,7 @@ class WsClient
      */
     public function getNoCli()
     {
-        return intval($this->NoCli);
+        return $this->NoCli;
     }
 
     /**
@@ -419,7 +300,7 @@ class WsClient
      */
     public function setNoCli($NoCli)
     {
-        $this->NoCli = intval($NoCli);
+        $this->NoCli = $NoCli;
     }
 
     /**
@@ -459,7 +340,7 @@ class WsClient
      */
     public function getIdDep()
     {
-        return intval($this->IdDep);
+        return $this->IdDep;
     }
 
     /**
@@ -467,7 +348,7 @@ class WsClient
      */
     public function setIdDep($IdDep)
     {
-        $this->IdDep = intval($IdDep);
+        $this->IdDep = $IdDep;
     }
 
     /**
@@ -539,7 +420,7 @@ class WsClient
      */
     public function getIdAdr()
     {
-        return intval($this->IdAdr);
+        return $this->IdAdr;
     }
 
     /**
@@ -547,7 +428,7 @@ class WsClient
      */
     public function setIdAdr($IdAdr)
     {
-        $this->IdAdr = intval($IdAdr);
+        $this->IdAdr = $IdAdr;
     }
 
     /**
@@ -747,7 +628,7 @@ class WsClient
      */
     public function getIdCpt()
     {
-        return intval($this->IdCpt);
+        return $this->IdCpt;
     }
 
     /**
@@ -755,7 +636,7 @@ class WsClient
      */
     public function setIdCpt($IdCpt)
     {
-        $this->IdCpt = intval($IdCpt);
+        $this->IdCpt = $IdCpt;
     }
 
     /**
@@ -763,7 +644,7 @@ class WsClient
      */
     public function getIdTC()
     {
-        return intval($this->IdTC);
+        return $this->IdTC;
     }
 
     /**
@@ -771,7 +652,7 @@ class WsClient
      */
     public function setIdTC($IdTC)
     {
-        $this->IdTC = intval($IdTC);
+        $this->IdTC = $IdTC;
     }
 
     /**
@@ -843,7 +724,7 @@ class WsClient
      */
     public function getIdCliSoc()
     {
-        return intval($this->IdCliSoc);
+        return $this->IdCliSoc;
     }
 
     /**
@@ -851,7 +732,7 @@ class WsClient
      */
     public function setIdCliSoc($IdCliSoc)
     {
-        $this->IdCliSoc = intval($IdCliSoc);
+        $this->IdCliSoc = $IdCliSoc;
     }
 
     /**
@@ -859,7 +740,7 @@ class WsClient
      */
     public function getIdCSS()
     {
-        return intval($this->IdCSS);
+        return $this->IdCSS;
     }
 
     /**
@@ -867,7 +748,7 @@ class WsClient
      */
     public function setIdCSS($IdCSS)
     {
-        $this->IdCSS = intval($IdCSS);
+        $this->IdCSS = $IdCSS;
     }
 
     /**
@@ -1035,7 +916,7 @@ class WsClient
      */
     public function getLstJourLivCli()
     {
-        return explode(',', $this->LstJourLivCli);
+        return $this->LstJourLivCli;
     }
 
     /**
@@ -1171,7 +1052,7 @@ class WsClient
      */
     public function setDateLimiteCredit($DateLimiteCredit)
     {
-        $this->DateLimiteCredit = new \DateTime($DateLimiteCredit);
+        $this->DateLimiteCredit = $DateLimiteCredit;
     }
 
     /**
@@ -1203,7 +1084,7 @@ class WsClient
      */
     public function setDateLimiteTmpCredit($DateLimiteTmpCredit)
     {
-        $this->DateLimiteTmpCredit = new \DateTime($DateLimiteTmpCredit);
+        $this->DateLimiteTmpCredit = $DateLimiteTmpCredit;
     }
 
     /**
@@ -1235,7 +1116,7 @@ class WsClient
      */
     public function setDateMontantAssure($DateMontantAssure)
     {
-        $this->DateMontantAssure = new \DateTime($DateMontantAssure);
+        $this->DateMontantAssure = $DateMontantAssure;
     }
 
     /**
@@ -1251,7 +1132,7 @@ class WsClient
      */
     public function setDateDebMontantAssure($DateDebMontantAssure)
     {
-        $this->DateDebMontantAssure = new \DateTime($DateDebMontantAssure);
+        $this->DateDebMontantAssure = $DateDebMontantAssure;
     }
 
     /**
@@ -1267,7 +1148,7 @@ class WsClient
      */
     public function setDateFinMontantAssure($DateFinMontantAssure)
     {
-        $this->DateFinMontantAssure = new \DateTime($DateFinMontantAssure);
+        $this->DateFinMontantAssure = $DateFinMontantAssure;
     }
 
     /**
@@ -1463,19 +1344,19 @@ class WsClient
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getFlgAssujettiTvaCli()
+    public function isFlgAssujettiTvaCli()
     {
         return $this->FlgAssujettiTvaCli;
     }
 
     /**
-     * @param mixed $FlgAssujettiTvaCli
+     * @param boolean $FlgAssujettiTvaCli
      */
     public function setFlgAssujettiTvaCli($FlgAssujettiTvaCli)
     {
-        $this->FlgAssujettiTvaCli = boolval($FlgAssujettiTvaCli);
+        $this->FlgAssujettiTvaCli = $FlgAssujettiTvaCli;
     }
 
     /**
@@ -1523,7 +1404,7 @@ class WsClient
      */
     public function setDateLimFoncCli($DateLimFoncCli)
     {
-        $this->DateLimFoncCli = new \DateTime($DateLimFoncCli);
+        $this->DateLimFoncCli = $DateLimFoncCli;
     }
 
     /**
@@ -1543,15 +1424,15 @@ class WsClient
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getSocieteAssurance()
+    public function isSocieteAssurance()
     {
         return $this->SocieteAssurance;
     }
 
     /**
-     * @param mixed $SocieteAssurance
+     * @param boolean $SocieteAssurance
      */
     public function setSocieteAssurance($SocieteAssurance)
     {
@@ -1559,15 +1440,15 @@ class WsClient
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getRelFMCli()
+    public function isRelFMCli()
     {
         return $this->RelFMCli;
     }
 
     /**
-     * @param mixed $RelFMCli
+     * @param boolean $RelFMCli
      */
     public function setRelFMCli($RelFMCli)
     {
@@ -1575,15 +1456,15 @@ class WsClient
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getFinMoisCli()
+    public function isFinMoisCli()
     {
         return $this->FinMoisCli;
     }
 
     /**
-     * @param mixed $FinMoisCli
+     * @param boolean $FinMoisCli
      */
     public function setFinMoisCli($FinMoisCli)
     {
@@ -1659,7 +1540,7 @@ class WsClient
      */
     public function getIdTG()
     {
-        return intval($this->IdTG);
+        return $this->IdTG;
     }
 
     /**
@@ -1667,23 +1548,23 @@ class WsClient
      */
     public function setIdTG($IdTG)
     {
-        $this->IdTG = intval($IdTG);
+        $this->IdTG = $IdTG;
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getFlgTTCCli()
+    public function isFlgTTCCli()
     {
-        return boolval($this->FlgTTCCli);
+        return $this->FlgTTCCli;
     }
 
     /**
-     * @param mixed $FlgTTCCli
+     * @param boolean $FlgTTCCli
      */
     public function setFlgTTCCli($FlgTTCCli)
     {
-        $this->FlgTTCCli = boolval($FlgTTCCli);
+        $this->FlgTTCCli = $FlgTTCCli;
     }
 
     /**
@@ -1703,35 +1584,35 @@ class WsClient
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getFlgEncCmdAncCliSoc()
+    public function isFlgEncCmdAncCliSoc()
     {
-        return boolval($this->FlgEncCmdAncCliSoc);
+        return $this->FlgEncCmdAncCliSoc;
     }
 
     /**
-     * @param mixed $FlgEncCmdAncCliSoc
+     * @param boolean $FlgEncCmdAncCliSoc
      */
     public function setFlgEncCmdAncCliSoc($FlgEncCmdAncCliSoc)
     {
-        $this->FlgEncCmdAncCliSoc = boolval($FlgEncCmdAncCliSoc);
+        $this->FlgEncCmdAncCliSoc = $FlgEncCmdAncCliSoc;
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getFlgFacPayCli()
+    public function isFlgFacPayCli()
     {
-        return boolval($this->FlgFacPayCli);
+        return $this->FlgFacPayCli;
     }
 
     /**
-     * @param mixed $FlgFacPayCli
+     * @param boolean $FlgFacPayCli
      */
     public function setFlgFacPayCli($FlgFacPayCli)
     {
-        $this->FlgFacPayCli = boolval($FlgFacPayCli);
+        $this->FlgFacPayCli = $FlgFacPayCli;
     }
 
     /**
@@ -1811,39 +1692,39 @@ class WsClient
      */
     public function setDatSuspCli($DatSuspCli)
     {
-        $this->DatSuspCli = new \DateTime($DatSuspCli);
+        $this->DatSuspCli = $DatSuspCli;
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getFlgComptaCli()
+    public function isFlgComptaCli()
     {
-        return boolval($this->FlgComptaCli);
+        return $this->FlgComptaCli;
     }
 
     /**
-     * @param mixed $FlgComptaCli
+     * @param boolean $FlgComptaCli
      */
     public function setFlgComptaCli($FlgComptaCli)
     {
-        $this->FlgComptaCli = boolval($FlgComptaCli);
+        $this->FlgComptaCli = $FlgComptaCli;
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getFlgExclureAnoCli()
+    public function isFlgExclureAnoCli()
     {
-        return boolval($this->FlgExclureAnoCli);
+        return $this->FlgExclureAnoCli;
     }
 
     /**
-     * @param mixed $FlgExclureAnoCli
+     * @param boolean $FlgExclureAnoCli
      */
     public function setFlgExclureAnoCli($FlgExclureAnoCli)
     {
-        $this->FlgExclureAnoCli = boolval($FlgExclureAnoCli);
+        $this->FlgExclureAnoCli = $FlgExclureAnoCli;
     }
 
     /**
@@ -1878,5 +1759,22 @@ class WsClient
         $this->MontFFCliSoc = $MontFFCliSoc;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getContacts(): ArrayCollection
+    {
+        return $this->Contacts;
+    }
+
+    /**
+     * @param ArrayCollection $Contacts
+     */
+    public function setContacts(ArrayCollection $Contacts)
+    {
+        $this->Contacts = $Contacts;
+    }
     
+    
+
 }

@@ -35,7 +35,8 @@ class TTParam
                 $param instanceof WsFacCliAtt ||
                 $param instanceof WsEdition ||
                 $param instanceof WsLibelle ||
-                $param instanceof WsDepot
+                $param instanceof WsDepot ||
+                $param instanceof WsContact
             ) {
                 $string .= ($string !== "") ? ',' : '';
                 $string .= $param->__toString();
@@ -63,7 +64,8 @@ class TTParam
             $param instanceof WsFacCliAtt ||
             $param instanceof WsEdition ||
             $param instanceof WsLibelle ||
-            $param instanceof WsDepot
+            $param instanceof WsDepot ||
+            $param instanceof WsContact
         ) {
             $this->params[] = $param;
         }
@@ -84,7 +86,8 @@ class TTParam
             $param instanceof WsFacCliAtt ||
             $param instanceof WsEdition ||
             $param instanceof WsLibelle ||
-            $param instanceof WsDepot
+            $param instanceof WsDepot ||
+            $param instanceof WsContact
         ) {
             $this->params->removeElement($param);
         }

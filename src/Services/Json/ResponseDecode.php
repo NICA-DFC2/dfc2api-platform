@@ -7,6 +7,7 @@ use App\Services\Objets\TTParam;
 use App\Services\Objets\CritParam;
 use App\Services\Objets\Notif;
 use App\Services\Objets\TTRetour;
+use App\Services\Objets\WsContact;
 use App\Services\Objets\WsDepot;
 use App\Services\Objets\WsDocumEnt;
 use App\Services\Objets\WsDocumLig;
@@ -244,12 +245,6 @@ class ResponseDecode
                         $wsArticle->setStocks($this->decodeRetourTTStock($ProDataSet->ttStock, $wsArticle, $filter_depots));
                         $ttArtDet->setItem($iTTArtDet, $wsArticle);
                     }
-
-//                    $article = new WsArticle();
-//                    if($ttArtDet->countItems() > 0) {
-//                        $article = $ttArtDet->getItem(0);
-//                    }
-//                    $ttRetour->setTable($this->decodeRetourTTStock($ProDataSet->ttStock, $article, $filter_depots), WsTableNamesRetour::TABLENAME_TT_STOCK);
                 }
                 if(isset($ProDataSet->ttFacCliAtt)) {
                     $ttRetour->addTable($this->decodeRetourTTFacCliAtt($ProDataSet->ttFacCliAtt), WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
@@ -268,6 +263,9 @@ class ResponseDecode
                 }
                 if(isset($ProDataSet->ttLib)) {
                     $ttRetour->addTable($this->decodeRetourTTLib($ProDataSet->ttLib), WsTableNamesRetour::TABLENAME_TT_LIB);
+                }
+                if(isset($ProDataSet->ttContact)) {
+                    $ttRetour->addTable($this->decodeRetourTTContact($ProDataSet->ttContact), WsTableNamesRetour::TABLENAME_TT_CONTACT);
                 }
 
                 return $ttRetour;
@@ -444,6 +442,20 @@ class ResponseDecode
         foreach ($ttDocumLig as $item){
             $lig = new WsDocumLig($item);
             $ttReturn->addItem($lig);
+        }
+        return $ttReturn;
+    }
+
+    /**
+     * Decode la collection de contacts de la réponse
+     * @param $ttContact
+     * @return TTParam
+     */
+    private function decodeRetourTTContact($ttContact){
+        $ttReturn = new TTParam();
+        foreach ($ttContact as $item){
+            $ct = new WsContact($item);
+            $ttReturn->addItem($ct);
         }
         return $ttReturn;
     }
