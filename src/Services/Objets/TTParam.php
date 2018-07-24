@@ -134,7 +134,8 @@ class TTParam
     }
 
     /**
-     * @param ArrayCollection $params
+     * @param $property : Propriété ou le filtre doit s'appliquer
+     * @param $value : Valeur de la propriété à filtrer
      * @return array
      */
     public function getItemsByFilter($property, $value)
@@ -153,4 +154,19 @@ class TTParam
         return $itemsFind;
     }
 
+    /**
+     * @param $property : Propriété ou le filtre doit s'appliquer
+     * @param $value : Valeur de la propriété à filtrer
+     * @return mixed
+     */
+    public function getItemByFilter($property, $value)
+    {
+        foreach ($this->params as $param){
+            if(property_exists($param, $property)) {
+                if($param->{$property} === $value){
+                    return $param;
+                }
+            }
+        }
+    }
 }

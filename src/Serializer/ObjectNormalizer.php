@@ -5,6 +5,7 @@ namespace App\Serializer;
 use App\Entity\Article;
 use App\Entity\User;
 use App\Services\Objets\Notif;
+use App\Services\Objets\TTParam;
 use App\Services\Objets\TTRetour;
 use App\Services\UserService;
 use App\Services\WsManager;
@@ -44,6 +45,17 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     private $user_service;
 
+    /**
+     * @var TTParam
+     * @SWG\Property(
+     *     name="depots",
+     *     type="TTParam",
+     *     description="Liste des dépots disponibles")
+     */
+    private $depots;
+
+
+
     public function __construct(NormalizerInterface $normalizer, WsManager $wsManager, UserService $userService)
     {
         if (!$normalizer instanceof DenormalizerInterface) {
@@ -59,6 +71,8 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
         $this->normalizer = $normalizer;
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
+
+        $this->getDepots();
     }
 
     public function supportsNormalization($data, $format = null)
@@ -186,15 +200,11 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
                     for ($i = 0; $i < count($stocks); $i++) {
                         $wsStock = $stocks[$i];
 
-                        $TTDepotRetour = $this->ws_manager->getDepot($wsStock->getIdDep());
-                        if(!is_null($TTDepotRetour) && $TTDepotRetour instanceof TTRetour) {
-                            $TTDepot = $TTDepotRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DEPOT);
-                            $wsDepot = $TTDepot->getItem(0);
+                        $wsDepot = $this->getDepot($wsStock->getIdDep());
 
-                            $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
-                        }
+                        $stockDepot = new StockDepot();
+                        $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                        $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
                     }
                     $data["Stocks"] = $arrayStocks;
                 }
@@ -279,5 +289,27 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
             return $user_data;
         }
         return $user_data;
+    }
+
+
+    /**
+     * @return TTParam|mixed
+     */
+    private function getDepots(){
+        $TTDepotRetour = $this->ws_manager->getDepots();
+        if(!is_null($TTDepotRetour) && $TTDepotRetour instanceof TTRetour) {
+            $this->depots = $TTDepotRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DEPOT);
+            return $this->depots;
+
+        }
+        return new TTParam();
+    }
+
+    /**
+     * @param $id_depot
+     * @return mixed
+     */
+    private function getDepot($id_depot){
+        return $this->depots->getItemByFilter('IdDep', $id_depot);
     }
 }

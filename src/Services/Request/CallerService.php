@@ -105,6 +105,8 @@ class CallerService
      */
     private function getContext(): string
     {
+        $this->context = 'pijDSCntxClient={"ProDataSet":{}}';
+
         if($this->cache->has($this->cache_key_admin)) {
             $data = $this->cache->get($this->cache_key_admin);
             $contexte = new CntxAdmin();
