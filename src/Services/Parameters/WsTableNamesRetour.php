@@ -15,4 +15,8 @@ class WsTableNamesRetour
     public const TABLENAME_TT_EDITION = 'ttEdition';
     public const TABLENAME_TT_STAT = 'ttStat';
     public const TABLENAME_TT_DEPOT = 'ttDepot';
+    public const TABLENAME_TT_CONTACT = 'ttContact';
+    public const TABLENAME_TT_INSTCAT = 'ttInstCat';
+    public const TABLENAME_TT_CATEG = 'ttCateg';
+    public const TABLENAME_TT_FOUR = 'ttFour';
 }

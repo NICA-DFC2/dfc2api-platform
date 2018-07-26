@@ -36,6 +36,7 @@ class WsParameters
     public const MODULE_TOURNEE = 'Tournee';
     public const MODULE_UTILISATEUR = 'Util';
     public const MODULE_VISITE = 'Visite';
+    public const MODULE_FOURNISSEUR = 'Fournisseur';
 
     public const TYPE_DONNEE_CLI_ADRESSE = 'CliAdresse';
     public const TYPE_DONNEE_CLI_PROSPECT = 'CliProspect';
@@ -44,6 +45,10 @@ class WsParameters
     public const TYPE_DONNEE_ARTDET_STOCK = 'ArtDetStock';
     public const TYPE_DONNEE_ARTDET_WEB = 'ArtDetWeb';
     public const TYPE_DONNEE_ARTDET = 'ArtDet';
+
+    public const TYPE_DONNEE_INSTCAT = 'InstCat';
+
+    public const TYPE_DONNEE_FOUR = 'Four';
 
     public const TYPE_RECHERCHE_ARTDET = 'ArticleCommandes';
 
@@ -59,6 +64,8 @@ class WsParameters
     public const TYPE_PRENDRE_EDITION_DEVIS = 'EditionDevis';
     public const TYPE_PRENDRE_EDITION_CMDCLI = 'EditionCommandeClient';
     public const TYPE_PRENDRE_EDITION_FACCLI = 'EditionFactureClient';
+    public const TYPE_PRENDRE_CONTACTWEB = 'ContactWeb';
+    public const TYPE_PRENDRE_INSTCAT_BRANCHE = 'InstCatBranche';
 
     public const FORMAT_DOCUMENT_VIDE = ' ';
     public const FORMAT_DOCUMENT_ENT = 'Ent';

@@ -185,8 +185,6 @@ class WsManager
          * @throws
          */
         public function getDemarre($algorithme = WsAlgorithmOpenSSL::NONE) {
-            $this->getPublicKey();
-
             if($this->getCache()->has($this->cache_key_admin)) {
                 $cntxAdmin =  new Objets\CntxAdmin();
                 $cntxAdmin->__parse($this->getCache()->get($this->cache_key_admin));
@@ -196,7 +194,7 @@ class WsManager
                 }
             }
 
-
+            $this->getPublicKey();
             $publicKeyNumber = $this->getValPublicKeyNumber();
 
             $TTparam = new TTParam();
@@ -204,7 +202,6 @@ class WsManager
             $TTparam->addItem(new CritParam('MotDePasse', (!is_null($this->wsAdminPassword)) ? $this->encryptByOpenSSL($this->wsAdminPassword, $algorithme) : ''));
             $TTparam->addItem(new CritParam('Algorithme', $algorithme));
             $TTparam->addItem(new CritParam('NumClePublique', $publicKeyNumber));
-
 
             $response = $this->getCaller()
                 ->setCache($this->getCache())
@@ -215,7 +212,6 @@ class WsManager
 
             $responseDecode = new ResponseDecode($response);
             $context = $responseDecode->decodeCntxAdmin();
-            var_dump($context);
             if ($context instanceof CntxAdmin) {
                 // met en cache le contexte de connexion
                 $this->getCache()->clear();
@@ -368,6 +364,33 @@ class WsManager
             return '{}';
         }
 
+
+        /**
+         * Lecture des informations des clients d'un représentant
+         * @param $id_rep
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getClientsWithRep($id_rep)
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
+
+            $TTCritSel = new TTParam();
+            $TTCritSel->addItem(new CritParam('IdSal', $id_rep));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_CLIENT)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
+
         /**
          * Lecture des informations d'un client par son identifiant unique
          * @param $id_cli
@@ -447,6 +470,122 @@ class WsManager
         }
 
 
+    /* #################################################
+     *
+     * MANAGE CONTACTS
+     *
+     ################################################# */
+
+        /**
+         * Lecture des informations des contacts d'un client
+         * @param $id_cli
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getContacts($id_cli)
+        {
+            if($id_cli > 0) {
+                $TTParamAppel = new TTParam();
+                $TTParamAppel->addItem(new CritParam('TypePrendre', WsParameters::TYPE_PRENDRE_CONTACTWEB));
+
+                $TTCritSel = new TTParam();
+                $TTCritSel->addItem(new CritParam('IdCli', $id_cli));
+                $TTCritSel->addItem(new CritParam('CodLogWebAdr', 'ContactWeb'));
+
+                $response = $this->getCaller()
+                    ->setCache($this->getCache())
+                    ->setModule(WsParameters::MODULE_CONTACT)
+                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                    ->setFilter($this->getFilter())
+                    ->setParamsAppel($TTParamAppel)
+                    ->setCritsSelect($TTCritSel)
+                    ->get();
+
+                $responseDecode = new ResponseDecode($response);
+                return $responseDecode->decodeRetour();
+            }
+
+            return '{}';
+        }
+
+
+    /* #################################################
+     *
+     * MANAGE INSTANCES CATEGORIES (Schéma de classement) / CATEGORIES (Classement)
+     *
+     ################################################# */
+
+        /**
+         * Lecture des instances de catégorie
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getInstsCats()
+        {
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_INSTANCE_CATEGORIE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel(new TTParam())
+                ->setCritsSelect(new TTParam())
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
+
+        /**
+         * Lecture des catégories
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getCategories()
+        {
+            //$TTParamAppel = new TTParam();
+            //$TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_INSTCAT));
+            //$TTParamAppel->addItem(new CritParam('TypePrendre', WsParameters::TYPE_PRENDRE_INSTCAT_BRANCHE));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_CATEGORIE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel(new TTParam())
+                ->setCritsSelect(new TTParam())
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
+
+    /* #################################################
+     *
+     * MANAGE FOURNISSEUR
+     *
+     ################################################# */
+
+        /**
+         * Lecture des fournisseurs
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getFournisseurs()
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_FOUR));
+
+            $TTCritSel = new TTParam();
+            $TTCritSel->addItem(new CritParam('TypeFour', 'N', 1));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_FOURNISSEUR)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
 
 
     /* #################################################
@@ -564,9 +703,10 @@ class WsManager
 
         /**
          * Lecture des informations des articles
+         * @param $filter_depots
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getArticles()
+        public function getArticles($filter_depots = array())
         {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
@@ -582,8 +722,169 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour();
+            return $responseDecode->decodeRetour($filter_depots);
         }
+
+        /**
+         * Lecture des informations des articles pour un client
+         * @param $id_cli
+         * @param $filter_depots
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getArticlesWithClient(?int $id_cli, $filter_depots = array())
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
+            $TTParamAppel->addItem(new CritParam("CalculPrixNet", "yes"));
+            $TTParamAppel->addItem(new CritParam('IdCli', $id_cli));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_ARTICLE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect(new TTParam())
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour($filter_depots);
+        }
+
+        /**
+         * Lecture des informations d'un article avec le stock pour un client par son numéro
+         * @param $id_cli
+         * @param $no_ad
+         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
+         * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getArticleWithClientByNoAD($id_cli, $no_ad, $filter_depots = array())
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
+            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($id_cli > 0) ? "yes" : "no"));
+            if($id_cli > 0) {
+                $TTParamAppel->addItem(new CritParam('IdCli', $id_cli));
+            }
+
+            $TTCritSel = new TTParam();
+            $TTCritSel->addItem(new CritParam('NoAD', $no_ad));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_ARTICLE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour($filter_depots);
+        }
+
+        /**
+         * Lecture des informations d'un article avec le stock pour un client par son identifiant unique
+         * @param $id_cli
+         * @param $id_ad
+         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
+         * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getArticleWithClientByIdAD($id_cli, $id_ad, $filter_depots = array())
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
+            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($id_cli > 0) ? "yes" : "no"));
+            if($id_cli > 0) {
+                $TTParamAppel->addItem(new CritParam('IdCli', $id_cli));
+            }
+
+            $TTCritSel = new TTParam();
+            $TTCritSel->addItem(new CritParam('IdAD', $id_ad));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_ARTICLE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour($filter_depots);
+        }
+
+        /**
+         * Lecture des informations d'un article avec le stock pour un client par son code
+         * @param $id_cli
+         * @param $cod_ad
+         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
+         * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getArticleWithClientByCodAD($id_cli, $cod_ad, $filter_depots = array())
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
+            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($id_cli > 0) ? "yes" : "no"));
+            if($id_cli > 0) {
+                $TTParamAppel->addItem(new CritParam('IdCli', $id_cli));
+            }
+
+            $TTCritSel = new TTParam();
+            $TTCritSel->addItem(new CritParam('CodAD', $cod_ad));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_ARTICLE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour($filter_depots);
+        }
+
+        /**
+         * Lecture des informations d'un article avec le stock pour un client par son identifiant unique evolubat IdArt
+         * @param $id_cli
+         * @param $id_art
+         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
+         * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getArticleWithClientByIdArt($id_cli, $id_art, $filter_depots = array())
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
+            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($id_cli > 0) ? "yes" : "no"));
+
+            if($id_cli > 0) {
+                $TTParamAppel->addItem(new CritParam('IdCli', $id_cli));
+            }
+
+            $TTCritSel = new TTParam();
+            $TTCritSel->addItem(new CritParam('IdArt', $id_art));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_ARTICLE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour($filter_depots);
+        }
+
+
 
         /**
          * Lecture des informations d'un article avec le stock par son numéro
