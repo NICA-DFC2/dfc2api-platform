@@ -5,10 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Services\Objets\WsArticle;
-use App\Utils\StockDepot;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Swagger\Annotations as SWG;
@@ -18,48 +16,7 @@ use App\Validator\Constraints as ApiAssert;
 /**
  * Entité qui représente un Article. Certain champs sont hydratés par un appel aux services web GIMEL.
  *
- * @ApiResource(
- *     itemOperations={
- *     "get"={"method"="GET"},
- *     "logistic"={
- *         "method"="GET",
- *         "path"="/articles/{id}/logistic",
- *         "requirements"={"id"="\d+"},
- *         "access_control"="is_granted('ROLE_USER')"
- *     },
- *     "anduser"={
- *         "method"="GET",
- *         "path"="/articles/{id}/and-user",
- *         "requirements"={"id"="\d+"},
- *         "access_control"="is_granted('ROLE_USER')"
- *     },
- *     "prixnet"={
- *         "method"="GET",
- *         "path"="/articles/{id}/prix-net",
- *         "requirements"={"id"="\d+"},
- *         "access_control"="is_granted('ROLE_USER')"
- *     },
- *     "prixnetlogistic"={
- *         "method"="GET",
- *         "path"="/articles/{id}/prix-net/logistic",
- *         "requirements"={"id"="\d+"},
- *         "access_control"="is_granted('ROLE_USER')"
- *     },
- *     "prixnetanduser"={
- *         "method"="GET",
- *         "path"="/articles/{id}/prix-net/and-user",
- *         "requirements"={"id"="\d+"},
- *         "access_control"="is_granted('ROLE_USER')"
- *     }
- * },
- *     collectionOperations={
-        "articleslist"={
- *         "method"="GET",
- *         "path"="/articles/list",
- *         "access_control"="is_granted('ROLE_USER')"
- *      }
- * }
- *     )
+ * @ApiResource()
  * @ORM\Entity
  * @ORM\Table(name="Article")
  */
@@ -83,6 +40,7 @@ class Article
 
     /**
      * @ORM\Column(name="DesiAD", type="string", length=255, nullable=true)
+     * @ApiFilter(SearchFilter::class, strategy="partial")
      */
     private $DesiAD;
 
@@ -120,6 +78,7 @@ class Article
 
     /**
      * @ORM\Column(name="MotsClesAD", type="string", length=255, nullable=true)
+     * @ApiFilter(SearchFilter::class, strategy="partial")
      */
     private $MotsClesAD;
 
@@ -292,6 +251,348 @@ class Article
     private $PrixNetCliADWS;
 
     /**
+     * @var integer|null
+     * @SWG\Property(description="Identifiant de la société de l'article.", type="integer")
+     */
+    private $IdSocWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Identifiant du dépot d'appartenance de l'article.", type="integer")
+     */
+    private $IdDepWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Identifiant d'instance de catégorie de l'article.", type="integer")
+     */
+    private $IdICWS;
+
+    /**
+     * @var string|null
+     * @SWG\Property(description="Désignation automatique de l'article.", type="string")
+     */
+    private $DesiAutoADWS;
+
+    /**
+     * @var string|null
+     * @SWG\Property(description="Valeur de niveau de l'article.", type="string")
+     */
+    private $ValNivADWS;
+    
+    /**
+     * @var float|null
+     * @SWG\Property(description="Stock réél de l'article.", type="float")
+     */
+    private $StkReelADWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Stock réservé de l'article.", type="float")
+     */
+    private $StkResADWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Stock en commande de l'article.", type="float")
+     */
+    private $StkCmdeADWS;
+
+    /**
+     * @var string|null
+     * @SWG\Property(description="Code de gestion stock de l'article.", type="string")
+     */
+    private $CodGesStkADWS;
+
+    /**
+     * @var string|null
+     * @SWG\Property(description="Etat de stock de l'article.", type="string")
+     */
+    private $EtatStockADWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Stock disponible de l'article.", type="float")
+     */
+    private $StockDisponibleWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Stock disponible de la société de l'article.", type="float")
+     */
+    private $StockDisponibleSocWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Stock pratique de l'article.", type="float")
+     */
+    private $StockPratiqueWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Stock réél à la plateforme de l'article.", type="float")
+     */
+    private $StkReelPlat1WS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Identifiant unique ?? de l'article.", type="integer")
+     */
+    private $QteCIDSsCFADWS;
+
+    /**
+     * @var string|null
+     * @SWG\Property(description="Unité de vente de l'article.", type="string")
+     */
+    private $UVteArtWS;
+
+    /**
+     * @var string|null
+     * @SWG\Property(description="Unité de stock de l'article.", type="string")
+     */
+    private $UStoArtWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="valeur ?? de l'article.", type="float")
+     */
+    private $CvStoVteADWS;
+
+    /**
+     * @var boolean|null
+     * @SWG\Property(description="valeur ?? de l'article.", type="boolean")
+     */
+    private $TypCvStoVteADWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Nombre unité de stock en conditionnement de vente de l'article.", type="integer")
+     */
+    private $NbUStoCondVteADWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Poids unité de vente de l'article.", type="float")
+     */
+    private $PoidsUVteArtWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Nombre unité de vente en conditionnement de vente de l'article.", type="float")
+     */
+    private $NbUVteUCondVteWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Prix public conditionnel vente de l'article.", type="float")
+     */
+    private $PrixPubUCondVteWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Prix net unitaire conditionel vente de l'article.", type="float")
+     */
+    private $PrixNetUCondVteWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Nombre unitaire stock à la vente de l'article.", type="integer")
+     */
+    private $NbUStoUVteWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Nombre unitaire vente de stock de l'article.", type="integer")
+     */
+    private $NbUVteUStoWS;
+    
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Nombre déconditionnement de l'article.", type="integer")
+     */
+    private $NbrDecArtWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Longueur de l'article.", type="integer")
+     */
+    private $LongADWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Largeur de l'article.", type="integer")
+     */
+    private $LargADWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Epaissseur de l'article.", type="integer")
+     */
+    private $EpaisADWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Conditionnement à la vente de l'article.", type="integer")
+     */
+    private $CondVteADWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="indique s'il faut déconditionner l'article.", type="integer")
+     */
+    private $FlgDecondADWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Désignation 2 de l'article.", type="integer")
+     */
+    private $Desi2ArtWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Identifiant unique du fournisseur de l'article.", type="integer")
+     */
+    private $IdFourWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Nom du dépot d'apartenance de l'article.", type="integer")
+     */
+    private $NomDepWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Code de suspension de l'article.", type="integer")
+     */
+    private $CodSuspADWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Lien du média de l'article.", type="integer")
+     */
+    private $MultimediaArtWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Commentaires techniques de l'article.", type="integer")
+     */
+    private $ComTechADWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Lien vers un document de l'article.", type="integer")
+     */
+    private $DocLieWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Gencode de l'article.", type="integer")
+     */
+    private $GenCodADWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Code ecotaxe de l'article.", type="integer")
+     */
+    private $CodEcoTaxeADWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Montant ecotaxe de l'article.", type="integer")
+     */
+    private $MtEcoTaxeWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Valeur ecotaxe de l'article.", type="integer")
+     */
+    private $ValEcoTaxeWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Identifiant du dépot de la plateforme de l'article.", type="integer")
+     */
+    private $IdDepPlatWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Identifiant unique fournisseur  de l'article.", type="integer")
+     */
+    private $IdADFWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Gencode 1 fournisseur de l'article.", type="integer")
+     */
+    private $GenCod1ADFWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Gencode 2 fournisseur de l'article.", type="integer")
+     */
+    private $GenCod2ADFWS;
+
+    /**
+     * @var integer|null
+     * @SWG\Property(description="Code de la catégorie de l'article.", type="integer")
+     */
+    private $CodCatADWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Prix net de l'article.", type="float")
+     */
+    private $PrixNetWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Prix public client de l'article.", type="float")
+     */
+    private $PrixPubCliWS;
+
+    /**
+     * @var string|null
+     * @SWG\Property(description="Type tarif de l'article.", type="string")
+     */
+    private $TypeTarifWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Prix de revient conventionnel de l'article.", type="float")
+     */
+    private $PrixRevConvADWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Prix de revient réél de l'article.", type="float")
+     */
+    private $PrixRevReelADWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Coefficient PRR de l'article.", type="float")
+     */
+    private $CoefPRRADWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Coefficient PRC de l'article.", type="float")
+     */
+    private $CoefPRCADWS;
+
+    /**
+     * @var float|null
+     * @SWG\Property(description="Marge réélle de l'article.", type="float")
+     */
+    private $MargeReelleADWS;
+    
+    /**
+     * @var float|null
+     * @SWG\Property(description="Marge conventionelle de l'article.", type="float")
+     */
+    private $MargeConvADWS;
+    
+    /**
      * @var array
      * @SWG\Property(description="Stocks disponibles Evolubat de l'article dans les différents dépots.", type="array")
      */
@@ -315,49 +616,49 @@ class Article
      * parseObject
      * Prend un argument $object : hydrate l'objet avec la structure json passée en argument
      */
-    public function parseObject(WsArticle $json_object) {
+    public function parseObject(WsArticle $json_object=null) {
         if(!is_null($json_object)) {
             $this->setIdAD($json_object->{'IdAD'});
             $this->setIdArtEvoAD($json_object->{'IdArt'});
-//            $this->setIdDep($json_object->{'IdDep'});
+            $this->setIdDepWS($json_object->{'IdDep'});
             $this->setNoADWS($json_object->{'NoAD'});
             $this->setCodADWS($json_object->{'CodAD'});
-            $this->setDesiAD($json_object->{'DesiAutoAD'});
-//            $this->setStkReelAD($json_object->{'StkReelAD'});
-//            $this->setStkResAD($json_object->{'StkResAD'});
-//            $this->setStkCmdeAD($json_object->{'StkCmdeAD'});
-//            $this->setStockDisponible($json_object->{'StockDisponible'});
-//            $this->setStockDisponibleSoc($json_object->{'StockDisponibleSoc'});
-//            $this->setStockPratique($json_object->{'StockPratique'});
-//            $this->setStkReelPlat1($json_object->{'StkReelPlat1'});
-//            $this->setUVteArt($json_object->{'UVteArt'});
-//            $this->setUStoArt($json_object->{'UStoArt'});
-//            $this->setPrixPubUCondVte($json_object->{'PrixPubUCondVte'});
-//            $this->setPrixNetUCondVte($json_object->{'PrixNetUCondVte'});
+            $this->setDesiAutoADWS($json_object->{'DesiAutoAD'});
+            $this->setStkReelADWS($json_object->{'StkReelAD'});
+            $this->setStkResADWS($json_object->{'StkResAD'});
+            $this->setStkCmdeADWS($json_object->{'StkCmdeAD'});
+            $this->setStockDisponibleWS($json_object->{'StockDisponible'});
+            $this->setStockDisponibleSocWS($json_object->{'StockDisponibleSoc'});
+            $this->setStockPratiqueWS($json_object->{'StockPratique'});
+            $this->setStkReelPlat1WS($json_object->{'StkReelPlat1'});
+            $this->setUVteArtWS($json_object->{'UVteArt'});
+            $this->setUStoArtWS($json_object->{'UStoArt'});
+            $this->setPrixPubUCondVteWS($json_object->{'PrixPubUCondVte'});
+            $this->setPrixNetUCondVteWS($json_object->{'PrixNetUCondVte'});
 
             // Champs qui n'existe pas dans les articles de ttStock
             if (isset($json_object->{'NbrDecArt'})) {
-//                $this->setLongAD($json_object->{'LongAD'});
-//                $this->setLargAD($json_object->{'LargAD'});
-//                $this->setEpaisAD($json_object->{'EpaisAD'});
-//                $this->setCondVteAD($json_object->{'CondVteAD'});
-//                $this->setFlgDecondAD($json_object->{'FlgDecondAD'});
-//                $this->setDesi2Art($json_object->{'Desi2Art'});
-//                $this->setIdFour($json_object->{'IdFour'});
-//                $this->setNomDep($json_object->{'NomDep'});
-//                $this->setCodSuspAD($json_object->{'CodSuspAD'});
-//                $this->setGenCodAD($json_object->{'GenCodAD'});
-//                $this->setCodADF($json_object->{'CodADF'});
-//                $this->setGenCod1ADF($json_object->{'GenCod1ADF'});
-//                $this->setGenCod2ADF($json_object->{'GenCod2ADF'});
+                $this->setLongADWS($json_object->{'LongAD'});
+                $this->setLargADWS($json_object->{'LargAD'});
+                $this->setEpaisADWS($json_object->{'EpaisAD'});
+                $this->setCondVteADWS($json_object->{'CondVteAD'});
+                $this->setFlgDecondADWS($json_object->{'FlgDecondAD'});
+                $this->setDesi2ArtWS($json_object->{'Desi2Art'});
+                $this->setIdFourWS($json_object->{'IdFour'});
+                $this->setNomDepWS($json_object->{'NomDep'});
+                $this->setCodSuspADWS($json_object->{'CodSuspAD'});
+                $this->setGenCodADWS($json_object->{'GenCodAD'});
+                $this->setCodADFWS($json_object->{'CodADF'});
+                $this->setGenCod1ADFWS($json_object->{'GenCod1ADF'});
+                $this->setGenCod2ADFWS($json_object->{'GenCod2ADF'});
             }
 
-//            $this->setPrixNet($json_object->{'PrixNet'});
-//            $this->setPrixPubCli($json_object->{'PrixPubCli'});
-//            $this->setPrixPubAD($json_object->{'PrixPubAD'});
-//            $this->setPrixRevConvAD($json_object->{'PrixRevConvAD'});
-//            $this->setCoefPRCAD($json_object->{'CoefPRCAD'});
-//            $this->setMargeConvAD($json_object->{'MargeConvAD'});
+            $this->setPrixNetWS($json_object->{'PrixNet'});
+            $this->setPrixPubCliWS($json_object->{'PrixPubCli'});
+            $this->setPrixPubADWS($json_object->{'PrixPubAD'});
+            $this->setPrixRevConvADWS($json_object->{'PrixRevConvAD'});
+            $this->setCoefPRCADWS($json_object->{'CoefPRCAD'});
+            $this->setMargeConvADWS($json_object->{'MargeConvAD'});
         }
     }
 
@@ -1005,6 +1306,919 @@ class Article
         $this->PrixNetCliADWS = $PrixNetCliADWS;
     }
 
+    /**
+     * @return int|null
+     */
+    public function getIdSocWS()
+    {
+        return $this->IdSocWS;
+    }
+
+    /**
+     * @param int|null $IdSocWS
+     */
+    public function setIdSocWS($IdSocWS)
+    {
+        $this->IdSocWS = $IdSocWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getIdDepWS()
+    {
+        return $this->IdDepWS;
+    }
+
+    /**
+     * @param int|null $IdDepWS
+     */
+    public function setIdDepWS($IdDepWS)
+    {
+        $this->IdDepWS = $IdDepWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getIdICWS()
+    {
+        return $this->IdICWS;
+    }
+
+    /**
+     * @param int|null $IdICWS
+     */
+    public function setIdICWS($IdICWS)
+    {
+        $this->IdICWS = $IdICWS;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getDesiAutoADWS()
+    {
+        return $this->DesiAutoADWS;
+    }
+
+    /**
+     * @param null|string $DesiAutoADWS
+     */
+    public function setDesiAutoADWS($DesiAutoADWS)
+    {
+        $this->DesiAutoADWS = $DesiAutoADWS;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getValNivADWS()
+    {
+        return $this->ValNivADWS;
+    }
+
+    /**
+     * @param null|string $ValNivADWS
+     */
+    public function setValNivADWS($ValNivADWS)
+    {
+        $this->ValNivADWS = $ValNivADWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getStkReelADWS()
+    {
+        return $this->StkReelADWS;
+    }
+
+    /**
+     * @param float|null $StkReelADWS
+     */
+    public function setStkReelADWS($StkReelADWS)
+    {
+        $this->StkReelADWS = $StkReelADWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getStkResADWS()
+    {
+        return $this->StkResADWS;
+    }
+
+    /**
+     * @param float|null $StkResADWS
+     */
+    public function setStkResADWS($StkResADWS)
+    {
+        $this->StkResADWS = $StkResADWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getStkCmdeADWS()
+    {
+        return $this->StkCmdeADWS;
+    }
+
+    /**
+     * @param float|null $StkCmdeADWS
+     */
+    public function setStkCmdeADWS($StkCmdeADWS)
+    {
+        $this->StkCmdeADWS = $StkCmdeADWS;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getCodGesStkADWS()
+    {
+        return $this->CodGesStkADWS;
+    }
+
+    /**
+     * @param null|string $CodGesStkADWS
+     */
+    public function setCodGesStkADWS($CodGesStkADWS)
+    {
+        $this->CodGesStkADWS = $CodGesStkADWS;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getEtatStockADWS()
+    {
+        return $this->EtatStockADWS;
+    }
+
+    /**
+     * @param null|string $EtatStockADWS
+     */
+    public function setEtatStockADWS($EtatStockADWS)
+    {
+        $this->EtatStockADWS = $EtatStockADWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getStockDisponibleWS()
+    {
+        return $this->StockDisponibleWS;
+    }
+
+    /**
+     * @param float|null $StockDisponibleWS
+     */
+    public function setStockDisponibleWS($StockDisponibleWS)
+    {
+        $this->StockDisponibleWS = $StockDisponibleWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getStockDisponibleSocWS()
+    {
+        return $this->StockDisponibleSocWS;
+    }
+
+    /**
+     * @param float|null $StockDisponibleSocWS
+     */
+    public function setStockDisponibleSocWS($StockDisponibleSocWS)
+    {
+        $this->StockDisponibleSocWS = $StockDisponibleSocWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getStockPratiqueWS()
+    {
+        return $this->StockPratiqueWS;
+    }
+
+    /**
+     * @param float|null $StockPratiqueWS
+     */
+    public function setStockPratiqueWS($StockPratiqueWS)
+    {
+        $this->StockPratiqueWS = $StockPratiqueWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getStkReelPlat1WS()
+    {
+        return $this->StkReelPlat1WS;
+    }
+
+    /**
+     * @param float|null $StkReelPlat1WS
+     */
+    public function setStkReelPlat1WS($StkReelPlat1WS)
+    {
+        $this->StkReelPlat1WS = $StkReelPlat1WS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getQteCIDSsCFADWS()
+    {
+        return $this->QteCIDSsCFADWS;
+    }
+
+    /**
+     * @param int|null $QteCIDSsCFADWS
+     */
+    public function setQteCIDSsCFADWS($QteCIDSsCFADWS)
+    {
+        $this->QteCIDSsCFADWS = $QteCIDSsCFADWS;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getUVteArtWS()
+    {
+        return $this->UVteArtWS;
+    }
+
+    /**
+     * @param null|string $UVteArtWS
+     */
+    public function setUVteArtWS($UVteArtWS)
+    {
+        $this->UVteArtWS = $UVteArtWS;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getUStoArtWS()
+    {
+        return $this->UStoArtWS;
+    }
+
+    /**
+     * @param null|string $UStoArtWS
+     */
+    public function setUStoArtWS($UStoArtWS)
+    {
+        $this->UStoArtWS = $UStoArtWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getCvStoVteADWS()
+    {
+        return $this->CvStoVteADWS;
+    }
+
+    /**
+     * @param float|null $CvStoVteADWS
+     */
+    public function setCvStoVteADWS($CvStoVteADWS)
+    {
+        $this->CvStoVteADWS = $CvStoVteADWS;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getTypCvStoVteADWS()
+    {
+        return $this->TypCvStoVteADWS;
+    }
+
+    /**
+     * @param bool|null $TypCvStoVteADWS
+     */
+    public function setTypCvStoVteADWS($TypCvStoVteADWS)
+    {
+        $this->TypCvStoVteADWS = $TypCvStoVteADWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getNbUStoCondVteADWS()
+    {
+        return $this->NbUStoCondVteADWS;
+    }
+
+    /**
+     * @param int|null $NbUStoCondVteADWS
+     */
+    public function setNbUStoCondVteADWS($NbUStoCondVteADWS)
+    {
+        $this->NbUStoCondVteADWS = $NbUStoCondVteADWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPoidsUVteArtWS()
+    {
+        return $this->PoidsUVteArtWS;
+    }
+
+    /**
+     * @param float|null $PoidsUVteArtWS
+     */
+    public function setPoidsUVteArtWS($PoidsUVteArtWS)
+    {
+        $this->PoidsUVteArtWS = $PoidsUVteArtWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getNbUVteUCondVteWS()
+    {
+        return $this->NbUVteUCondVteWS;
+    }
+
+    /**
+     * @param float|null $NbUVteUCondVteWS
+     */
+    public function setNbUVteUCondVteWS($NbUVteUCondVteWS)
+    {
+        $this->NbUVteUCondVteWS = $NbUVteUCondVteWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPrixPubUCondVteWS()
+    {
+        return $this->PrixPubUCondVteWS;
+    }
+
+    /**
+     * @param float|null $PrixPubUCondVteWS
+     */
+    public function setPrixPubUCondVteWS($PrixPubUCondVteWS)
+    {
+        $this->PrixPubUCondVteWS = $PrixPubUCondVteWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPrixNetUCondVteWS()
+    {
+        return $this->PrixNetUCondVteWS;
+    }
+
+    /**
+     * @param float|null $PrixNetUCondVteWS
+     */
+    public function setPrixNetUCondVteWS($PrixNetUCondVteWS)
+    {
+        $this->PrixNetUCondVteWS = $PrixNetUCondVteWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getNbUStoUVteWS()
+    {
+        return $this->NbUStoUVteWS;
+    }
+
+    /**
+     * @param int|null $NbUStoUVteWS
+     */
+    public function setNbUStoUVteWS($NbUStoUVteWS)
+    {
+        $this->NbUStoUVteWS = $NbUStoUVteWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getNbUVteUStoWS()
+    {
+        return $this->NbUVteUStoWS;
+    }
+
+    /**
+     * @param int|null $NbUVteUStoWS
+     */
+    public function setNbUVteUStoWS($NbUVteUStoWS)
+    {
+        $this->NbUVteUStoWS = $NbUVteUStoWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getNbrDecArtWS()
+    {
+        return $this->NbrDecArtWS;
+    }
+
+    /**
+     * @param int|null $NbrDecArtWS
+     */
+    public function setNbrDecArtWS($NbrDecArtWS)
+    {
+        $this->NbrDecArtWS = $NbrDecArtWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLongADWS()
+    {
+        return $this->LongADWS;
+    }
+
+    /**
+     * @param int|null $LongADWS
+     */
+    public function setLongADWS($LongADWS)
+    {
+        $this->LongADWS = $LongADWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLargADWS()
+    {
+        return $this->LargADWS;
+    }
+
+    /**
+     * @param int|null $LargADWS
+     */
+    public function setLargADWS($LargADWS)
+    {
+        $this->LargADWS = $LargADWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getEpaisADWS()
+    {
+        return $this->EpaisADWS;
+    }
+
+    /**
+     * @param int|null $EpaisADWS
+     */
+    public function setEpaisADWS($EpaisADWS)
+    {
+        $this->EpaisADWS = $EpaisADWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCondVteADWS()
+    {
+        return $this->CondVteADWS;
+    }
+
+    /**
+     * @param int|null $CondVteADWS
+     */
+    public function setCondVteADWS($CondVteADWS)
+    {
+        $this->CondVteADWS = $CondVteADWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getFlgDecondADWS()
+    {
+        return $this->FlgDecondADWS;
+    }
+
+    /**
+     * @param int|null $FlgDecondADWS
+     */
+    public function setFlgDecondADWS($FlgDecondADWS)
+    {
+        $this->FlgDecondADWS = $FlgDecondADWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDesi2ArtWS()
+    {
+        return $this->Desi2ArtWS;
+    }
+
+    /**
+     * @param int|null $Desi2ArtWS
+     */
+    public function setDesi2ArtWS($Desi2ArtWS)
+    {
+        $this->Desi2ArtWS = $Desi2ArtWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getIdFourWS()
+    {
+        return $this->IdFourWS;
+    }
+
+    /**
+     * @param int|null $IdFourWS
+     */
+    public function setIdFourWS($IdFourWS)
+    {
+        $this->IdFourWS = $IdFourWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getNomDepWS()
+    {
+        return $this->NomDepWS;
+    }
+
+    /**
+     * @param int|null $NomDepWS
+     */
+    public function setNomDepWS($NomDepWS)
+    {
+        $this->NomDepWS = $NomDepWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCodSuspADWS()
+    {
+        return $this->CodSuspADWS;
+    }
+
+    /**
+     * @param int|null $CodSuspADWS
+     */
+    public function setCodSuspADWS($CodSuspADWS)
+    {
+        $this->CodSuspADWS = $CodSuspADWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMultimediaArtWS()
+    {
+        return $this->MultimediaArtWS;
+    }
+
+    /**
+     * @param int|null $MultimediaArtWS
+     */
+    public function setMultimediaArtWS($MultimediaArtWS)
+    {
+        $this->MultimediaArtWS = $MultimediaArtWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getComTechADWS()
+    {
+        return $this->ComTechADWS;
+    }
+
+    /**
+     * @param int|null $ComTechADWS
+     */
+    public function setComTechADWS($ComTechADWS)
+    {
+        $this->ComTechADWS = $ComTechADWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDocLieWS()
+    {
+        return $this->DocLieWS;
+    }
+
+    /**
+     * @param int|null $DocLieWS
+     */
+    public function setDocLieWS($DocLieWS)
+    {
+        $this->DocLieWS = $DocLieWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getGenCodADWS()
+    {
+        return $this->GenCodADWS;
+    }
+
+    /**
+     * @param int|null $GenCodADWS
+     */
+    public function setGenCodADWS($GenCodADWS)
+    {
+        $this->GenCodADWS = $GenCodADWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCodEcoTaxeADWS()
+    {
+        return $this->CodEcoTaxeADWS;
+    }
+
+    /**
+     * @param int|null $CodEcoTaxeADWS
+     */
+    public function setCodEcoTaxeADWS($CodEcoTaxeADWS)
+    {
+        $this->CodEcoTaxeADWS = $CodEcoTaxeADWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMtEcoTaxeWS()
+    {
+        return $this->MtEcoTaxeWS;
+    }
+
+    /**
+     * @param int|null $MtEcoTaxeWS
+     */
+    public function setMtEcoTaxeWS($MtEcoTaxeWS)
+    {
+        $this->MtEcoTaxeWS = $MtEcoTaxeWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getValEcoTaxeWS()
+    {
+        return $this->ValEcoTaxeWS;
+    }
+
+    /**
+     * @param int|null $ValEcoTaxeWS
+     */
+    public function setValEcoTaxeWS($ValEcoTaxeWS)
+    {
+        $this->ValEcoTaxeWS = $ValEcoTaxeWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getIdDepPlatWS()
+    {
+        return $this->IdDepPlatWS;
+    }
+
+    /**
+     * @param int|null $IdDepPlatWS
+     */
+    public function setIdDepPlatWS($IdDepPlatWS)
+    {
+        $this->IdDepPlatWS = $IdDepPlatWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getIdADFWS()
+    {
+        return $this->IdADFWS;
+    }
+
+    /**
+     * @param int|null $IdADFWS
+     */
+    public function setIdADFWS($IdADFWS)
+    {
+        $this->IdADFWS = $IdADFWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getGenCod1ADFWS()
+    {
+        return $this->GenCod1ADFWS;
+    }
+
+    /**
+     * @param int|null $GenCod1ADFWS
+     */
+    public function setGenCod1ADFWS($GenCod1ADFWS)
+    {
+        $this->GenCod1ADFWS = $GenCod1ADFWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getGenCod2ADFWS()
+    {
+        return $this->GenCod2ADFWS;
+    }
+
+    /**
+     * @param int|null $GenCod2ADFWS
+     */
+    public function setGenCod2ADFWS($GenCod2ADFWS)
+    {
+        $this->GenCod2ADFWS = $GenCod2ADFWS;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCodCatADWS()
+    {
+        return $this->CodCatADWS;
+    }
+
+    /**
+     * @param int|null $CodCatADWS
+     */
+    public function setCodCatADWS($CodCatADWS)
+    {
+        $this->CodCatADWS = $CodCatADWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPrixNetWS()
+    {
+        return $this->PrixNetWS;
+    }
+
+    /**
+     * @param float|null $PrixNetWS
+     */
+    public function setPrixNetWS($PrixNetWS)
+    {
+        $this->PrixNetWS = $PrixNetWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPrixPubCliWS()
+    {
+        return $this->PrixPubCliWS;
+    }
+
+    /**
+     * @param float|null $PrixPubCliWS
+     */
+    public function setPrixPubCliWS($PrixPubCliWS)
+    {
+        $this->PrixPubCliWS = $PrixPubCliWS;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getTypeTarifWS()
+    {
+        return $this->TypeTarifWS;
+    }
+
+    /**
+     * @param null|string $TypeTarifWS
+     */
+    public function setTypeTarifWS($TypeTarifWS)
+    {
+        $this->TypeTarifWS = $TypeTarifWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPrixRevConvADWS()
+    {
+        return $this->PrixRevConvADWS;
+    }
+
+    /**
+     * @param float|null $PrixRevConvADWS
+     */
+    public function setPrixRevConvADWS($PrixRevConvADWS)
+    {
+        $this->PrixRevConvADWS = $PrixRevConvADWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPrixRevReelADWS()
+    {
+        return $this->PrixRevReelADWS;
+    }
+
+    /**
+     * @param float|null $PrixRevReelADWS
+     */
+    public function setPrixRevReelADWS($PrixRevReelADWS)
+    {
+        $this->PrixRevReelADWS = $PrixRevReelADWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getCoefPRRADWS()
+    {
+        return $this->CoefPRRADWS;
+    }
+
+    /**
+     * @param float|null $CoefPRRADWS
+     */
+    public function setCoefPRRADWS($CoefPRRADWS)
+    {
+        $this->CoefPRRADWS = $CoefPRRADWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getCoefPRCADWS()
+    {
+        return $this->CoefPRCADWS;
+    }
+
+    /**
+     * @param float|null $CoefPRCADWS
+     */
+    public function setCoefPRCADWS($CoefPRCADWS)
+    {
+        $this->CoefPRCADWS = $CoefPRCADWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getMargeReelleADWS()
+    {
+        return $this->MargeReelleADWS;
+    }
+
+    /**
+     * @param float|null $MargeReelleADWS
+     */
+    public function setMargeReelleADWS($MargeReelleADWS)
+    {
+        $this->MargeReelleADWS = $MargeReelleADWS;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getMargeConvADWS()
+    {
+        return $this->MargeConvADWS;
+    }
+
+    /**
+     * @param float|null $MargeConvADWS
+     */
+    public function setMargeConvADWS($MargeConvADWS)
+    {
+        $this->MargeConvADWS = $MargeConvADWS;
+    }
+
+    
 
     /**
      * @return array|null

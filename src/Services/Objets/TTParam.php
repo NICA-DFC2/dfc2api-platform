@@ -125,6 +125,15 @@ class TTParam
     }
 
     /**
+     * @param integer $index
+     * @param mixed $item
+     */
+    public function setItem($index, $item)
+    {
+        $this->params[$index] = $item;
+    }
+
+    /**
      * @param ArrayCollection $params
      * @return array
      */

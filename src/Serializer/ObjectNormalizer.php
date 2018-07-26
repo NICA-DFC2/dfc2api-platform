@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Serializer;
+namespace App\Serializer;
 
 use App\Entity\Article;
 use App\Entity\User;
@@ -73,8 +73,7 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      * @param null $format
      * @param array $context
      * @return mixed
-     * @throws \ErrorException
-     *
+     * @throws
      */
     public function normalize($object, $format = null, array $context = [])
     {
@@ -86,7 +85,6 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
         if($object instanceof Article) {
             return $this->normalizeArtDet($data, $context['uri']);
         }
-
         return $data;
     }
 
@@ -117,15 +115,35 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     private function normalizeArtDet($data, $uri) {
 
-        $flg_prixnet = (strpos($uri, 'prix-net') !== false);
-        $flg_logistic = (strpos($uri, 'logistic') !== false);
-        $flg_anduser = (strpos($uri, 'and-user')  !== false);
+        $depots = array();
+        $flg_prixnet = false;
+
+        $parseUrl = parse_url($uri);
+        if(array_key_exists('query', $parseUrl)){
+            parse_str($parseUrl['query'], $arrayQuery);
+
+            if(array_key_exists('depots', $arrayQuery)){
+                $depots = $arrayQuery['depots'];
+                if(is_array(json_decode($depots))){
+                    $depots = json_decode($depots);
+                }
+                else {
+                    $depots = array($depots);
+                }
+            }
+
+            if(array_key_exists('prixnet', $arrayQuery)){
+                $prixnet = $arrayQuery['prixnet'];
+                $flg_prixnet = ($prixnet==='yes'||$prixnet==='y'||$prixnet==='1') ? true : false;
+            }
+        }
 
         // Identifiant technique de l'article dans Evolubat
         $IdArtEvoAD = $data["IdArtEvoAD"];
 
         // Lecture du user connecté
         $user = $this->user_service->getCurrentUser();
+
         // si user connecté et de type User
         if($user instanceof User) {
             // hydratation de l'entité User avec les informations du service web gimel
@@ -133,27 +151,27 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
             // instancie la propriété user du manager des services web gimel
             $this->ws_manager->setUser($user);
             // Appel service web d'un article par son identifiant technique IdArt et calcul du prix net si client connecté
-            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD, $flg_prixnet, $flg_logistic, $flg_anduser);
+            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD, $flg_prixnet, $depots);
         }
         else {
             // Appel service web d'un article par son identifiant technique IdArt
-            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD, false, $flg_logistic);
+            $TTRetour = $this->ws_manager->getArticleByIdArt($IdArtEvoAD, false, $depots);
         }
 
         // si le retour est de type Notif
         // Message d'erreur retourné par les webservices
         if($TTRetour instanceof Notif) {
-            throw new \ErrorException(sprintf('Il y a une erreur:  %s.', $TTRetour->__toString()), 401 ,1, __FILE__);
+            //throw new \ErrorException(sprintf('Il y a une erreur:  %s.', $TTRetour->__toString()), 401 ,1, __FILE__);
         }
 
         if(!is_null($TTRetour)) {
             $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
 
             if(is_null($TTParam)) {
-                throw new \ErrorException('Il y a une erreur, objet TTParam:class null ', 401 ,1, __FILE__);
+                //throw new \ErrorException('Il y a une erreur, objet TTParam:class null ', 401 ,1, __FILE__);
             }
             else if($TTParam->countItems() == 0) {
-                throw new \ErrorException(sprintf('Il y a une erreur, objet TTParam:class vide:  %s.', $TTParam->__toString()), 401 ,1, __FILE__);
+                //throw new \ErrorException(sprintf('Il y a une erreur, objet TTParam:class vide:  %s.', $TTParam->__toString()), 401 ,1, __FILE__);
             }
             else {
                 $wsArticle = $TTParam->getItem(0);
@@ -163,10 +181,10 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
                 $stocks = $wsArticle->getStocks();
 
                 $arrayStocks = array();
-                if (!is_null($stocks)) {
+                if (!is_null($stocks) && count($stocks) > 0) {
                     // Création d'un tableau des stocks simplifié
-                    for ($i = 0; $i < $stocks->countItems(); $i++) {
-                        $wsStock = $stocks->getItem($i);
+                    for ($i = 0; $i < count($stocks); $i++) {
+                        $wsStock = $stocks[$i];
 
                         $TTDepotRetour = $this->ws_manager->getDepot($wsStock->getIdDep());
                         if(!is_null($TTDepotRetour) && $TTDepotRetour instanceof TTRetour) {
@@ -178,18 +196,54 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
                             $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
                         }
                     }
+                    $data["Stocks"] = $arrayStocks;
                 }
 
                 $data["IdADWS"] = $wsArticle->getIdAD();
                 $data["NoADWS"] = $wsArticle->getNoAD();
                 $data["CodADFWS"] = $wsArticle->getCodADF();
-                $data["DesiADWS"] = $wsArticle->getDesiAutoAD();
+                $data["DesiAutoADWS"] = $wsArticle->getDesiAutoAD();
                 $data["CodADWS"] = $wsArticle->getCodAD();
                 $data["UVteADWS"] = $wsArticle->getUVteArt();
                 $data["UStoADWS"] = $wsArticle->getUStoArt();
                 $data["PrixPubADWS"] = $wsArticle->getPrixPubAD();
                 $data["PrixNetCliADWS"] = $wsArticle->getPrixNet();
-                $data["Stocks"] = $arrayStocks;
+
+                $data["IdDepWS"] = $wsArticle->getIdDep();
+                $data["NoADWS"] = $wsArticle->getNoAD();
+                $data["CodADWS"] = $wsArticle->getCodAD();
+                $data["StkReelADWS"] = $wsArticle->getStkReelAD();
+                $data["StkResADWS"] = $wsArticle->getStkResAD();
+                $data["StkCmdeADWS"] = $wsArticle->getStkCmdeAD();
+                $data["StockDisponibleWS"] = $wsArticle->getStockDisponible();
+                $data["StockDisponibleSocWS"] = $wsArticle->getStockDisponibleSoc();
+                $data["StockPratiqueWS"] = $wsArticle->getStockPratique();
+                $data["StkReelPlat1WS"] = $wsArticle->getStkReelPlat1();
+                $data["UVteArtWS"] = $wsArticle->getUVteArt();
+                $data["UStoArtWS"] = $wsArticle->getUStoArt();
+                $data["PrixPubUCondVteWS"] = $wsArticle->getPrixPubUCondVte();
+                $data["PrixNetUCondVteWS"] = $wsArticle->getPrixNetUCondVte();
+
+                $data["LongADWS"] = $wsArticle->getLongAD();
+                $data["LargADWS"] = $wsArticle->getLargAD();
+                $data["EpaisADWS"] = $wsArticle->getEpaisAD();
+                $data["CondVteADWS"] = $wsArticle->getCondVteAD();
+                $data["FlgDecondADWS"] = $wsArticle->getFlgDecondAD();
+                $data["Desi2ArtWS"] = $wsArticle->getDesi2Art();
+                $data["IdFourWS"] = $wsArticle->getIdFour();
+                $data["NomDepWS"] = $wsArticle->getNomDep();
+                $data["CodSuspADWS"] = $wsArticle->getCodSuspAD();
+                $data["GenCodADWS"] = $wsArticle->getGenCodAD();
+                $data["CodADFWS"] = $wsArticle->getCodADF();
+                $data["GenCod1ADFWS"] = $wsArticle->getGenCod1ADF();
+                $data["GenCod2ADFWS"] = $wsArticle->getGenCod2ADF();
+
+                $data["PrixNetWS"] = $wsArticle->getPrixNet();
+                $data["PrixPubCliWS"] = $wsArticle->getPrixPubCli();
+                $data["PrixPubADWS"] = $wsArticle->getPrixPubAD();
+                $data["PrixRevConvADWS"] = $wsArticle->getPrixRevConvAD();
+                $data["CoefPRCADWS"] = $wsArticle->getCoefPRCAD();
+                $data["MargeConvADWS"] = $wsArticle->getMargeConvAD();
             }
         }
         return $data;

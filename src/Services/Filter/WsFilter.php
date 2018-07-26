@@ -67,7 +67,7 @@ class WsFilter
                     }
                     else {
                         // création d'un critére de selection avec l'opérateur par defaut pour tout sauf les dates
-                        array_push($this->criteres_selection, new CritParam($property, $value_property, 1));
+                        array_push($this->criteres_selection, new CritParam($property, str_replace('+', ' ', $value_property), 1));
                         array_push($this->criteres_selection, new CritParam($property, $this->types['default'], 2));
                     }
                 }
@@ -89,7 +89,7 @@ class WsFilter
                             }
                             else {
                                 // création d'un critére de selection avec l'opérateur définit pour tout sauf les dates
-                                array_push($this->criteres_selection, new CritParam($property, $value_filter, 1));
+                                array_push($this->criteres_selection, new CritParam($property, str_replace('+', ' ', $value_filter), 1));
                                 array_push($this->criteres_selection, new CritParam($property, $this->types[$type_filter], 2));
                             }
                         }
