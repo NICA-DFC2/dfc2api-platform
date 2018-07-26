@@ -298,6 +298,11 @@ class Article
     private $Stocks = null;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\AffinageGroupe", inversedBy="articles")
+     */
+    private $affinageGroupe;
+
+    /**
      * ArtDet constructor.
      */
     public function __construct()
@@ -1015,6 +1020,18 @@ class Article
     public function setStocks($stocks)
     {
         $this->Stocks = $stocks;
+    }
+
+    public function getAffinageGroupe(): ?AffinageGroupe
+    {
+        return $this->affinageGroupe;
+    }
+
+    public function setAffinageGroupe(?AffinageGroupe $affinageGroupe): self
+    {
+        $this->affinageGroupe = $affinageGroupe;
+
+        return $this;
     }
 
 
