@@ -3,8 +3,9 @@ security:
         FOS\UserBundle\Model\UserInterface: bcrypt
 
     role_hierarchy:
-        ROLE_COMMERCIAL: ROLE_USER
-        ROLE_MARKET_LEADER: ROLE_USER
+        ROLE_COMMERCIAL: ROLE_COMMERCIAL
+        ROLE_MARKET_LEADER: ROLE_MARKET_LEADER
+        ROLE_USER: ROLE_USER
         ROLE_ADMIN: ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_USER,ROLE_ADMIN]
 
@@ -56,7 +57,7 @@ security:
 
         - { path: ^/api/users, roles: [ ROLE_ADMIN ] }
 
-        - { path: ^/api/articles, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN, IS_AUTHENTICATED_ANONYMOUSLY ] }
+        - { path: ^/api/articles, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
 
         - { path: ^/api/devis, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
         - { path: ^/api/factures, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }

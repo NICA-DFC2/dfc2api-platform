@@ -569,7 +569,7 @@ class WsManager
         public function getArticles()
         {
             $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET));
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
             $TTParamAppel->addItem(new CritParam("CalculPrixNet", "no"));
 
             $response = $this->getCaller()
@@ -589,11 +589,10 @@ class WsManager
          * Lecture des informations d'un article avec le stock par son numéro
          * @param $no_ad
          * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
-         * @param $onlyPlateform : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme
-         * @param $onlyPlateformAndDepCli : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme et le dépôt du client connecté
+         * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getArticleByNoAD($no_ad, $calculPrixNet = false, $onlyPlateform = false, $onlyPlateformAndDepCli = false)
+        public function getArticleByNoAD($no_ad, $calculPrixNet = false, $filter_depots = array())
         {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
@@ -604,19 +603,6 @@ class WsManager
 
             $TTCritSel = new TTParam();
             $TTCritSel->addItem(new CritParam('NoAD', $no_ad));
-
-            $filter_depots = array();
-            if($this->getUser()->getIdCli() > 0 && $onlyPlateform) {
-                $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-            }
-            else if($this->getUser()->getIdCli() > 0 && $onlyPlateformAndDepCli) {
-                if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-                }
-                else {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME, intval($this->getUser()->getIdDepotCli()));
-                }
-            }
 
             $response = $this->getCaller()
                 ->setCache($this->getCache())
@@ -635,11 +621,10 @@ class WsManager
          * Lecture des informations d'un article avec le stock par son identifiant unique
          * @param $id_ad
          * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
-         * @param $onlyPlateform : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme
-         * @param $onlyPlateformAndDepCli : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme et le dépôt du client connecté
+         * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getArticleByIdAD($id_ad, $calculPrixNet = false, $onlyPlateform = false, $onlyPlateformAndDepCli = false)
+        public function getArticleByIdAD($id_ad, $calculPrixNet = false, $filter_depots = array())
         {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
@@ -650,66 +635,6 @@ class WsManager
 
             $TTCritSel = new TTParam();
             $TTCritSel->addItem(new CritParam('IdAD', $id_ad));
-
-            $filter_depots = array();
-            if($this->getUser()->getIdCli() > 0 && $onlyPlateform) {
-                $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-            }
-            else if($this->getUser()->getIdCli() > 0 && $onlyPlateformAndDepCli) {
-                if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-                }
-                else {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME, intval($this->getUser()->getIdDepotCli()));
-                }
-            }
-
-            $response = $this->getCaller()
-                ->setCache($this->getCache())
-                ->setModule(WsParameters::MODULE_ARTICLE)
-                ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                ->setFilter($this->getFilter())
-                ->setParamsAppel($TTParamAppel)
-                ->setCritsSelect($TTCritSel)
-                ->get();
-
-            $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour($filter_depots);
-        }
-
-        /**
-         * Lecture des informations d'un article avec le stock par son identifiant unique evolubat IdArt
-         * @param $id_art
-         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
-         * @param $onlyPlateform : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme
-         * @param $onlyPlateformAndDepCli : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme et le dépôt du client connecté
-         * @return Objets\TTRetour|\Exception|mixed
-         */
-        public function getArticleByIdArt($id_art, $calculPrixNet = false, $onlyPlateform = false, $onlyPlateformAndDepCli = false)
-        {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
-            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
-
-            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-            }
-
-            $TTCritSel = new TTParam();
-            $TTCritSel->addItem(new CritParam('IdArt', $id_art));
-
-            $filter_depots = array();
-            if($this->getUser()->getIdCli() > 0 && $onlyPlateform) {
-                $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-            }
-            else if($this->getUser()->getIdCli() > 0 && $onlyPlateformAndDepCli) {
-                if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-                }
-                else {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME, intval($this->getUser()->getIdDepotCli()));
-                }
-            }
 
             $response = $this->getCaller()
                 ->setCache($this->getCache())
@@ -728,11 +653,10 @@ class WsManager
          * Lecture des informations d'un article avec le stock par son code
          * @param $cod_ad
          * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
-         * @param $onlyPlateform : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme
-         * @param $onlyPlateformAndDepCli : Indique si la réponse de l'appel doit être filtrée seulement pour la plateforme et le dépôt du client connecté
+         * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getArticleByCodAD($cod_ad, $calculPrixNet = false, $onlyPlateform = false, $onlyPlateformAndDepCli = false)
+        public function getArticleByCodAD($cod_ad, $calculPrixNet = false, $filter_depots = array())
         {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
@@ -743,19 +667,6 @@ class WsManager
 
             $TTCritSel = new TTParam();
             $TTCritSel->addItem(new CritParam('CodAD', $cod_ad));
-
-            $filter_depots = array();
-            if($this->getUser()->getIdCli() > 0 && $onlyPlateform) {
-                $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-            }
-            else if($this->getUser()->getIdCli() > 0 && $onlyPlateformAndDepCli) {
-                if(WsParameters::ID_DEP_PLATEFORME === intval($this->getUser()->getIdDepotCli())) {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME);
-                }
-                else {
-                    $filter_depots = array(WsParameters::ID_DEP_PLATEFORME, intval($this->getUser()->getIdDepotCli()));
-                }
-            }
 
             $response = $this->getCaller()
                 ->setCache($this->getCache())
@@ -770,6 +681,38 @@ class WsManager
             return $responseDecode->decodeRetour($filter_depots);
         }
 
+        /**
+         * Lecture des informations d'un article avec le stock par son identifiant unique evolubat IdArt
+         * @param $id_art
+         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
+         * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getArticleByIdArt($id_art, $calculPrixNet = false, $filter_depots = array())
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
+            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
+
+            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
+                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+            }
+
+            $TTCritSel = new TTParam();
+            $TTCritSel->addItem(new CritParam('IdArt', $id_art));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_ARTICLE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour($filter_depots);
+        }
 
 
         /* #################################################

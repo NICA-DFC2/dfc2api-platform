@@ -14,6 +14,11 @@ api_platform:
     oauth:
           # To enable or disable oauth.
           enabled: false
+    collection:
+          pagination:
+              items_per_page: 20 # Default value
+              client_items_per_page: true # Disabled by default
+              items_per_page_parameter_name: itemsPerPage # Default value
 
 framework:
     form: { enabled: true }

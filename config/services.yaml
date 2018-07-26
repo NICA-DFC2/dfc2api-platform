@@ -23,11 +23,6 @@ services:
         resource: '../src/*'
         exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
 
-    App\Services\Serializer\ObjectNormalizer:
-        decorates: 'api_platform.jsonld.normalizer.item'
-        arguments: [ '@App\Services\Serializer\ObjectNormalizer.inner', '@dfc2.api.manager', '@dfc2.user.service' ]
-        autoconfigure: false
-
     # paramétrage du service mannager
     dfc2.api.manager:
         class: App\Services\WsManager
@@ -39,9 +34,13 @@ services:
 
     dfc2.user.service:
         public: true
+        autowire: true
         class: App\Services\UserService
         arguments: [ '@security.token_storage' ]
 
+    App\Serializer\ObjectNormalizer:
+        decorates: 'api_platform.jsonld.normalizer.item'
+        arguments: [ '@App\Serializer\ObjectNormalizer.inner', '@dfc2.api.manager', '@dfc2.user.service' ]
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
