@@ -7,12 +7,15 @@ use App\Services\Objets\TTParam;
 use App\Services\Objets\CritParam;
 use App\Services\Objets\Notif;
 use App\Services\Objets\TTRetour;
+use App\Services\Objets\WsCateg;
 use App\Services\Objets\WsContact;
 use App\Services\Objets\WsDepot;
 use App\Services\Objets\WsDocumEnt;
 use App\Services\Objets\WsDocumLig;
 use App\Services\Objets\WsEdition;
 use App\Services\Objets\WsFacCliAtt;
+use App\Services\Objets\WsFour;
+use App\Services\Objets\WsInstCat;
 use App\Services\Objets\WsLibelle;
 use App\Services\Objets\WsStock;
 use App\Services\Objets\WsClient;
@@ -267,6 +270,15 @@ class ResponseDecode
                 if(isset($ProDataSet->ttContact)) {
                     $ttRetour->addTable($this->decodeRetourTTContact($ProDataSet->ttContact), WsTableNamesRetour::TABLENAME_TT_CONTACT);
                 }
+                if(isset($ProDataSet->ttInstCat)) {
+                    $ttRetour->addTable($this->decodeRetourTTInstCat($ProDataSet->ttInstCat), WsTableNamesRetour::TABLENAME_TT_INSTCAT);
+                }
+                if(isset($ProDataSet->ttCateg)) {
+                    $ttRetour->addTable($this->decodeRetourTTCateg($ProDataSet->ttCateg), WsTableNamesRetour::TABLENAME_TT_CATEG);
+                }
+                if(isset($ProDataSet->ttFour)) {
+                    $ttRetour->addTable($this->decodeRetourTTFour($ProDataSet->ttFour), WsTableNamesRetour::TABLENAME_TT_FOUR);
+                }
 
                 return $ttRetour;
             }
@@ -460,13 +472,58 @@ class ResponseDecode
         return $ttReturn;
     }
 
-    //******
-    // NON TERMINEE
+    /**
+     * Decode la collection des informations d'edition de la réponse
+     * @param $ttEdition
+     * @return TTParam
+     */
     private function decodeRetourTTEdition($ttEdition){
         $ttReturn = new TTParam();
         foreach ($ttEdition as $item){
             $lig = new WsEdition($item);
             $ttReturn->addItem($lig);
+        }
+        return $ttReturn;
+    }
+
+    /**
+     * Decode la collection des instances de catégorie de la réponse
+     * @param $ttInstCat
+     * @return TTParam
+     */
+    private function decodeRetourTTInstCat($ttInstCat){
+        $ttReturn = new TTParam();
+        foreach ($ttInstCat as $item){
+            $instCat = new WsInstCat($item);
+            $ttReturn->addItem($instCat);
+        }
+        return $ttReturn;
+    }
+
+    /**
+     * Decode la collection des catégories de la réponse
+     * @param $ttCateg
+     * @return TTParam
+     */
+    private function decodeRetourTTCateg($ttCateg){
+        $ttReturn = new TTParam();
+        foreach ($ttCateg as $item){
+            $instCat = new WsCateg($item);
+            $ttReturn->addItem($instCat);
+        }
+        return $ttReturn;
+    }
+
+    /**
+     * Decode la collection des fournisseurs de la réponse
+     * @param $ttFour
+     * @return TTParam
+     */
+    private function decodeRetourTTFour($ttFour){
+        $ttReturn = new TTParam();
+        foreach ($ttFour as $item){
+            $four = new WsFour($item);
+            $ttReturn->addItem($four);
         }
         return $ttReturn;
     }

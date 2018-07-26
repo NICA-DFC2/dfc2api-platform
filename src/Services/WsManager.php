@@ -507,6 +507,87 @@ class WsManager
             return '{}';
         }
 
+
+    /* #################################################
+     *
+     * MANAGE INSTANCES CATEGORIES (Schéma de classement) / CATEGORIES (Classement)
+     *
+     ################################################# */
+
+        /**
+         * Lecture des instances de catégorie
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getInstsCats()
+        {
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_INSTANCE_CATEGORIE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel(new TTParam())
+                ->setCritsSelect(new TTParam())
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
+
+        /**
+         * Lecture des catégories
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getCategories()
+        {
+            //$TTParamAppel = new TTParam();
+            //$TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_INSTCAT));
+            //$TTParamAppel->addItem(new CritParam('TypePrendre', WsParameters::TYPE_PRENDRE_INSTCAT_BRANCHE));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_CATEGORIE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel(new TTParam())
+                ->setCritsSelect(new TTParam())
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
+
+    /* #################################################
+     *
+     * MANAGE FOURNISSEUR
+     *
+     ################################################# */
+
+        /**
+         * Lecture des fournisseurs
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getFournisseurs()
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_FOUR));
+
+            $TTCritSel = new TTParam();
+            $TTCritSel->addItem(new CritParam('TypeFour', 'N', 1));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_FOURNISSEUR)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
+
+
     /* #################################################
      *
      * MANAGE ARTICLES

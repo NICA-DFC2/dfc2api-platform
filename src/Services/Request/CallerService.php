@@ -312,6 +312,7 @@ class CallerService
      */
     public function get() {
         $this->setUrl();
+        Unirest\Request::timeout(30);
         $response = Unirest\Request::get($this->getUrl(), $this->getHeaders(), null);
         return $response;
     }

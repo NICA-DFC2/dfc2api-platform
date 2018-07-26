@@ -25,9 +25,8 @@ services:
 
 
     App\EventListener\ExceptionListener:
-            tags:
-                - { name: kernel.event_listener, event: kernel.exception }
-
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
 
     # paramétrage du service mannager
     dfc2.api.manager:

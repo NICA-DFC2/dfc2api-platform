@@ -36,7 +36,10 @@ class TTParam
                 $param instanceof WsEdition ||
                 $param instanceof WsLibelle ||
                 $param instanceof WsDepot ||
-                $param instanceof WsContact
+                $param instanceof WsContact ||
+                $param instanceof WsInstCat ||
+                $param instanceof WsCateg ||
+                $param instanceof WsFour
             ) {
                 $string .= ($string !== "") ? ',' : '';
                 $string .= $param->__toString();
@@ -65,7 +68,10 @@ class TTParam
             $param instanceof WsEdition ||
             $param instanceof WsLibelle ||
             $param instanceof WsDepot ||
-            $param instanceof WsContact
+            $param instanceof WsContact ||
+            $param instanceof WsInstCat ||
+            $param instanceof WsCateg ||
+            $param instanceof WsFour
         ) {
             $this->params[] = $param;
         }
@@ -87,9 +93,23 @@ class TTParam
             $param instanceof WsEdition ||
             $param instanceof WsLibelle ||
             $param instanceof WsDepot ||
-            $param instanceof WsContact
+            $param instanceof WsContact ||
+            $param instanceof WsInstCat ||
+            $param instanceof WsCateg ||
+            $param instanceof WsFour
         ) {
             $this->params->removeElement($param);
+        }
+        return $this;
+    }
+
+    /**
+     * @param mixed $param
+     * @return TTParam
+     */
+    public function removeItems(ArrayCollection $items){
+        foreach($items as $item) {
+            $this->params->removeElement($item);
         }
         return $this;
     }
@@ -152,6 +172,24 @@ class TTParam
             }
             else {
                 break;
+            }
+        }
+        return $itemsFind;
+    }
+
+    /**
+     * @param $property : Propriété ou le filtre doit s'appliquer
+     * @param $value : Valeur de la propriété à filtrer
+     * @return ArrayCollection
+     */
+    public function getItemsByFilterInArrayCollection($property, $value)
+    {
+        $itemsFind = new ArrayCollection();
+        foreach ($this->params as $param){
+            if(property_exists($param, $property)) {
+                if($param->{$property} === $value){
+                    $itemsFind->add($param);
+                }
             }
         }
         return $itemsFind;

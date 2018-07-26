@@ -2,17 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Article;
 use App\Entity\Client;
 use App\Entity\Contact;
 use App\Services\Objets\Notif;
-use App\Services\Objets\TTParam;
 use App\Services\Objets\TTRetour;
 use App\Services\Parameters\WsTableNamesRetour;
 use App\Services\UserService;
 use App\Services\WsManager;
 use App\Utils\ErrorRoute;
-use App\Utils\StockDepot;
 use Doctrine\Common\Collections\ArrayCollection;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
