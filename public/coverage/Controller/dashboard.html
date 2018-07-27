@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /home/nico/sites/dfc2api-platform/src/Controller</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../.css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="../.css/nv.d3.min.css" rel="stylesheet" type="text/css">
+  <link href="../.css/style.css" rel="stylesheet" type="text/css">
+  <!--[if lt IE 9]>
+  <script src="../.js/html5shiv.min.js"></script>
+  <script src="../.js/respond.min.js"></script>
+  <![endif]-->
+ </head>
+ <body>
+  <header>
+   <div class="container">
+    <div class="row">
+     <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li><a href="../index.html">/home/nico/sites/dfc2api-platform/src</a></li>
+        <li><a href="index.html">Controller</a></li>
+        <li class="active">(Dashboard)</li>
+
+      </ol>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="ArticlesController.php.html#22">App\Controller\ArticlesController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="BonsLivraisonController.php.html#24">App\Controller\BonsLivraisonController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CategsController.php.html#21">App\Controller\CategsController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ClientsController.php.html#22">App\Controller\ClientsController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CommandesController.php.html#23">App\Controller\CommandesController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DepotsController.php.html#20">App\Controller\DepotsController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DevisController.php.html#25">App\Controller\DevisController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FacturesController.php.html#24">App\Controller\FacturesController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FacturesEnAttentesController.php.html#21">App\Controller\FacturesEnAttentesController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FoursController.php.html#20">App\Controller\FoursController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InstancesCategorieController.php.html#21">App\Controller\InstancesCategorieController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="LibellesController.php.html#20">App\Controller\LibellesController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SecurityController.php.html#9">App\Controller\SecurityController</a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="ArticlesController.php.html#22">App\Controller\ArticlesController</a></td><td class="text-right">7482</td></tr>
+       <tr><td><a href="ClientsController.php.html#22">App\Controller\ClientsController</a></td><td class="text-right">1056</td></tr>
+       <tr><td><a href="FacturesController.php.html#24">App\Controller\FacturesController</a></td><td class="text-right">756</td></tr>
+       <tr><td><a href="CommandesController.php.html#23">App\Controller\CommandesController</a></td><td class="text-right">600</td></tr>
+       <tr><td><a href="DevisController.php.html#25">App\Controller\DevisController</a></td><td class="text-right">600</td></tr>
+       <tr><td><a href="BonsLivraisonController.php.html#24">App\Controller\BonsLivraisonController</a></td><td class="text-right">506</td></tr>
+       <tr><td><a href="DepotsController.php.html#20">App\Controller\DepotsController</a></td><td class="text-right">506</td></tr>
+       <tr><td><a href="FacturesEnAttentesController.php.html#21">App\Controller\FacturesEnAttentesController</a></td><td class="text-right">240</td></tr>
+       <tr><td><a href="LibellesController.php.html#20">App\Controller\LibellesController</a></td><td class="text-right">240</td></tr>
+       <tr><td><a href="InstancesCategorieController.php.html#21">App\Controller\InstancesCategorieController</a></td><td class="text-right">210</td></tr>
+       <tr><td><a href="CategsController.php.html#21">App\Controller\CategsController</a></td><td class="text-right">156</td></tr>
+       <tr><td><a href="FoursController.php.html#20">App\Controller\FoursController</a></td><td class="text-right">156</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="ArticlesController.php.html#52"><abbr title="App\Controller\ArticlesController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FacturesEnAttentesController.php.html#42"><abbr title="App\Controller\FacturesEnAttentesController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DepotsController.php.html#118"><abbr title="App\Controller\DepotsController::depotsGetAction">depotsGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DepotsController.php.html#149"><abbr title="App\Controller\DepotsController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DevisController.php.html#48"><abbr title="App\Controller\DevisController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DevisController.php.html#80"><abbr title="App\Controller\DevisController::devisGetAction">devisGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DevisController.php.html#136"><abbr title="App\Controller\DevisController::editionsDevisGetAction">editionsDevisGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DevisController.php.html#165"><abbr title="App\Controller\DevisController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FacturesController.php.html#45"><abbr title="App\Controller\FacturesController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FacturesController.php.html#76"><abbr title="App\Controller\FacturesController::facturesGetAction">facturesGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FacturesController.php.html#145"><abbr title="App\Controller\FacturesController::editionsFactureGetAction">editionsFactureGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FacturesController.php.html#174"><abbr title="App\Controller\FacturesController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FacturesEnAttentesController.php.html#73"><abbr title="App\Controller\FacturesEnAttentesController::facturesEnAttentesGetAction">facturesEnAttentesGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DepotsController.php.html#41"><abbr title="App\Controller\DepotsController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FacturesEnAttentesController.php.html#103"><abbr title="App\Controller\FacturesEnAttentesController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FoursController.php.html#42"><abbr title="App\Controller\FoursController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FoursController.php.html#75"><abbr title="App\Controller\FoursController::callWebserviceFoursGetAction">callWebserviceFoursGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="FoursController.php.html#113"><abbr title="App\Controller\FoursController::getDemarre">getDemarre</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InstancesCategorieController.php.html#48"><abbr title="App\Controller\InstancesCategorieController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InstancesCategorieController.php.html#80"><abbr title="App\Controller\InstancesCategorieController::callWebserviceInstancesCategoriesGetAction">callWebserviceInstancesCategoriesGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InstancesCategorieController.php.html#120"><abbr title="App\Controller\InstancesCategorieController::getDemarre">getDemarre</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InstancesCategorieController.php.html#124"><abbr title="App\Controller\InstancesCategorieController::getEnfants">getEnfants</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="LibellesController.php.html#41"><abbr title="App\Controller\LibellesController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="LibellesController.php.html#72"><abbr title="App\Controller\LibellesController::libellesGetAction">libellesGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="LibellesController.php.html#102"><abbr title="App\Controller\LibellesController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DepotsController.php.html#73"><abbr title="App\Controller\DepotsController::depotGetAction">depotGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CommandesController.php.html#159"><abbr title="App\Controller\CommandesController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ArticlesController.php.html#86"><abbr title="App\Controller\ArticlesController::callWebserviceArticlesGetAction">callWebserviceArticlesGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="BonsLivraisonController.php.html#133"><abbr title="App\Controller\BonsLivraisonController::editionsBonLivraisonGetAction">editionsBonLivraisonGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ArticlesController.php.html#168"><abbr title="App\Controller\ArticlesController::callWebserviceArticlesWithClientGetAction">callWebserviceArticlesWithClientGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ArticlesController.php.html#250"><abbr title="App\Controller\ArticlesController::callWebserviceArticleWithClientByNoADGetAction">callWebserviceArticleWithClientByNoADGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ArticlesController.php.html#333"><abbr title="App\Controller\ArticlesController::callWebserviceArticleWithClientByIdADGetAction">callWebserviceArticleWithClientByIdADGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ArticlesController.php.html#417"><abbr title="App\Controller\ArticlesController::callWebserviceArticleWithClientByCodADGetAction">callWebserviceArticleWithClientByCodADGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ArticlesController.php.html#500"><abbr title="App\Controller\ArticlesController::callWebserviceArticleWithClientByIdArtGetAction">callWebserviceArticleWithClientByIdArtGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ArticlesController.php.html#569"><abbr title="App\Controller\ArticlesController::getDepots">getDepots</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ArticlesController.php.html#583"><abbr title="App\Controller\ArticlesController::getDepot">getDepot</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ArticlesController.php.html#590"><abbr title="App\Controller\ArticlesController::getDemarre">getDemarre</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="BonsLivraisonController.php.html#45"><abbr title="App\Controller\BonsLivraisonController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="BonsLivraisonController.php.html#76"><abbr title="App\Controller\BonsLivraisonController::bonsLivraisonGetAction">bonsLivraisonGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="BonsLivraisonController.php.html#161"><abbr title="App\Controller\BonsLivraisonController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CommandesController.php.html#130"><abbr title="App\Controller\CommandesController::editionsCommandeGetAction">editionsCommandeGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CategsController.php.html#48"><abbr title="App\Controller\CategsController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CategsController.php.html#80"><abbr title="App\Controller\CategsController::callWebserviceCategsGetAction">callWebserviceCategsGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CategsController.php.html#118"><abbr title="App\Controller\CategsController::getDemarre">getDemarre</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ClientsController.php.html#43"><abbr title="App\Controller\ClientsController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ClientsController.php.html#79"><abbr title="App\Controller\ClientsController::callWebserviceClientsWithRepGetAction">callWebserviceClientsWithRepGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ClientsController.php.html#152"><abbr title="App\Controller\ClientsController::callWebserviceClientsByIdCliGetAction">callWebserviceClientsByIdCliGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ClientsController.php.html#225"><abbr title="App\Controller\ClientsController::callWebserviceClientsByNoCliGetAction">callWebserviceClientsByNoCliGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ClientsController.php.html#297"><abbr title="App\Controller\ClientsController::callWebserviceClientsByCodCliGetAction">callWebserviceClientsByCodCliGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ClientsController.php.html#355"><abbr title="App\Controller\ClientsController::getDemarre">getDemarre</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CommandesController.php.html#44"><abbr title="App\Controller\CommandesController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CommandesController.php.html#75"><abbr title="App\Controller\CommandesController::commandesGetAction">commandesGetAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SecurityController.php.html#14"><abbr title="App\Controller\SecurityController::logout">logout</abbr></a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="ArticlesController.php.html#86"><abbr title="App\Controller\ArticlesController::callWebserviceArticlesGetAction">callWebserviceArticlesGetAction</abbr></a></td><td class="text-right">182</td></tr>
+       <tr><td><a href="ArticlesController.php.html#168"><abbr title="App\Controller\ArticlesController::callWebserviceArticlesWithClientGetAction">callWebserviceArticlesWithClientGetAction</abbr></a></td><td class="text-right">182</td></tr>
+       <tr><td><a href="ArticlesController.php.html#250"><abbr title="App\Controller\ArticlesController::callWebserviceArticleWithClientByNoADGetAction">callWebserviceArticleWithClientByNoADGetAction</abbr></a></td><td class="text-right">182</td></tr>
+       <tr><td><a href="ArticlesController.php.html#333"><abbr title="App\Controller\ArticlesController::callWebserviceArticleWithClientByIdADGetAction">callWebserviceArticleWithClientByIdADGetAction</abbr></a></td><td class="text-right">182</td></tr>
+       <tr><td><a href="ArticlesController.php.html#417"><abbr title="App\Controller\ArticlesController::callWebserviceArticleWithClientByCodADGetAction">callWebserviceArticleWithClientByCodADGetAction</abbr></a></td><td class="text-right">182</td></tr>
+       <tr><td><a href="ArticlesController.php.html#500"><abbr title="App\Controller\ArticlesController::callWebserviceArticleWithClientByIdArtGetAction">callWebserviceArticleWithClientByIdArtGetAction</abbr></a></td><td class="text-right">182</td></tr>
+       <tr><td><a href="FacturesController.php.html#76"><abbr title="App\Controller\FacturesController::facturesGetAction">facturesGetAction</abbr></a></td><td class="text-right">156</td></tr>
+       <tr><td><a href="CommandesController.php.html#75"><abbr title="App\Controller\CommandesController::commandesGetAction">commandesGetAction</abbr></a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="DevisController.php.html#80"><abbr title="App\Controller\DevisController::devisGetAction">devisGetAction</abbr></a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="BonsLivraisonController.php.html#76"><abbr title="App\Controller\BonsLivraisonController::bonsLivraisonGetAction">bonsLivraisonGetAction</abbr></a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="InstancesCategorieController.php.html#80"><abbr title="App\Controller\InstancesCategorieController::callWebserviceInstancesCategoriesGetAction">callWebserviceInstancesCategoriesGetAction</abbr></a></td><td class="text-right">72</td></tr>
+       <tr><td><a href="CategsController.php.html#80"><abbr title="App\Controller\CategsController::callWebserviceCategsGetAction">callWebserviceCategsGetAction</abbr></a></td><td class="text-right">72</td></tr>
+       <tr><td><a href="FoursController.php.html#75"><abbr title="App\Controller\FoursController::callWebserviceFoursGetAction">callWebserviceFoursGetAction</abbr></a></td><td class="text-right">72</td></tr>
+       <tr><td><a href="DevisController.php.html#136"><abbr title="App\Controller\DevisController::editionsDevisGetAction">editionsDevisGetAction</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="ClientsController.php.html#297"><abbr title="App\Controller\ClientsController::callWebserviceClientsByCodCliGetAction">callWebserviceClientsByCodCliGetAction</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="CommandesController.php.html#130"><abbr title="App\Controller\CommandesController::editionsCommandeGetAction">editionsCommandeGetAction</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="DepotsController.php.html#73"><abbr title="App\Controller\DepotsController::depotGetAction">depotGetAction</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="ClientsController.php.html#225"><abbr title="App\Controller\ClientsController::callWebserviceClientsByNoCliGetAction">callWebserviceClientsByNoCliGetAction</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="FacturesEnAttentesController.php.html#73"><abbr title="App\Controller\FacturesEnAttentesController::facturesEnAttentesGetAction">facturesEnAttentesGetAction</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="ClientsController.php.html#152"><abbr title="App\Controller\ClientsController::callWebserviceClientsByIdCliGetAction">callWebserviceClientsByIdCliGetAction</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="ClientsController.php.html#79"><abbr title="App\Controller\ClientsController::callWebserviceClientsWithRepGetAction">callWebserviceClientsWithRepGetAction</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="FacturesController.php.html#145"><abbr title="App\Controller\FacturesController::editionsFactureGetAction">editionsFactureGetAction</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="LibellesController.php.html#72"><abbr title="App\Controller\LibellesController::libellesGetAction">libellesGetAction</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="DepotsController.php.html#118"><abbr title="App\Controller\DepotsController::depotsGetAction">depotsGetAction</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="DevisController.php.html#165"><abbr title="App\Controller\DevisController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="FacturesEnAttentesController.php.html#103"><abbr title="App\Controller\FacturesEnAttentesController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="LibellesController.php.html#102"><abbr title="App\Controller\LibellesController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="DepotsController.php.html#149"><abbr title="App\Controller\DepotsController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="CommandesController.php.html#159"><abbr title="App\Controller\CommandesController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="BonsLivraisonController.php.html#161"><abbr title="App\Controller\BonsLivraisonController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="BonsLivraisonController.php.html#133"><abbr title="App\Controller\BonsLivraisonController::editionsBonLivraisonGetAction">editionsBonLivraisonGetAction</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="FacturesController.php.html#174"><abbr title="App\Controller\FacturesController::setCurrentUser">setCurrentUser</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="FoursController.php.html#42"><abbr title="App\Controller\FoursController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="InstancesCategorieController.php.html#48"><abbr title="App\Controller\InstancesCategorieController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="LibellesController.php.html#41"><abbr title="App\Controller\LibellesController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="ArticlesController.php.html#52"><abbr title="App\Controller\ArticlesController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="FacturesEnAttentesController.php.html#42"><abbr title="App\Controller\FacturesEnAttentesController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="FacturesController.php.html#45"><abbr title="App\Controller\FacturesController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="DevisController.php.html#48"><abbr title="App\Controller\DevisController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="CommandesController.php.html#44"><abbr title="App\Controller\CommandesController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="ClientsController.php.html#43"><abbr title="App\Controller\ClientsController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="CategsController.php.html#48"><abbr title="App\Controller\CategsController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="BonsLivraisonController.php.html#45"><abbr title="App\Controller\BonsLivraisonController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="ArticlesController.php.html#569"><abbr title="App\Controller\ArticlesController::getDepots">getDepots</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="DepotsController.php.html#41"><abbr title="App\Controller\DepotsController::__construct">__construct</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="InstancesCategorieController.php.html#124"><abbr title="App\Controller\InstancesCategorieController::getEnfants">getEnfants</abbr></a></td><td class="text-right">6</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 5.3.2</a> using <a href="https://secure.php.net/" target="_top">PHP 7.2.7-0ubuntu0.18.04.2</a> with <a href="https://xdebug.org/">Xdebug 2.6.0</a> and <a href="https://phpunit.de/">PHPUnit 6.5.9</a> at Thu Jul 26 17:26:53 CEST 2018.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../.js/jquery.min.js" type="text/javascript"></script>
+  <script src="../.js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../.js/holder.min.js" type="text/javascript"></script>
+  <script src="../.js/d3.min.js" type="text/javascript"></script>
+  <script src="../.js/nv.d3.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([13,0,0,0,0,0,0,0,0,0,0,0], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([53,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[0,86,"<a href=\"ArticlesController.php.html#22\">App\\Controller\\ArticlesController<\/a>"],[0,22,"<a href=\"BonsLivraisonController.php.html#24\">App\\Controller\\BonsLivraisonController<\/a>"],[0,12,"<a href=\"CategsController.php.html#21\">App\\Controller\\CategsController<\/a>"],[0,32,"<a href=\"ClientsController.php.html#22\">App\\Controller\\ClientsController<\/a>"],[0,24,"<a href=\"CommandesController.php.html#23\">App\\Controller\\CommandesController<\/a>"],[0,22,"<a href=\"DepotsController.php.html#20\">App\\Controller\\DepotsController<\/a>"],[0,24,"<a href=\"DevisController.php.html#25\">App\\Controller\\DevisController<\/a>"],[0,27,"<a href=\"FacturesController.php.html#24\">App\\Controller\\FacturesController<\/a>"],[0,15,"<a href=\"FacturesEnAttentesController.php.html#21\">App\\Controller\\FacturesEnAttentesController<\/a>"],[0,12,"<a href=\"FoursController.php.html#20\">App\\Controller\\FoursController<\/a>"],[0,14,"<a href=\"InstancesCategorieController.php.html#21\">App\\Controller\\InstancesCategorieController<\/a>"],[0,15,"<a href=\"LibellesController.php.html#20\">App\\Controller\\LibellesController<\/a>"],[0,1,"<a href=\"SecurityController.php.html#9\">App\\Controller\\SecurityController<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[0,3,"<a href=\"ArticlesController.php.html#52\">App\\Controller\\ArticlesController::__construct<\/a>"],[0,13,"<a href=\"ArticlesController.php.html#86\">App\\Controller\\ArticlesController::callWebserviceArticlesGetAction<\/a>"],[0,13,"<a href=\"ArticlesController.php.html#168\">App\\Controller\\ArticlesController::callWebserviceArticlesWithClientGetAction<\/a>"],[0,13,"<a href=\"ArticlesController.php.html#250\">App\\Controller\\ArticlesController::callWebserviceArticleWithClientByNoADGetAction<\/a>"],[0,13,"<a href=\"ArticlesController.php.html#333\">App\\Controller\\ArticlesController::callWebserviceArticleWithClientByIdADGetAction<\/a>"],[0,13,"<a href=\"ArticlesController.php.html#417\">App\\Controller\\ArticlesController::callWebserviceArticleWithClientByCodADGetAction<\/a>"],[0,13,"<a href=\"ArticlesController.php.html#500\">App\\Controller\\ArticlesController::callWebserviceArticleWithClientByIdArtGetAction<\/a>"],[0,3,"<a href=\"ArticlesController.php.html#569\">App\\Controller\\ArticlesController::getDepots<\/a>"],[0,1,"<a href=\"ArticlesController.php.html#583\">App\\Controller\\ArticlesController::getDepot<\/a>"],[0,1,"<a href=\"ArticlesController.php.html#590\">App\\Controller\\ArticlesController::getDemarre<\/a>"],[0,3,"<a href=\"BonsLivraisonController.php.html#45\">App\\Controller\\BonsLivraisonController::__construct<\/a>"],[0,9,"<a href=\"BonsLivraisonController.php.html#76\">App\\Controller\\BonsLivraisonController::bonsLivraisonGetAction<\/a>"],[0,5,"<a href=\"BonsLivraisonController.php.html#133\">App\\Controller\\BonsLivraisonController::editionsBonLivraisonGetAction<\/a>"],[0,5,"<a href=\"BonsLivraisonController.php.html#161\">App\\Controller\\BonsLivraisonController::setCurrentUser<\/a>"],[0,3,"<a href=\"CategsController.php.html#48\">App\\Controller\\CategsController::__construct<\/a>"],[0,8,"<a href=\"CategsController.php.html#80\">App\\Controller\\CategsController::callWebserviceCategsGetAction<\/a>"],[0,1,"<a href=\"CategsController.php.html#118\">App\\Controller\\CategsController::getDemarre<\/a>"],[0,3,"<a href=\"ClientsController.php.html#43\">App\\Controller\\ClientsController::__construct<\/a>"],[0,7,"<a href=\"ClientsController.php.html#79\">App\\Controller\\ClientsController::callWebserviceClientsWithRepGetAction<\/a>"],[0,7,"<a href=\"ClientsController.php.html#152\">App\\Controller\\ClientsController::callWebserviceClientsByIdCliGetAction<\/a>"],[0,7,"<a href=\"ClientsController.php.html#225\">App\\Controller\\ClientsController::callWebserviceClientsByNoCliGetAction<\/a>"],[0,7,"<a href=\"ClientsController.php.html#297\">App\\Controller\\ClientsController::callWebserviceClientsByCodCliGetAction<\/a>"],[0,1,"<a href=\"ClientsController.php.html#355\">App\\Controller\\ClientsController::getDemarre<\/a>"],[0,3,"<a href=\"CommandesController.php.html#44\">App\\Controller\\CommandesController::__construct<\/a>"],[0,9,"<a href=\"CommandesController.php.html#75\">App\\Controller\\CommandesController::commandesGetAction<\/a>"],[0,7,"<a href=\"CommandesController.php.html#130\">App\\Controller\\CommandesController::editionsCommandeGetAction<\/a>"],[0,5,"<a href=\"CommandesController.php.html#159\">App\\Controller\\CommandesController::setCurrentUser<\/a>"],[0,3,"<a href=\"DepotsController.php.html#41\">App\\Controller\\DepotsController::__construct<\/a>"],[0,7,"<a href=\"DepotsController.php.html#73\">App\\Controller\\DepotsController::depotGetAction<\/a>"],[0,7,"<a href=\"DepotsController.php.html#118\">App\\Controller\\DepotsController::depotsGetAction<\/a>"],[0,5,"<a href=\"DepotsController.php.html#149\">App\\Controller\\DepotsController::setCurrentUser<\/a>"],[0,3,"<a href=\"DevisController.php.html#48\">App\\Controller\\DevisController::__construct<\/a>"],[0,9,"<a href=\"DevisController.php.html#80\">App\\Controller\\DevisController::devisGetAction<\/a>"],[0,7,"<a href=\"DevisController.php.html#136\">App\\Controller\\DevisController::editionsDevisGetAction<\/a>"],[0,5,"<a href=\"DevisController.php.html#165\">App\\Controller\\DevisController::setCurrentUser<\/a>"],[0,3,"<a href=\"FacturesController.php.html#45\">App\\Controller\\FacturesController::__construct<\/a>"],[0,12,"<a href=\"FacturesController.php.html#76\">App\\Controller\\FacturesController::facturesGetAction<\/a>"],[0,7,"<a href=\"FacturesController.php.html#145\">App\\Controller\\FacturesController::editionsFactureGetAction<\/a>"],[0,5,"<a href=\"FacturesController.php.html#174\">App\\Controller\\FacturesController::setCurrentUser<\/a>"],[0,3,"<a href=\"FacturesEnAttentesController.php.html#42\">App\\Controller\\FacturesEnAttentesController::__construct<\/a>"],[0,7,"<a href=\"FacturesEnAttentesController.php.html#73\">App\\Controller\\FacturesEnAttentesController::facturesEnAttentesGetAction<\/a>"],[0,5,"<a href=\"FacturesEnAttentesController.php.html#103\">App\\Controller\\FacturesEnAttentesController::setCurrentUser<\/a>"],[0,3,"<a href=\"FoursController.php.html#42\">App\\Controller\\FoursController::__construct<\/a>"],[0,8,"<a href=\"FoursController.php.html#75\">App\\Controller\\FoursController::callWebserviceFoursGetAction<\/a>"],[0,1,"<a href=\"FoursController.php.html#113\">App\\Controller\\FoursController::getDemarre<\/a>"],[0,3,"<a href=\"InstancesCategorieController.php.html#48\">App\\Controller\\InstancesCategorieController::__construct<\/a>"],[0,8,"<a href=\"InstancesCategorieController.php.html#80\">App\\Controller\\InstancesCategorieController::callWebserviceInstancesCategoriesGetAction<\/a>"],[0,1,"<a href=\"InstancesCategorieController.php.html#120\">App\\Controller\\InstancesCategorieController::getDemarre<\/a>"],[0,2,"<a href=\"InstancesCategorieController.php.html#124\">App\\Controller\\InstancesCategorieController::getEnfants<\/a>"],[0,3,"<a href=\"LibellesController.php.html#41\">App\\Controller\\LibellesController::__construct<\/a>"],[0,7,"<a href=\"LibellesController.php.html#72\">App\\Controller\\LibellesController::libellesGetAction<\/a>"],[0,5,"<a href=\"LibellesController.php.html#102\">App\\Controller\\LibellesController::setCurrentUser<\/a>"],[0,1,"<a href=\"SecurityController.php.html#14\">App\\Controller\\SecurityController::logout<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>
