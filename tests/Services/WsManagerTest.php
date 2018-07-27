@@ -105,7 +105,12 @@ class WsManagerTest extends TestCase
         }
     }
 
-    public function testGetClientByIdCli()
+    /**
+     * @param $user
+     *
+     * @dataProvider usersProvider
+     */
+    public function testGetClientByIdCli($user)
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
@@ -127,7 +132,7 @@ class WsManagerTest extends TestCase
             ->willReturn(new CntxAdmin('7','5','','986','2458319032855713246','1','544','18/07/2018 10:07:35.599 02:00'));
 
         // On déroule notre code normalement
-        $retour = $manager->getClientByIdCli(1234);
+        $retour = $manager->getClientByIdCli($user->getIdCli());
 
         if($retour instanceof Notif) {
             $this->assertInstanceOf(Notif::class, $retour, "L'objet parsé n'est pas une instance de type Notif:class");
@@ -137,7 +142,12 @@ class WsManagerTest extends TestCase
         }
     }
 
-    public function testGetClientByCodCli()
+    /**
+     * @param $user
+     *
+     * @dataProvider usersProvider
+     */
+    public function testGetClientByCodCli($user)
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
@@ -159,7 +169,7 @@ class WsManagerTest extends TestCase
             ->willReturn(new CntxAdmin('7','5','','986','2458319032855713246','1','544','18/07/2018 10:07:35.599 02:00'));
 
         // On déroule notre code normalement
-        $retour = $manager->getClientByCodCli('TEST');
+        $retour = $manager->getClientByCodCli($user->getCode());
 
         if($retour instanceof Notif) {
             $this->assertInstanceOf(Notif::class, $retour, "L'objet parsé n'est pas une instance de type Notif:class");
@@ -169,7 +179,12 @@ class WsManagerTest extends TestCase
         }
     }
 
-    public function testGetClientByNoCli()
+    /**
+     * @param $user
+     *
+     * @dataProvider usersProvider
+     */
+    public function testGetClientByNoCli($user)
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
@@ -191,7 +206,7 @@ class WsManagerTest extends TestCase
             ->willReturn(new CntxAdmin('7','5','','986','2458319032855713246','1','544','18/07/2018 10:07:35.599 02:00'));
 
         // On déroule notre code normalement
-        $retour = $manager->getClientByNoCli('1234');
+        $retour = $manager->getClientByNoCli($user->getNoCli());
 
         if($retour instanceof Notif) {
             $this->assertInstanceOf(Notif::class, $retour, "L'objet parsé n'est pas une instance de type Notif:class");

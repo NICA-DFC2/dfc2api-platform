@@ -67,7 +67,7 @@
        </div>
 </td>
       <td class="danger small"><div align="right">0.00%</div></td>
-      <td class="danger small"><div align="right">0&nbsp;/&nbsp;38</div></td>
+      <td class="danger small"><div align="right">0&nbsp;/&nbsp;42</div></td>
      </tr>
 
      <tr>
@@ -96,7 +96,7 @@
        </div>
 </td>
       <td class="danger small"><div align="right">0.00%</div></td>
-      <td class="danger small"><div align="right">0&nbsp;/&nbsp;38</div></td>
+      <td class="danger small"><div align="right">0&nbsp;/&nbsp;42</div></td>
      </tr>
 
      <tr>
@@ -117,7 +117,7 @@
        </div>
 </td>
       <td class="danger small"><div align="right">0.00%</div></td>
-      <td class="danger small"><div align="right">0&nbsp;/&nbsp;37</div></td>
+      <td class="danger small"><div align="right">0&nbsp;/&nbsp;39</div></td>
      </tr>
 
      <tr>
@@ -138,7 +138,7 @@
        </div>
 </td>
       <td class="danger small"><div align="right">0.00%</div></td>
-      <td class="danger small"><div align="right">0&nbsp;/&nbsp;1</div></td>
+      <td class="danger small"><div align="right">0&nbsp;/&nbsp;3</div></td>
      </tr>
 
 
@@ -162,7 +162,7 @@
      <tr><td><div align="right"><a name="14"></a><a href="#14">14</a></div></td><td class="codeLine"><span class="keyword">class</span><span class="default">&nbsp;</span><span class="default">LoadArticles</span><span class="default">&nbsp;</span><span class="keyword">extends</span><span class="default">&nbsp;</span><span class="default">Fixture</span><span class="default">&nbsp;</span><span class="keyword">implements</span><span class="default">&nbsp;</span><span class="default">OrderedFixtureInterface</span></td></tr>
      <tr><td><div align="right"><a name="15"></a><a href="#15">15</a></div></td><td class="codeLine"><span class="keyword">{</span></td></tr>
      <tr><td><div align="right"><a name="16"></a><a href="#16">16</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public</span><span class="default">&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">load</span><span class="keyword">(</span><span class="default">ObjectManager</span><span class="default">&nbsp;</span><span class="default">$manager</span><span class="keyword">)</span></td></tr>
-     <tr><td><div align="right"><a name="17"></a><a href="#17">17</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">{</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="17"></a><a href="#17">17</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">{</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="18"></a><a href="#18">18</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$faker</span><span class="default">&nbsp;</span><span class="keyword">=</span><span class="default">&nbsp;</span><span class="default">Faker</span><span class="default">\</span><span class="default">Factory</span><span class="default">::</span><span class="default">create</span><span class="keyword">(</span><span class="default">'fr_FR'</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="19"></a><a href="#19">19</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">for</span><span class="keyword">(</span><span class="default">$i</span><span class="default">&nbsp;</span><span class="keyword">=</span><span class="default">&nbsp;</span><span class="default">0</span><span class="keyword">;</span><span class="default">&nbsp;</span><span class="default">$i</span><span class="default">&nbsp;</span><span class="keyword">&lt;</span><span class="default">&nbsp;</span><span class="default">50</span><span class="keyword">;</span><span class="default">&nbsp;</span><span class="default">$i</span><span class="default">++</span><span class="keyword">)</span><span class="keyword">{</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="20"></a><a href="#20">20</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$category</span><span class="default">&nbsp;</span><span class="keyword">=</span><span class="default">&nbsp;</span><span class="keyword">new</span><span class="default">&nbsp;</span><span class="default">ArticleCategorie</span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
@@ -200,7 +200,7 @@
      <tr class="danger"><td><div align="right"><a name="52"></a><a href="#52">52</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$manager</span><span class="default">-&gt;</span><span class="default">flush</span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="53"></a><a href="#53">53</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$manager</span><span class="default">-&gt;</span><span class="default">clear</span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
      <tr><td><div align="right"><a name="54"></a><a href="#54">54</a></div></td><td class="codeLine"></td></tr>
-     <tr><td><div align="right"><a name="55"></a><a href="#55">55</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="55"></a><a href="#55">55</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span></td></tr>
      <tr><td><div align="right"><a name="56"></a><a href="#56">56</a></div></td><td class="codeLine"></td></tr>
      <tr><td><div align="right"><a name="57"></a><a href="#57">57</a></div></td><td class="codeLine"></td></tr>
      <tr class="danger"><td><div align="right"><a name="58"></a><a href="#58">58</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span></td></tr>
@@ -211,9 +211,9 @@
      <tr><td><div align="right"><a name="63"></a><a href="#63">63</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;integer</span></td></tr>
      <tr><td><div align="right"><a name="64"></a><a href="#64">64</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></td></tr>
      <tr><td><div align="right"><a name="65"></a><a href="#65">65</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">getOrder</span><span class="keyword">(</span><span class="keyword">)</span></td></tr>
-     <tr><td><div align="right"><a name="66"></a><a href="#66">66</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">{</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="66"></a><a href="#66">66</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">{</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="67"></a><a href="#67">67</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">2</span><span class="keyword">;</span></td></tr>
-     <tr class="warning"><td><div align="right"><a name="68"></a><a href="#68">68</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="68"></a><a href="#68">68</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span></td></tr>
      <tr><td><div align="right"><a name="69"></a><a href="#69">69</a></div></td><td class="codeLine"></td></tr>
      <tr><td><div align="right"><a name="70"></a><a href="#70">70</a></div></td><td class="codeLine"><span class="keyword">}</span></td></tr>
 
@@ -228,7 +228,7 @@
      <span class="warning"><strong>Dead Code</strong></span>
     </p>
     <p>
-     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 5.3.2</a> using <a href="https://secure.php.net/" target="_top">PHP 7.2.7-0ubuntu0.18.04.2</a> with <a href="https://xdebug.org/">Xdebug 2.6.0</a> and <a href="https://phpunit.de/">PHPUnit 6.5.9</a> at Fri Jul 27 10:21:07 CEST 2018.</small>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 5.3.2</a> using <a href="https://secure.php.net/" target="_top">PHP 7.2.7-0ubuntu0.18.04.2</a> with <a href="https://xdebug.org/">Xdebug 2.6.0</a> and <a href="https://phpunit.de/">PHPUnit 6.5.9</a> at Fri Jul 27 10:31:27 CEST 2018.</small>
     </p>
     <a title="Back to the top" id="toplink" href="#"><span class="glyphicon glyphicon-arrow-up"></span></a>
    </footer>
