@@ -361,9 +361,8 @@ class WsManager
                 return $responseDecode->decodeRetour();
             }
 
-            return '{}';
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdCli() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
         }
-
 
         /**
          * Lecture des informations des clients d'un représentant
@@ -372,23 +371,27 @@ class WsManager
          */
         public function getClientsWithRep($id_rep)
         {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
+            if($id_rep > 0) {
+                $TTParamAppel = new TTParam();
+                $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
 
-            $TTCritSel = new TTParam();
-            $TTCritSel->addItem(new CritParam('IdSal', $id_rep));
+                $TTCritSel = new TTParam();
+                $TTCritSel->addItem(new CritParam('IdSal', $id_rep));
 
-            $response = $this->getCaller()
-                ->setCache($this->getCache())
-                ->setModule(WsParameters::MODULE_CLIENT)
-                ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                ->setFilter($this->getFilter())
-                ->setParamsAppel($TTParamAppel)
-                ->setCritsSelect($TTCritSel)
-                ->get();
+                $response = $this->getCaller()
+                    ->setCache($this->getCache())
+                    ->setModule(WsParameters::MODULE_CLIENT)
+                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                    ->setFilter($this->getFilter())
+                    ->setParamsAppel($TTParamAppel)
+                    ->setCritsSelect($TTCritSel)
+                    ->get();
 
-            $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour();
+                $responseDecode = new ResponseDecode($response);
+                return $responseDecode->decodeRetour();
+            }
+
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés id_rep inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
         }
 
         /**
@@ -398,23 +401,27 @@ class WsManager
          */
         public function getClientByIdCli($id_cli)
         {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
+            if($id_cli > 0) {
+                $TTParamAppel = new TTParam();
+                $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
 
-            $TTCritSel = new TTParam();
-            $TTCritSel->addItem(new CritParam('IdCli', $id_cli));
+                $TTCritSel = new TTParam();
+                $TTCritSel->addItem(new CritParam('IdCli', $id_cli));
 
-            $response = $this->getCaller()
-                ->setCache($this->getCache())
-                ->setModule(WsParameters::MODULE_CLIENT)
-                ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                ->setFilter($this->getFilter())
-                ->setParamsAppel($TTParamAppel)
-                ->setCritsSelect($TTCritSel)
-                ->get();
+                $response = $this->getCaller()
+                    ->setCache($this->getCache())
+                    ->setModule(WsParameters::MODULE_CLIENT)
+                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                    ->setFilter($this->getFilter())
+                    ->setParamsAppel($TTParamAppel)
+                    ->setCritsSelect($TTCritSel)
+                    ->get();
 
-            $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour();
+                $responseDecode = new ResponseDecode($response);
+                return $responseDecode->decodeRetour();
+            }
+
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés id_cli inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
         }
 
         /**
@@ -424,23 +431,27 @@ class WsManager
          */
         public function getClientByNoCli($no_cli)
         {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
+            if($no_cli > 0) {
+                $TTParamAppel = new TTParam();
+                $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
 
-            $TTCritSel = new TTParam();
-            $TTCritSel->addItem(new CritParam('NoCli', $no_cli));
+                $TTCritSel = new TTParam();
+                $TTCritSel->addItem(new CritParam('NoCli', $no_cli));
 
-            $response = $this->getCaller()
-                ->setCache($this->getCache())
-                ->setModule(WsParameters::MODULE_CLIENT)
-                ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                ->setFilter($this->getFilter())
-                ->setParamsAppel($TTParamAppel)
-                ->setCritsSelect($TTCritSel)
-                ->get();
+                $response = $this->getCaller()
+                    ->setCache($this->getCache())
+                    ->setModule(WsParameters::MODULE_CLIENT)
+                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                    ->setFilter($this->getFilter())
+                    ->setParamsAppel($TTParamAppel)
+                    ->setCritsSelect($TTCritSel)
+                    ->get();
 
-            $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour();
+                $responseDecode = new ResponseDecode($response);
+                return $responseDecode->decodeRetour();
+            }
+
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés no_cli inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
         }
 
         /**
@@ -450,23 +461,27 @@ class WsManager
          */
         public function getClientByCodCli($cod_cli)
         {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
+            if(!empty($cod_cli) && !is_null($cod_cli)) {
+                $TTParamAppel = new TTParam();
+                $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
 
-            $TTCritSel = new TTParam();
-            $TTCritSel->addItem(new CritParam('CodCli', $cod_cli));
+                $TTCritSel = new TTParam();
+                $TTCritSel->addItem(new CritParam('CodCli', $cod_cli));
 
-            $response = $this->getCaller()
-                ->setCache($this->getCache())
-                ->setModule(WsParameters::MODULE_CLIENT)
-                ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                ->setFilter($this->getFilter())
-                ->setParamsAppel($TTParamAppel)
-                ->setCritsSelect($TTCritSel)
-                ->get();
+                $response = $this->getCaller()
+                    ->setCache($this->getCache())
+                    ->setModule(WsParameters::MODULE_CLIENT)
+                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                    ->setFilter($this->getFilter())
+                    ->setParamsAppel($TTParamAppel)
+                    ->setCritsSelect($TTCritSel)
+                    ->get();
 
-            $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour();
+                $responseDecode = new ResponseDecode($response);
+                return $responseDecode->decodeRetour();
+            }
+
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés cod_cli est NULL ou vide', 'Paramètres manquants', '', __FUNCTION__);
         }
 
 
@@ -504,7 +519,7 @@ class WsManager
                 return $responseDecode->decodeRetour();
             }
 
-            return '{}';
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés id_cli inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
         }
 
 
@@ -539,10 +554,6 @@ class WsManager
          */
         public function getCategories()
         {
-            //$TTParamAppel = new TTParam();
-            //$TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_INSTCAT));
-            //$TTParamAppel->addItem(new CritParam('TypePrendre', WsParameters::TYPE_PRENDRE_INSTCAT_BRANCHE));
-
             $response = $this->getCaller()
                 ->setCache($this->getCache())
                 ->setModule(WsParameters::MODULE_CATEGORIE)
@@ -731,7 +742,7 @@ class WsManager
          * @param $filter_depots
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getArticlesWithClient(?int $id_cli, $filter_depots = array())
+        public function getArticlesWithClient($id_cli, $filter_depots = array())
         {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
@@ -755,7 +766,6 @@ class WsManager
          * Lecture des informations d'un article avec le stock pour un client par son numéro
          * @param $id_cli
          * @param $no_ad
-         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
          * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
          * @return Objets\TTRetour|\Exception|mixed
          */
@@ -788,7 +798,6 @@ class WsManager
          * Lecture des informations d'un article avec le stock pour un client par son identifiant unique
          * @param $id_cli
          * @param $id_ad
-         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
          * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
          * @return Objets\TTRetour|\Exception|mixed
          */
@@ -821,7 +830,6 @@ class WsManager
          * Lecture des informations d'un article avec le stock pour un client par son code
          * @param $id_cli
          * @param $cod_ad
-         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
          * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
          * @return Objets\TTRetour|\Exception|mixed
          */
@@ -854,7 +862,6 @@ class WsManager
          * Lecture des informations d'un article avec le stock pour un client par son identifiant unique evolubat IdArt
          * @param $id_cli
          * @param $id_art
-         * @param $calculPrixNet : Indique si l'appel doit récupérer le PRIX NET du client connecté
          * @param $filter_depots : Lecture des stocks pour la liste des dépots renseignés
          * @return Objets\TTRetour|\Exception|mixed
          */
@@ -883,8 +890,6 @@ class WsManager
             $responseDecode = new ResponseDecode($response);
             return $responseDecode->decodeRetour($filter_depots);
         }
-
-
 
         /**
          * Lecture des informations d'un article avec le stock par son numéro
