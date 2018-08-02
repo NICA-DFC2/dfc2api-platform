@@ -41,18 +41,20 @@ services:
         public: true
         autowire: true
         class: App\Services\UserService
-        arguments: [ '@security.token_storage' ]
-
-    App\Serializer\ObjectNormalizer:
-        decorates: 'api_platform.jsonld.normalizer.item'
-        arguments: [ '@App\Serializer\ObjectNormalizer.inner', '@dfc2.api.manager', '@dfc2.user.service' ]
+        arguments: [ '@security.token_storage', '@dfc2.api.manager' ]
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-        arguments: [ '@dfc2.api.manager', '@dfc2.user.service', '@api_platform.serializer' ]
+        arguments: [ '@dfc2.api.manager', '@dfc2.user.service' ]
+
+
+    App\EventSubscriber\TransformResponseSubscriber:
+            tags:
+                - { name: kernel.view }
+            arguments: [ '@dfc2.api.manager', '@dfc2.user.service' ]
 
 
     # lexik_jwt_authentication EVENTS
@@ -61,7 +63,7 @@ services:
             class: App\EventListener\AuthenticationSuccessListener
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
-            arguments: [ '@dfc2.api.manager' ]
+            arguments: [ '@dfc2.api.manager', '@dfc2.user.service' ]
 
     dfc2.api.event.authentication_failure_listener:
             autowire: true

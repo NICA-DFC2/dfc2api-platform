@@ -11,6 +11,9 @@ class TTParam
      */
     private $params;
 
+    private $TotalItems = 0;
+    private $View = array();
+
     /**
      * TTParam constructor.
      */
@@ -39,7 +42,8 @@ class TTParam
                 $param instanceof WsContact ||
                 $param instanceof WsInstCat ||
                 $param instanceof WsCateg ||
-                $param instanceof WsFour
+                $param instanceof WsFour ||
+                $param instanceof WsUtil
             ) {
                 $string .= ($string !== "") ? ',' : '';
                 $string .= $param->__toString();
@@ -71,7 +75,8 @@ class TTParam
             $param instanceof WsContact ||
             $param instanceof WsInstCat ||
             $param instanceof WsCateg ||
-            $param instanceof WsFour
+            $param instanceof WsFour ||
+            $param instanceof WsUtil
         ) {
             $this->params[] = $param;
         }
@@ -96,7 +101,8 @@ class TTParam
             $param instanceof WsContact ||
             $param instanceof WsInstCat ||
             $param instanceof WsCateg ||
-            $param instanceof WsFour
+            $param instanceof WsFour ||
+            $param instanceof WsUtil
         ) {
             $this->params->removeElement($param);
         }
@@ -155,6 +161,34 @@ class TTParam
     {
         $this->params[$index] = $item;
     }
+
+    /**
+     * @return int
+     */
+    public function getTotalItems(): int
+    {
+        return $this->params->count();
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getView(): array
+    {
+        return $this->View;
+    }
+
+    /**
+     * @param array $View
+     */
+    public function setView(array $View)
+    {
+        $this->View = $View;
+    }
+
+
+
 
     /**
      * @param $property : Propriété ou le filtre doit s'appliquer

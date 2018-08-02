@@ -4,13 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Services\Objets\Notif;
-use App\Services\Objets\TTParam;
 use App\Services\Objets\TTRetour;
 use App\Services\Parameters\WsTableNamesRetour;
 use App\Services\UserService;
 use App\Services\WsManager;
 use App\Utils\ErrorRoute;
-use App\Utils\StockDepot;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,17 +35,11 @@ class ArticlesController extends Controller
      */
     private $user_service;
 
-    /**
-     * @var TTParam
-     * @SWG\Property(
-     *     name="depots",
-     *     type="TTParam",
-     *     description="Liste des dépots disponibles")
-     */
-    private $depots;
 
     /**
      * ArticlesController constructor.
+     * @param WsManager $wsManager
+     * @param UserService $userService
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {
@@ -62,7 +54,6 @@ class ArticlesController extends Controller
         $this->user_service = $userService;
 
         $this->getDemarre();
-        $this->getDepots();
     }
 
 
@@ -105,42 +96,16 @@ class ArticlesController extends Controller
 
         $TTRetour = $this->ws_manager->getArticles($depots);
 
-        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+        if ($TTRetour instanceof TTRetour) {
             if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_ARTDET)) {
                 $TTArtDet = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
-
-                $list_arts = array();
-                for ($i = 0; $i < $TTArtDet->countItems(); $i++) {
-                    $wsArtDet = $TTArtDet->getItem($i);
-
-                    // Lecture du tableau des stocks
-                    // Le retour est complexe on doit créer un tableau simplifié
-                    $stocks = $wsArtDet->getStocks();
-
-                    $arrayStocks = array();
-                    if (!is_null($stocks) && count($stocks) > 0) {
-                        // Création d'un tableau des stocks simplifié
-                        for ($i = 0; $i < count($stocks); $i++) {
-                            $wsStock = $stocks[$i];
-                            $wsDepot = $this->getDepot($wsStock->getIdDep());
-
-                            $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
-                        }
-                        $wsArtDet->setStocks($arrayStocks);
-                    }
-
-                    array_push($list_arts, $wsArtDet);
-                }
-
                 return $this->json($TTArtDet);
             }
             else {
                 return $this->json(array());
             }
         }
-        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+        else if($TTRetour instanceof Notif) {
             return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
         }
 
@@ -187,42 +152,16 @@ class ArticlesController extends Controller
 
         $TTRetour = $this->ws_manager->getArticlesWithClient($id_cli, $depots);
 
-        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+        if ($TTRetour instanceof TTRetour) {
             if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_ARTDET)) {
                 $TTArtDet = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
-
-                $list_arts = array();
-                for ($i = 0; $i < $TTArtDet->countItems(); $i++) {
-                    $wsArtDet = $TTArtDet->getItem($i);
-
-                    // Lecture du tableau des stocks
-                    // Le retour est complexe on doit créer un tableau simplifié
-                    $stocks = $wsArtDet->getStocks();
-
-                    $arrayStocks = array();
-                    if (!is_null($stocks) && count($stocks) > 0) {
-                        // Création d'un tableau des stocks simplifié
-                        for ($i = 0; $i < count($stocks); $i++) {
-                            $wsStock = $stocks[$i];
-                            $wsDepot = $this->getDepot($wsStock->getIdDep());
-
-                            $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
-                        }
-                        $wsArtDet->setStocks($arrayStocks);
-                    }
-
-                    array_push($list_arts, $wsArtDet);
-                }
-
                 return $this->json($TTArtDet);
             }
             else {
                 return $this->json(array());
             }
         }
-        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+        else if($TTRetour instanceof Notif) {
             return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
         }
 
@@ -270,42 +209,16 @@ class ArticlesController extends Controller
 
         $TTRetour = $this->ws_manager->getArticleWithClientByNoAD($id_cli, $no_ad, $depots);
 
-        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+        if ($TTRetour instanceof TTRetour) {
             if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_ARTDET)) {
                 $TTArtDet = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
-
-                $list_arts = array();
-                for ($i = 0; $i < $TTArtDet->countItems(); $i++) {
-                    $wsArtDet = $TTArtDet->getItem($i);
-
-                    // Lecture du tableau des stocks
-                    // Le retour est complexe on doit créer un tableau simplifié
-                    $stocks = $wsArtDet->getStocks();
-
-                    $arrayStocks = array();
-                    if (!is_null($stocks) && count($stocks) > 0) {
-                        // Création d'un tableau des stocks simplifié
-                        for ($i = 0; $i < count($stocks); $i++) {
-                            $wsStock = $stocks[$i];
-                            $wsDepot = $this->getDepot($wsStock->getIdDep());
-
-                            $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
-                        }
-                        $wsArtDet->setStocks($arrayStocks);
-                    }
-
-                    array_push($list_arts, $wsArtDet);
-                }
-
                 return $this->json($TTArtDet);
             }
             else {
                 return $this->json(array());
             }
         }
-        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+        else if($TTRetour instanceof Notif) {
             return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
         }
 
@@ -353,42 +266,16 @@ class ArticlesController extends Controller
 
         $TTRetour = $this->ws_manager->getArticleWithClientByIdAD($id_cli, $id_ad, $depots);
 
-        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+        if ($TTRetour instanceof TTRetour) {
             if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_ARTDET)) {
                 $TTArtDet = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
-
-                $list_arts = array();
-                for ($i = 0; $i < $TTArtDet->countItems(); $i++) {
-                    $wsArtDet = $TTArtDet->getItem($i);
-
-                    // Lecture du tableau des stocks
-                    // Le retour est complexe on doit créer un tableau simplifié
-                    $stocks = $wsArtDet->getStocks();
-
-                    $arrayStocks = array();
-                    if (!is_null($stocks) && count($stocks) > 0) {
-                        // Création d'un tableau des stocks simplifié
-                        for ($i = 0; $i < count($stocks); $i++) {
-                            $wsStock = $stocks[$i];
-                            $wsDepot = $this->getDepot($wsStock->getIdDep());
-
-                            $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
-                        }
-                        $wsArtDet->setStocks($arrayStocks);
-                    }
-
-                    array_push($list_arts, $wsArtDet);
-                }
-
                 return $this->json($TTArtDet);
             }
             else {
                 return $this->json(array());
             }
         }
-        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+        else if($TTRetour instanceof Notif) {
             return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
         }
 
@@ -437,42 +324,16 @@ class ArticlesController extends Controller
 
         $TTRetour = $this->ws_manager->getArticleWithClientByCodAD($id_cli, $cod_ad, $depots);
 
-        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+        if ($TTRetour instanceof TTRetour) {
             if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_ARTDET)) {
                 $TTArtDet = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
-
-                $list_arts = array();
-                for ($i = 0; $i < $TTArtDet->countItems(); $i++) {
-                    $wsArtDet = $TTArtDet->getItem($i);
-
-                    // Lecture du tableau des stocks
-                    // Le retour est complexe on doit créer un tableau simplifié
-                    $stocks = $wsArtDet->getStocks();
-
-                    $arrayStocks = array();
-                    if (!is_null($stocks) && count($stocks) > 0) {
-                        // Création d'un tableau des stocks simplifié
-                        for ($i = 0; $i < count($stocks); $i++) {
-                            $wsStock = $stocks[$i];
-                            $wsDepot = $this->getDepot($wsStock->getIdDep());
-
-                            $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
-                        }
-                        $wsArtDet->setStocks($arrayStocks);
-                    }
-
-                    array_push($list_arts, $wsArtDet);
-                }
-
                 return $this->json($TTArtDet);
             }
             else {
                 return $this->json(array());
             }
         }
-        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+        else if($TTRetour instanceof Notif) {
             return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
         }
 
@@ -520,68 +381,20 @@ class ArticlesController extends Controller
 
         $TTRetour = $this->ws_manager->getArticleWithClientByIdArt($id_cli, $id_art, $depots);
 
-        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+        if ($TTRetour instanceof TTRetour) {
             if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_ARTDET)) {
                 $TTArtDet = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
-
-                $list_arts = array();
-                for ($i = 0; $i < $TTArtDet->countItems(); $i++) {
-                    $wsArtDet = $TTArtDet->getItem($i);
-
-                    // Lecture du tableau des stocks
-                    // Le retour est complexe on doit créer un tableau simplifié
-                    $stocks = $wsArtDet->getStocks();
-
-                    $arrayStocks = array();
-                    if (!is_null($stocks) && count($stocks) > 0) {
-                        // Création d'un tableau des stocks simplifié
-                        for ($i = 0; $i < count($stocks); $i++) {
-                            $wsStock = $stocks[$i];
-                            $wsDepot = $this->getDepot($wsStock->getIdDep());
-
-                            $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
-                        }
-                        $wsArtDet->setStocks($arrayStocks);
-                    }
-
-                    array_push($list_arts, $wsArtDet);
-                }
-
                 return $this->json($TTArtDet);
             }
             else {
                 return $this->json(array());
             }
         }
-        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+        else if($TTRetour instanceof Notif) {
             return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
         }
 
         return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
-    }
-
-
-    /**
-     * @return TTParam|mixed
-     */
-    private function getDepots(){
-        $TTDepotRetour = $this->ws_manager->getDepots();
-        if(!is_null($TTDepotRetour) && $TTDepotRetour instanceof TTRetour) {
-            $this->depots = $TTDepotRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DEPOT);
-            return $this->depots;
-
-        }
-        return new TTParam();
-    }
-
-    /**
-     * @param $id_depot
-     * @return mixed
-     */
-    private function getDepot($id_depot){
-        return $this->depots->getItemByFilter('IdDep', $id_depot);
     }
 
     /**

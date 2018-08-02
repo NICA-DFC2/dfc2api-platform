@@ -20,9 +20,6 @@ class DocumentTest extends TestCase
         $ligne = new Ligne();
         $this->document->setLignes($ligne);
         $this->document->setLignes($ligne);
-
-        $edition = new Edition();
-        $this->document->setEdition($edition);
     }
     
     public function testGetLignes()
@@ -32,12 +29,6 @@ class DocumentTest extends TestCase
 
         // On vérifie que la collection contient bien les 2 éléments ajoutés
         $this->assertCount(2, $lignes, "La collection ne contient pas le nombre d'éléments attendu (2 éléments). Il y a $nb élément(s) dans la collection");
-    }
-
-    public function testGetEdition()
-    {
-        // On vérifie que la collection contient bien les 2 éléments ajoutés
-        $this->assertInstanceOf(Edition::class, $this->document->getEdition(), "L'objet parsé n'est pas une instance de type Edition:class");
     }
 
     public function testGetLigne()

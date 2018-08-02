@@ -5,7 +5,9 @@ namespace App\Tests\Services;
 use App\Entity\User;
 use App\Services\Objets\CntxAdmin;
 use App\Services\Objets\Notif;
+use App\Services\Objets\TTParam;
 use App\Services\Objets\TTRetour;
+use App\Services\Objets\WsDepot;
 use App\Services\Parameters\WsAlgorithmOpenSSL;
 use App\Services\Parameters\WsParameters;
 use App\Services\Request\CallerService;
@@ -99,9 +101,6 @@ class WsManagerTest extends TestCase
         }
         else if($retour instanceof TTRetour){
             $this->assertInstanceOf(TTRetour::class, $retour, "L'objet parsé n'est pas une instance de type TTRetour:class");
-        }
-        else {
-            $this->assertEquals('{}', $retour, "La réponse attendue n'est pas celle souhaitée");
         }
     }
 
@@ -218,11 +217,11 @@ class WsManagerTest extends TestCase
 
 
     /**
-     * @param $id_rep
+     * @param $user
      *
      * @dataProvider representantProvider
      */
-    public function testGetClientsWithRep($id_rep)
+    public function testGetClientsWithRep($user)
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
@@ -240,11 +239,15 @@ class WsManagerTest extends TestCase
             ->willReturn(new FilesystemCache());
 
         $manager->expects($this->any())
+            ->method('getUser')
+            ->willReturn($user);
+
+        $manager->expects($this->any())
             ->method('getDemarre')
             ->willReturn(new CntxAdmin('7','5','','986','2458319032855713246','1','544','18/07/2018 10:07:35.599 02:00'));
 
         // On déroule notre code normalement
-        $retour = $manager->getClientsWithRep($id_rep);
+        $retour = $manager->getClientsWithRep();
 
         if($retour instanceof Notif) {
             $this->assertInstanceOf(Notif::class, $retour, "L'objet parsé n'est pas une instance de type Notif:class");
@@ -304,9 +307,13 @@ class WsManagerTest extends TestCase
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
-            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre'))
+            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre', 'setDepotsClass'))
             ->disableOriginalConstructor()
             ->getMock();
+
+        $manager->expects($this->any())
+            ->method('setDepotsClass')
+            ->with($this->getDepotWS());
 
         // On précise les attentes concernant les méthodes getCaller et getCache
         $manager->expects($this->any())
@@ -342,9 +349,13 @@ class WsManagerTest extends TestCase
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
-            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre'))
+            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre', 'setDepotsClass'))
             ->disableOriginalConstructor()
             ->getMock();
+
+        $manager->expects($this->any())
+            ->method('setDepotsClass')
+            ->with($this->getDepotWS());
 
         // On précise les attentes concernant les méthodes getCaller et getCache
         $manager->expects($this->any())
@@ -384,9 +395,13 @@ class WsManagerTest extends TestCase
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
-            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre'))
+            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre', 'setDepotsClass'))
             ->disableOriginalConstructor()
             ->getMock();
+
+        $manager->expects($this->any())
+            ->method('setDepotsClass')
+            ->with($this->getDepotWS());
 
         // On précise les attentes concernant les méthodes getCaller et getCache
         $manager->expects($this->any())
@@ -422,9 +437,13 @@ class WsManagerTest extends TestCase
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
-            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre'))
+            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre', 'setDepotsClass'))
             ->disableOriginalConstructor()
             ->getMock();
+
+        $manager->expects($this->any())
+            ->method('setDepotsClass')
+            ->with($this->getDepotWS());
 
         // On précise les attentes concernant les méthodes getCaller et getCache
         $manager->expects($this->any())
@@ -460,9 +479,13 @@ class WsManagerTest extends TestCase
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
-            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre'))
+            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre', 'setDepotsClass'))
             ->disableOriginalConstructor()
             ->getMock();
+
+        $manager->expects($this->any())
+            ->method('setDepotsClass')
+            ->with($this->getDepotWS());
 
         // On précise les attentes concernant les méthodes getCaller et getCache
         $manager->expects($this->any())
@@ -498,9 +521,13 @@ class WsManagerTest extends TestCase
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
-            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre'))
+            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre', 'setDepotsClass'))
             ->disableOriginalConstructor()
             ->getMock();
+
+        $manager->expects($this->any())
+            ->method('setDepotsClass')
+            ->with($this->getDepotWS());
 
         // On précise les attentes concernant les méthodes getCaller et getCache
         $manager->expects($this->any())
@@ -538,9 +565,13 @@ class WsManagerTest extends TestCase
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
-            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre'))
+            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre', 'setDepotsClass'))
             ->disableOriginalConstructor()
             ->getMock();
+
+        $manager->expects($this->any())
+            ->method('setDepotsClass')
+            ->with($this->getDepotWS());
 
         // On précise les attentes concernant les méthodes getCaller et getCache
         $manager->expects($this->any())
@@ -581,9 +612,13 @@ class WsManagerTest extends TestCase
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
-            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre'))
+            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre', 'setDepotsClass'))
             ->disableOriginalConstructor()
             ->getMock();
+
+        $manager->expects($this->any())
+            ->method('setDepotsClass')
+            ->with($this->getDepotWS());
 
         // On précise les attentes concernant les méthodes getCaller et getCache
         $manager->expects($this->any())
@@ -624,9 +659,14 @@ class WsManagerTest extends TestCase
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
-            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre'))
+            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre', 'setDepotsClass'))
             ->disableOriginalConstructor()
             ->getMock();
+
+
+        $manager->expects($this->any())
+            ->method('setDepotsClass')
+            ->with($this->getDepotWS());
 
         // On précise les attentes concernant les méthodes getCaller et getCache
         $manager->expects($this->any())
@@ -667,9 +707,13 @@ class WsManagerTest extends TestCase
     {
         // On crée un mock
         $manager = $this->getMockBuilder(WsManager::class)
-            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre'))
+            ->setMethods(array('getCaller', 'getCache', 'getUser', 'getDemarre', 'setDepotsClass'))
             ->disableOriginalConstructor()
             ->getMock();
+
+        $manager->expects($this->any())
+            ->method('setDepotsClass')
+            ->with($this->getDepotWS());
 
         // On précise les attentes concernant les méthodes getCaller et getCache
         $manager->expects($this->any())
@@ -1084,9 +1128,33 @@ class WsManagerTest extends TestCase
 
     public static function representantProvider()
     {
+        $userEmpty = new User();
+        $userEmpty->setCode('');
+        $userEmpty->setEmail('');
+        $userEmpty->setFullname('');
+        $userEmpty->setIdCli(0);
+        $userEmpty->setIdSal(0);
+        $userEmpty->setIdDepotCli(-1);
+        $userEmpty->setNoCli(-1);
+        $userEmpty->setNomDepotCli('');
+        $userEmpty->setRaisonSociale('');
+        $userEmpty->setUsername('');
+
+        $userFilled = new User();
+        $userFilled->setCode('PERSO124');
+        $userFilled->setEmail('test@test.com');
+        $userFilled->setFullname('test test');
+        $userFilled->setIdCli(0);
+        $userFilled->setIdSal(187);
+        $userFilled->setIdDepotCli(5);
+        $userFilled->setNoCli(3850);
+        $userFilled->setNomDepotCli('VERTOU');
+        $userFilled->setRaisonSociale('test');
+        $userFilled->setUsername('NICA');
+
         return array(
-            array(array(0)),
-            array(array(187))
+            array($userEmpty),
+            array($userFilled)
         );
     }
 
@@ -1120,6 +1188,28 @@ class WsManagerTest extends TestCase
             array($userEmpty, false, array()),
             array($userEmpty, true, array(1, 5))
         );
+    }
+
+    public function getDepotWS(){
+        $depot1 = new WsDepot();
+        $depot1->setCodDep("DFC² VERTOU");
+        $depot1->setFlgActifDep(true);
+        $depot1->setFlgPlateformeDep(false);
+        $depot1->setIdDep(1);
+        $depot1->setNomDep("VERTOU");
+
+        $depot5 = new WsDepot();
+        $depot5->setCodDep("DFC2P");
+        $depot5->setFlgActifDep(true);
+        $depot5->setFlgPlateformeDep(true);
+        $depot5->setIdDep(5);
+        $depot5->setNomDep("LOGISTIQUE");
+
+        $TTParam = new TTParam();
+        $TTParam->addItem($depot1);
+        $TTParam->addItem($depot5);
+
+        return $TTParam;
     }
 
     public static function depotsProvider()

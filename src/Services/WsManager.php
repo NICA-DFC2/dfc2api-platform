@@ -5,7 +5,10 @@ namespace App\Services;
 use App\Entity\User;
 use App\Services\Filter\WsFilter;
 use App\Services\Objets\CntxAdmin;
+use App\Services\Objets\TTRetour;
+use App\Services\Parameters\WsTableNamesRetour;
 use App\Services\Request\CallerService;
+use App\Utils\StockDepot;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Cache\Simple\FilesystemCache;
@@ -28,6 +31,7 @@ class WsManager
      *
      ################################################# */
     private $cache_key_admin = 'dfc2.api.contexte.admin';
+    private $cache_key_depots = 'dfc2.api.depots';
 
     protected $wsAdminUser;
     protected $wsAdminPassword;
@@ -36,6 +40,12 @@ class WsManager
     protected $user;
     protected $filter;
     protected $caller = null;
+
+
+    /**
+     * @var TTParam
+     */
+    protected $depots;
 
 
     /* #################################################
@@ -49,6 +59,8 @@ class WsManager
         $this->setWsAdminPassword($wsAdminPassword);
         $this->setCache(new FilesystemCache());
         $this->caller = new CallerService();
+
+        $this->instantiateDepots();
     }
 
 
@@ -128,7 +140,7 @@ class WsManager
     private function getFilter()
     {
         $filter = new WsFilter($this->filter);
-        return $filter->getCritSel();
+        return ['criteres_selection' => $filter->getCritSel(), 'params_appel' => $filter->getParamsAppel()];
     }
 
     /**
@@ -172,6 +184,45 @@ class WsManager
     }
 
 
+    /**
+     * Lecture des dépots : à chaque instance de WsMananger on hydrate les dépôts
+     */
+    private function instantiateDepots(){
+        if($this->getCache()->has($this->cache_key_depots)) {
+            $this->depots = $this->getCache()->get($this->cache_key_depots);
+        }
+
+        $TTDepotRetour = $this->getDepots();
+        if(!is_null($TTDepotRetour) && $TTDepotRetour instanceof TTRetour) {
+            $this->depots = $TTDepotRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DEPOT);
+            $this->getCache()->set($this->cache_key_depots, $this->depots);
+
+        }
+        $this->getCache()->set($this->cache_key_depots, new TTParam());
+    }
+
+    /**
+     * @param $id_depot
+     * @return mixed
+     */
+    private function getDepotClass($id_depot){
+        return $this->depots->getItemByFilter('IdDep', $id_depot);
+    }
+
+    /**
+     * @return TTParam
+     */
+    private function getDepotsClass(){
+        return $this->depots;
+    }
+
+    /**
+     * @param array
+     */
+    public function setDepotsClass($depots){
+        $this->depots = $depots;
+    }
+
 
     /* #################################################
      *
@@ -194,7 +245,10 @@ class WsManager
                 }
             }
 
-            $this->getPublicKey();
+            if(!$this->getPublicKey()) {
+                return new Notif('WsManager::class', 'Impossible de lire la clé publique', 'Appel échoué', '', __FUNCTION__);
+            }
+
             $publicKeyNumber = $this->getValPublicKeyNumber();
 
             $TTparam = new TTParam();
@@ -281,7 +335,13 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
+            if($responseDecode instanceof Notif){
+
+                return false;
+            }
+
             $this->setPublicKeyObject($responseDecode);
+            return true;
         }
 
         /**
@@ -366,17 +426,16 @@ class WsManager
 
         /**
          * Lecture des informations des clients d'un représentant
-         * @param $id_rep
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getClientsWithRep($id_rep)
+        public function getClientsWithRep()
         {
-            if($id_rep > 0) {
+            if($this->getUser()->getIdSal() > 0) {
                 $TTParamAppel = new TTParam();
                 $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
 
                 $TTCritSel = new TTParam();
-                $TTCritSel->addItem(new CritParam('IdSal', $id_rep));
+                $TTCritSel->addItem(new CritParam('IdSal', $this->getUser()->getIdSal()));
 
                 $response = $this->getCaller()
                     ->setCache($this->getCache())
@@ -391,7 +450,7 @@ class WsManager
                 return $responseDecode->decodeRetour();
             }
 
-            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés id_rep inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getIdSal() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
         }
 
         /**
@@ -487,6 +546,40 @@ class WsManager
 
     /* #################################################
      *
+     * MANAGE UTILISATEURS
+     *
+     ################################################# */
+
+        /**
+         * Lecture des informations du salarié connecte
+         * @param $user
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getUtilisateur(User $user)
+        {
+            if($user->getCode() !== '') {
+                $TTCritSel = new TTParam();
+                $TTCritSel->addItem(new CritParam('CodU', $user->getCode()));
+
+                $response = $this->getCaller()
+                    ->setCache($this->getCache())
+                    ->setModule(WsParameters::MODULE_UTILISATEUR)
+                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                    ->setFilter($this->getFilter())
+                    ->setParamsAppel(new TTParam())
+                    ->setCritsSelect($TTCritSel)
+                    ->get();
+
+                $responseDecode = new ResponseDecode($response);
+                return $responseDecode->decodeRetour();
+            }
+
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdSal() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
+        }
+
+
+    /* #################################################
+     *
      * MANAGE CONTACTS
      *
      ################################################# */
@@ -504,7 +597,6 @@ class WsManager
 
                 $TTCritSel = new TTParam();
                 $TTCritSel->addItem(new CritParam('IdCli', $id_cli));
-                $TTCritSel->addItem(new CritParam('CodLogWebAdr', 'ContactWeb'));
 
                 $response = $this->getCaller()
                     ->setCache($this->getCache())
@@ -613,13 +705,15 @@ class WsManager
         /**
          * Lecture des informations des articles
          * @param $filter_depots
+         * @param $tailleLot
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getArticles($filter_depots = array())
+        public function getArticles($filter_depots = array(), $tailleLot = 50)
         {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
             $TTParamAppel->addItem(new CritParam("CalculPrixNet", "no"));
+            $TTParamAppel->addItem(new CritParam("TailleLotEnr", $tailleLot));
 
             $response = $this->getCaller()
                 ->setCache($this->getCache())
@@ -631,21 +725,138 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour($filter_depots);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if(!$decode instanceof Notif) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    unset($stocks);
+
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $TTParamRetour = $responseDecode->decodeParamRetour();
+                if(!$TTParamRetour instanceof Notif) {
+                    for ($i = 0; $i < $TTParamRetour->countItems(); $i++) {
+                        $param = $TTParamRetour->getItem($i);
+                        if($param->getNomPar() === 'RowIdEnrSuiv') {
+                            $TTParam->setView(['next' => '/api/ws/articles?RowIdEnrSuiv='.$param->getValPar()]);
+                        }
+                    }
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+
+            return $decode;
+        }
+
+        /**
+         * Lecture des informations des articles
+         * @param $idarts
+         * @param $calculPrixNet
+         * @param $filter_depots
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getArticlesByArray(?array $idarts, $calculPrixNet = false, $filter_depots = array())
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
+            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
+
+            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
+                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+            }
+
+            $TTCritSel = new TTParam();
+            for($i=0;$i<count($idarts);$i++) {
+                if($i==0) {
+                    $TTCritSel->addItem(new CritParam('IdArt', $idarts[$i], 1));
+                }
+                else {
+                    $TTCritSel->addItem(new CritParam('IdArt', $idarts[$i], 1));
+                    $TTCritSel->addItem(new CritParam('IdArt', 'OR', 4));
+                }
+            }
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_ARTICLE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if(!$decode instanceof Notif) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+            return $decode;
         }
 
         /**
          * Lecture des informations des articles pour un client
          * @param $id_cli
          * @param $filter_depots
+         * @param $tailleLot
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getArticlesWithClient($id_cli, $filter_depots = array())
+        public function getArticlesWithClient($id_cli, $filter_depots = array(), $tailleLot = 50)
         {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
             $TTParamAppel->addItem(new CritParam("CalculPrixNet", "yes"));
             $TTParamAppel->addItem(new CritParam('IdCli', $id_cli));
+            $TTParamAppel->addItem(new CritParam("TailleLotEnr", $tailleLot));
 
             $response = $this->getCaller()
                 ->setCache($this->getCache())
@@ -657,7 +868,50 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour($filter_depots);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if(!$decode instanceof Notif) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    unset($stocks);
+
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $TTParamRetour = $responseDecode->decodeParamRetour();
+                if(!$TTParamRetour instanceof Notif) {
+                    for ($i = 0; $i < $TTParamRetour->countItems(); $i++) {
+                        $param = $TTParamRetour->getItem($i);
+                        if($param->getNomPar() === 'RowIdEnrSuiv') {
+                            $TTParam->setView(['next' => '/api/ws/articles?RowIdEnrSuiv='.$param->getValPar()]);
+                        }
+                    }
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+            return $decode;
         }
 
         /**
@@ -689,7 +943,37 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour($filter_depots);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if(!$decode instanceof Notif) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+            return $decode;
         }
 
         /**
@@ -721,7 +1005,37 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour($filter_depots);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if(!$decode instanceof Notif) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+            return $decode;
         }
 
         /**
@@ -753,7 +1067,37 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour($filter_depots);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if(!$decode instanceof Notif) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+            return $decode;
         }
 
         /**
@@ -786,7 +1130,37 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour($filter_depots);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if(!$decode instanceof Notif) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+            return $decode;
         }
 
         /**
@@ -818,7 +1192,37 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour($filter_depots);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if(!$decode instanceof Notif) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+            return $decode;
         }
 
         /**
@@ -850,7 +1254,37 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour($filter_depots);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if(!$decode instanceof Notif) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+            return $decode;
         }
 
         /**
@@ -882,7 +1316,37 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour($filter_depots);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if(!$decode instanceof Notif) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+            return $decode;
         }
 
         /**
@@ -915,7 +1379,37 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour($filter_depots);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if(!$decode instanceof Notif) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+            return $decode;
         }
 
 
@@ -990,6 +1484,40 @@ class WsManager
             $TTCritSel = new TTParam();
             if($this->getUser()->getIdCli() > 0) {
                 $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+            }
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_DOCUMENT)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
+
+        /**
+         * Lecture des documents d'un client
+         * @param $id_cli
+         * @param $format : Indique le type de retour (Tout, Entete ou ligne)
+         * @param $type_prendre : Indique le type de document à lire
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getDocumentsWithClient($id_cli, $type_prendre=null, $format = WsParameters::FORMAT_DOCUMENT_VIDE)
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
+            $TTParamAppel->addItem(new CritParam("TypePrendre", $type_prendre));
+            if ($format !== WsParameters::FORMAT_DOCUMENT_VIDE) {
+                $TTParamAppel->addItem(new CritParam("FormatDocument", $format));
+            }
+
+            $TTCritSel = new TTParam();
+            if($id_cli > 0) {
+                $TTCritSel->addItem(new CritParam('IdCli', $id_cli));
             }
 
             $response = $this->getCaller()
@@ -1173,5 +1701,40 @@ class WsManager
             return $responseDecode->decodeRetour();
         }
 
+    /* #################################################
+    *
+    * MANAGE STATISTIQUE
+    *
+    ################################################# */
+
+        /**
+         * Lecture des statistiques client
+         * @param $avecBlEnCours : valeur possible oui ou non
+         * @param $type_donnee
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getStatistiquesClient($avecBlEnCours = "oui", $type_donnee = WsParameters::TYPE_DONNEE_STAT_CLI)
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam("TypeDonnee", $type_donnee));
+            $TTParamAppel->addItem(new CritParam("AvecBLenCours", $avecBlEnCours));
+
+            $TTCritSel = new TTParam();
+            if($this->getUser()->getIdCli() > 0) {
+                $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+            }
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_STATISTIQUE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
 
 }

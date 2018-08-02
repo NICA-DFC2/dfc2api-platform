@@ -25,7 +25,7 @@ class CritParam
     {
         $string = '{';
         $string .= '"NomPar":"'.$this->getNomPar().'" ,';
-        $string .= '"ValPar":"'.(is_array($this->getValPar())) ? json_encode($this->getValPar()) : $this->getValPar().'" ,';
+        $string .= '"ValPar":"'.$this->getValPar().'" ,';
         $string .= '"IndPar":'. $this->getIndPar().' ,';
         $string .= '"FamPar":"'.$this->getFamPar().'" ';
         $string .= '}';

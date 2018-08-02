@@ -8,6 +8,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Swagger\Annotations as SWG;
+use JMS\Serializer\Annotation as JMSSerializer;
 
 /**
  * Entité qui représente un User. Certain champs sont hydratés par un appel aux services web GIMEL. Héritage de la class BaseUser de FOSUserBundle.
@@ -88,7 +89,15 @@ class User extends BaseUser
      * @var integer
      * @SWG\Property(description="Identifiant unique Evolubat du user.", type="integer")
      */
-    protected $id_cli;
+    protected $id_cli = null;
+
+    /**
+     * @Groups({"user", "user-read"})
+     *
+     * @var integer
+     * @SWG\Property(description="Identifiant unique Evolubat du salarié.", type="integer")
+     */
+    protected $id_sal = null;
 
     /**
      * @Groups({"user", "user-read"})
@@ -96,7 +105,7 @@ class User extends BaseUser
      * @var integer
      * @SWG\Property(description="Numéro unique Evolubat du user.", type="integer")
      */
-    protected $no_cli;
+    protected $no_cli = null;
 
     /**
      * @Groups({"user", "user-read"})
@@ -115,23 +124,22 @@ class User extends BaseUser
     protected $nom_depot_cli;
 
 
-
-    public function setFullname($fullname): void
+    public function setFullname($fullname)
     {
         $this->fullname = $fullname;
     }
 
-    public function getFullname(): ?string
+    public function getFullname()
     {
         return $this->fullname;
     }
 
-    public function isUser(UserInterface $user = null): bool
+    public function isUser(UserInterface $user = null)
     {
         return $user instanceof self && $user->id === $this->id;
     }
 
-    public function getUsername(): ?string
+    public function getUsername()
     {
         return $this->username;
     }
@@ -143,7 +151,7 @@ class User extends BaseUser
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getEmail()
     {
         return $this->email;
     }
@@ -155,7 +163,7 @@ class User extends BaseUser
         return $this;
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -163,7 +171,7 @@ class User extends BaseUser
     /**
      * @return null|string
      */
-    public function getConfirmationToken(): ?string
+    public function getConfirmationToken()
     {
         return $this->confirmationToken;
     }
@@ -171,7 +179,7 @@ class User extends BaseUser
     /**
      * @return string
      */
-    public function getRaisonSociale(): string
+    public function getRaisonSociale()
     {
         return $this->raison_sociale;
     }
@@ -179,7 +187,7 @@ class User extends BaseUser
     /**
      * @param string $raison_sociale
      */
-    public function setRaisonSociale(string $raison_sociale): void
+    public function setRaisonSociale($raison_sociale)
     {
         $this->raison_sociale = $raison_sociale;
     }
@@ -187,7 +195,7 @@ class User extends BaseUser
     /**
      * @return string
      */
-    public function getCode(): string
+    public function getCode()
     {
         return $this->code;
     }
@@ -195,7 +203,7 @@ class User extends BaseUser
     /**
      * @param string $code
      */
-    public function setCode(string $code): void
+    public function setCode($code)
     {
         $this->code = $code;
     }
@@ -203,7 +211,7 @@ class User extends BaseUser
     /**
      * @return integer
      */
-    public function getIdCli(): int
+    public function getIdCli()
     {
         return $this->id_cli;
     }
@@ -211,7 +219,7 @@ class User extends BaseUser
     /**
      * @param integer $id_cli
      */
-    public function setIdCli(int $id_cli): void
+    public function setIdCli($id_cli)
     {
         $this->id_cli = $id_cli;
     }
@@ -219,7 +227,23 @@ class User extends BaseUser
     /**
      * @return integer
      */
-    public function getNoCli(): int
+    public function getIdSal()
+    {
+        return $this->id_sal;
+    }
+
+    /**
+     * @param integer $id_sal
+     */
+    public function setIdSal($id_sal)
+    {
+        $this->id_sal = $id_sal;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getNoCli()
     {
         return $this->no_cli;
     }
@@ -227,7 +251,7 @@ class User extends BaseUser
     /**
      * @param integer $no_cli
      */
-    public function setNoCli(int $no_cli): void
+    public function setNoCli($no_cli)
     {
         $this->no_cli = $no_cli;
     }
@@ -235,7 +259,7 @@ class User extends BaseUser
     /**
      * @return integer
      */
-    public function getIdDepotCli(): int
+    public function getIdDepotCli()
     {
         return $this->id_depot_cli;
     }
@@ -243,7 +267,7 @@ class User extends BaseUser
     /**
      * @param integer $id_depot_cli
      */
-    public function setIdDepotCli(int $id_depot_cli): void
+    public function setIdDepotCli($id_depot_cli)
     {
         $this->id_depot_cli = $id_depot_cli;
     }
@@ -251,7 +275,7 @@ class User extends BaseUser
     /**
      * @return string
      */
-    public function getNomDepotCli(): string
+    public function getNomDepotCli()
     {
         return $this->nom_depot_cli;
     }
@@ -259,7 +283,7 @@ class User extends BaseUser
     /**
      * @param string $nom_depot_cli
      */
-    public function setNomDepotCli(string $nom_depot_cli): void
+    public function setNomDepotCli($nom_depot_cli)
     {
         $this->nom_depot_cli = $nom_depot_cli;
     }

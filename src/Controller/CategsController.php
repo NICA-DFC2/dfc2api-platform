@@ -43,7 +43,9 @@ class CategsController extends Controller
     private $categories;
 
     /**
-     * ArticlesController constructor.
+     * CategsController constructor.
+     * @param WsManager $wsManager
+     * @param UserService $userService
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {

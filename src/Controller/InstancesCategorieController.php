@@ -43,7 +43,9 @@ class InstancesCategorieController extends Controller
     private $instances_categories;
 
     /**
-     * ArticlesController constructor.
+     * InstancesCategorieController constructor.
+     * @param WsManager $wsManager
+     * @param UserService $userService
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {

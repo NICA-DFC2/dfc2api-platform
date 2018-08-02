@@ -5,10 +5,15 @@ namespace App\Services\Parameters;
 class WsParameters
 {
     public const URL_SUFFIX = '/Dfc2WS/rest/Evo2Rest/Evolubat';
-    public const REFERER = 'http://www.dfc2.fr/';
     public const CONTENT_TYPE = 'application/json';
     public const ACCEPT = 'application/json';
     public const ORIGIN = 'http://www.dfc2.fr';
+    public const REFERER = 'http://www.dfc2.fr/';
+//    public const HOST = 'http://www.dfc2.fr';
+
+    public const HOST = 'http://192.168.46.14:4791';
+//    public const ORIGIN = 'http://192.168.46.8';
+//    public const REFERER = 'http://192.168.46.8/';
 
     public const ID_DEP_PLATEFORME = 5;
 
@@ -41,6 +46,12 @@ class WsParameters
     public const TYPE_DONNEE_CLI_ADRESSE = 'CliAdresse';
     public const TYPE_DONNEE_CLI_PROSPECT = 'CliProspect';
     public const TYPE_DONNEE_CLI_VCD = 'CliVCD';
+
+    public const TYPE_DONNEE_STAT_CLI = 'StatistiqueClient';
+    public const TYPE_DONNEE_STAT_CLI_ART = 'StatistiqueClientArticle';
+    public const TYPE_DONNEE_STAT_CLI_CLAS = 'StatistiqueClientClassement';
+    public const TYPE_DONNEE_STAT_REP_CLI = 'StatistiqueRepCli';
+    public const TYPE_DONNEE_STAT_REP_CLAS = 'StatistiqueRepClass';
 
     public const TYPE_DONNEE_ARTDET_STOCK = 'ArtDetStock';
     public const TYPE_DONNEE_ARTDET_WEB = 'ArtDetWeb';

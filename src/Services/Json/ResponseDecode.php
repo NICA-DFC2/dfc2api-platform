@@ -20,6 +20,7 @@ use App\Services\Objets\WsLibelle;
 use App\Services\Objets\WsStock;
 use App\Services\Objets\WsClient;
 use App\Services\Objets\WsArticle;
+use App\Services\Objets\WsUtil;
 use App\Services\Parameters\WsTableNamesRetour;
 use Unirest\Response;
 
@@ -279,6 +280,9 @@ class ResponseDecode
                 if(isset($ProDataSet->ttFour)) {
                     $ttRetour->addTable($this->decodeRetourTTFour($ProDataSet->ttFour), WsTableNamesRetour::TABLENAME_TT_FOUR);
                 }
+                if(isset($ProDataSet->ttUtil)) {
+                    $ttRetour->addTable($this->decodeRetourTTUtil($ProDataSet->ttUtil), WsTableNamesRetour::TABLENAME_TT_UTIL);
+                }
 
                 return $ttRetour;
             }
@@ -524,6 +528,20 @@ class ResponseDecode
         foreach ($ttFour as $item){
             $four = new WsFour($item);
             $ttReturn->addItem($four);
+        }
+        return $ttReturn;
+    }
+
+    /**
+     * Decode la collection des utilisateurs de la réponse
+     * @param $ttUtil
+     * @return TTParam
+     */
+    private function decodeRetourTTUtil($ttUtil){
+        $ttReturn = new TTParam();
+        foreach ($ttUtil as $item){
+            $util = new WsUtil($item);
+            $ttReturn->addItem($util);
         }
         return $ttReturn;
     }

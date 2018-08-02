@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Services\Objets\WsDocumEnt;
+use App\Utils\Edition;
 use App\Utils\EtatFacture;
 use App\Utils\Extensions\Document;
 use App\Utils\Ligne;
@@ -13,7 +14,8 @@ use App\Utils\Ligne;
  *
  * @ApiResource(
  *      collectionOperations={
- *          "all"={"route_name"="api_factures_items_get"}
+ *          "all"={"route_name"="api_factures_items_get"},
+ *          "all_client"={"route_name"="api_factures_client_items_get"}
  *      },
  *     itemOperations={
  *          "edition"={"route_name"="api_factures_edition_item_get"}
@@ -36,6 +38,11 @@ class Facture extends Document
     public function setLigne(Ligne $ligne)
     {
         parent::setLignes($ligne);
+    }
+
+    public function setEdition(Edition $edition)
+    {
+        parent::setEdition($edition);
     }
 
     /**

@@ -23,6 +23,7 @@ class WsFilter
 
     protected $filter = "";
     protected $criteres_selection = array();
+    protected $params_appel = array();
 
     /**
      * WsFilter constructor.
@@ -32,6 +33,7 @@ class WsFilter
     public function __construct($filter)
     {
         $this->setCritSel($filter);
+        $this->setParamsAppel($filter);
     }
 
 
@@ -42,6 +44,15 @@ class WsFilter
      */
     public function getCritSel() {
         return $this->criteres_selection;
+    }
+
+    /**
+     * Retourne un array de CritParam
+     *
+     * @return array
+     */
+    public function getParamsAppel() {
+        return $this->params_appel;
     }
 
 
@@ -99,6 +110,31 @@ class WsFilter
             }
         }
         return $this->criteres_selection;
+    }
+
+    /**
+     * Convertir les parametres d'url en un array de CritParam pour l'appel webservice. array qui est utilisé dans "pijDSParamAppel"
+     * @param $filter
+     * @return array
+     */
+    public function setParamsAppel($filter) {
+        $this->params_appel = array();
+
+        if(!is_null($filter) && is_array($filter)){
+            // boucle dans les paramètres d'URL
+            foreach($filter as $property => $value_property) {
+
+                // la valeur est de type string
+                if(is_string($value_property)){
+
+                    if($property === 'RowIdEnrSuiv'){
+                        // création d'un parametre avec l'opérateur par defaut pour tout sauf les dates
+                        array_push($this->params_appel, new CritParam($property, $value_property));
+                    }
+                }
+            }
+        }
+        return $this->params_appel;
     }
 
     /**

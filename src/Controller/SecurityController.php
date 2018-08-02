@@ -16,7 +16,8 @@ class SecurityController extends Controller
         $response = array(
             'code' => 200,
             'message' => 'Déconnexion réussie.',
-            'token' => ""
+            'user' => null,
+            'token' => null
         );
 
         $finalResponse = json_encode($response);

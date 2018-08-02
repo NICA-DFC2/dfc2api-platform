@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Services\Objets\Notif;
 use App\Services\Objets\TTRetour;
 use App\Services\Parameters\WsParameters;
@@ -40,6 +39,8 @@ class CommandesController extends Controller
 
     /**
      * CommandesController constructor.
+     * @param WsManager $wsManager
+     * @param UserService $userService
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {
@@ -52,7 +53,9 @@ class CommandesController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-        $this->setCurrentUser();
+
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
     }
 
     /**
@@ -95,6 +98,9 @@ class CommandesController extends Controller
                         $ligne->parseObject($wsLignes[$iL]);
                         $doc->setLignes($ligne);
                     }
+
+                    $doc->setLienEdition('/api/commandes/'.$wsDocs->getIdDocDE().'/edition');
+
                     array_push($list_docs, $doc);
                 }
 
@@ -154,36 +160,5 @@ class CommandesController extends Controller
         }
 
         return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
-    }
-
-    private function setCurrentUser()
-    {
-        $user_data = $this->user_service->getCurrentUser();
-        // Appel service web d'un client par son code client (CodCli)
-        $TTRetour = $this->ws_manager->getClientByCodCli($user_data->getCode());
-
-        // si le retour est de type Notif
-        // Message d'erreur retourné par les webservices
-        if($TTRetour instanceof Notif) {
-            //throw new \ErrorException(sprintf('Il y a une erreur:  %s.', $TTRetour->__toString()), 401 ,1, __FILE__);
-        }
-
-        if(!is_null($TTRetour)) {
-            $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
-            $wsClient = $TTParam->getItem(0);
-
-            if(!is_null($wsClient)) {
-                $user_data->setIdCli($wsClient->getIdCli());
-                $user_data->setNoCli($wsClient->getNoCli());
-                $user_data->setIdDepotCli($wsClient->getIdDep());
-                $user_data->setNomDepotCli($wsClient->getNomDep());
-            }
-        }
-
-        // si user connecté et de type User
-        if($user_data instanceof User) {
-            // instancie la propriété user du manager des services web gimel
-            $this->ws_manager->setUser($user_data);
-        }
     }
 }

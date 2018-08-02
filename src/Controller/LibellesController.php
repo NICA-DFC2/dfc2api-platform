@@ -36,7 +36,9 @@ class LibellesController extends Controller
     private $user_service;
 
     /**
-     * DepotsController constructor.
+     * LibellesController constructor.
+     * @param WsManager $wsManager
+     * @param UserService $userService
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {

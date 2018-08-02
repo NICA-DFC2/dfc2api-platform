@@ -3,6 +3,7 @@
 namespace App\Utils\Extensions;
 
 use App\Services\Objets\WsDocumEnt;
+use App\Utils\Edition;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -111,7 +112,7 @@ class Document
     private $CodOrigDE = "";
     private $DateCloDE = null;
 
-    private $Edition = null;
+    private $LienEdition = null;
     private $Lignes = null;
     private $IsFilled = false;
 
@@ -148,19 +149,19 @@ class Document
     }
 
     /**
-     * @return null
+     * @return string
      */
-    public function getEdition()
+    public function getLienEdition()
     {
-        return $this->Edition;
+        return $this->LienEdition;
     }
 
     /**
-     * @param null $Edition
+     * @param string $lien
      */
-    public function setEdition($Edition)
+    public function setLienEdition($lien)
     {
-        $this->Edition = $Edition;
+        $this->LienEdition = $lien;
     }
 
     /**

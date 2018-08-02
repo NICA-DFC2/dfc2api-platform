@@ -37,7 +37,9 @@ class FoursController extends Controller
 
 
     /**
-     * ArticlesController constructor.
+     * FoursController constructor.
+     * @param WsManager $wsManager
+     * @param UserService $userService
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {

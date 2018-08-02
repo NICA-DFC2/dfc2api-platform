@@ -40,7 +40,9 @@ class FacturesController extends Controller
     private $user_service;
 
     /**
-     * FactureController constructor.
+     * FacturesController constructor.
+     * @param WsManager $wsManager
+     * @param UserService $userService
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {
@@ -53,7 +55,9 @@ class FacturesController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-        $this->setCurrentUser();
+
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
     }
 
     /**
@@ -113,6 +117,81 @@ class FacturesController extends Controller
                             }
                         }
                     }
+
+                    $doc->setLienEdition('/api/factures/'.$wsDocs->getIdDocDE().'/edition');
+
+                    array_push($list_docs, $doc);
+                }
+
+                return $this->json($list_docs);
+            }
+            else {
+                return $this->json(array());
+            }
+        }
+    }
+
+    /**
+     * Liste d'entêtes de facture pour le client connecté dans un ordre décroissant.
+     *
+     * @Route(
+     *     name = "api_factures_client_items_get",
+     *     path = "/api/factures/{id_cli}/client",
+     *     methods= "GET",
+     *     requirements={"id_cli"="\d+"}
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne une liste de factures pour le client renseigné dans un ordre décroissant",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Facture::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function facturesGetWithClientAction($id_cli, Request $request)
+    {
+        $this->ws_manager->setFilter($request->query->all());
+
+        $TTRetour = $this->ws_manager->getDocumentsWithClient($id_cli, WsParameters::TYPE_PRENDRE_FACCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
+                $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
+                $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
+
+                $list_docs = array();
+                for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
+                    $wsDocs = $TTParamEnt->getItem($i);
+                    $doc = new Facture();
+                    $doc->parseObject($wsDocs);
+
+                    $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
+                    if(!is_null($wsLignes)) {
+                        for ($iL = 0; $iL < count($wsLignes); $iL++) {
+                            $ligne = new Ligne();
+                            $ligne->parseObject($wsLignes[$iL]);
+                            $doc->setLignes($ligne);
+                        }
+                    }
+
+                    // Etat de la facture
+                    $TTRetourFacCliAtt = $this->ws_manager->getFactureEnAttente($doc->getIdDocDE());
+                    if (!is_null($TTRetourFacCliAtt) && $TTRetourFacCliAtt instanceof TTRetour) {
+                        if($TTRetourFacCliAtt->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
+                            $TTFacCliAtt = $TTRetourFacCliAtt->getTable(WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
+
+                            for ($iFA = 0; $iFA < $TTFacCliAtt->countItems(); $iFA++) {
+                                $wsFacCliAtt = $TTFacCliAtt->getItem($iFA);
+                                $etat = new EtatFacture();
+                                $etat->parseObject($wsFacCliAtt);
+                                $doc->setEtatFacDE($etat);
+                            }
+                        }
+                    }
+
+                    $doc->setLienEdition('/api/factures/'.$wsDocs->getIdDocDE().'/edition');
+
                     array_push($list_docs, $doc);
                 }
 
@@ -169,36 +248,5 @@ class FacturesController extends Controller
         }
 
         return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
-    }
-
-    private function setCurrentUser()
-    {
-        $user_data = $this->user_service->getCurrentUser();
-        // Appel service web d'un client par son code client (CodCli)
-        $TTRetour = $this->ws_manager->getClientByCodCli($user_data->getCode());
-
-        // si le retour est de type Notif
-        // Message d'erreur retourné par les webservices
-        if($TTRetour instanceof Notif) {
-            //throw new \ErrorException(sprintf('Il y a une erreur:  %s.', $TTRetour->__toString()), 401 ,1, __FILE__);
-        }
-
-        if(!is_null($TTRetour)) {
-            $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
-            $wsClient = $TTParam->getItem(0);
-
-            if(!is_null($wsClient)) {
-                $user_data->setIdCli($wsClient->getIdCli());
-                $user_data->setNoCli($wsClient->getNoCli());
-                $user_data->setIdDepotCli($wsClient->getIdDep());
-                $user_data->setNomDepotCli($wsClient->getNomDep());
-            }
-        }
-
-        // si user connecté et de type User
-        if($user_data instanceof User) {
-            // instancie la propriété user du manager des services web gimel
-            $this->ws_manager->setUser($user_data);
-        }
     }
 }
