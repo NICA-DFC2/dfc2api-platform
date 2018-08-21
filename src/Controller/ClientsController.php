@@ -55,14 +55,64 @@ class ClientsController extends Controller
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
 
-        $this->getDemarre();
-
         $user = $this->user_service->getCurrentUser();
         $this->ws_manager->setUser($user);
     }
 
 
 
+
+    /**
+     * Retourne les infos du client connecté par les webservices.
+     *
+     * @Route(
+     *     name = "api_ws_client_item_current_get",
+     *     path = "/api/ws/client/current",
+     *     methods= "GET"
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne les infos du client connecté par les webservices.",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Client::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function callWebserviceClientCurrentGetAction(Request $request) {
+        // set the query parameters for create filter
+        $this->ws_manager->setFilter($request->query->all());
+
+        $TTRetour = $this->ws_manager->getClient();
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_CLI)) {
+                $TTCli = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
+
+                $list_cli = array();
+                for ($i = 0; $i < $TTCli->countItems(); $i++) {
+                    $wsClient = $TTCli->getItem($i);
+
+                    $client = new Client();
+                    $client->parseObject($wsClient);
+
+                    $client->setLienContacts('/api/ws/contacts/'.$client->getIdCli().'/client');
+
+                    array_push($list_cli, $client);
+                }
+
+                return $this->json($list_cli);
+            }
+            else {
+                return $this->json(array());
+            }
+        }
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
+
+        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
+    }
 
     /**
      * Liste de clients par les webservices pour un représentant.
@@ -272,12 +322,5 @@ class ClientsController extends Controller
         }
 
         return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
-    }
-
-    /**
-     * Démarrage du webservice gimel avec le compte ADMIN
-     */
-    private function getDemarre() {
-        $this->ws_manager->getDemarre();
     }
 }

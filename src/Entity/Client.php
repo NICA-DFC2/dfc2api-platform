@@ -12,7 +12,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ApiResource(
  *      collectionOperations={
- *          "all"={"route_name"="api_ws_clients_items_rep_get"}
+ *          "all"={"route_name"="api_ws_clients_items_rep_get"},
+*           "current"={"route_name"="api_ws_client_item_current_get"}
  *      }
  * )
  *

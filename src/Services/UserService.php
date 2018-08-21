@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Entity\User;
-use App\Services\Objets\CntxAdmin;
 use App\Services\Objets\TTRetour;
 use App\Services\Parameters\WsAlgorithmOpenSSL;
 use App\Services\Parameters\WsTableNamesRetour;
@@ -52,6 +51,7 @@ class UserService
         $token = $this->tokenStorage->getToken();
         if ($token instanceof TokenInterface)
         {
+            $this->ws_manager->getDemarre(WsAlgorithmOpenSSL::NONE);
             /** @var User $user */
             $user = $token->getUser();
 
@@ -67,8 +67,6 @@ class UserService
             $this->user_infos['roles'] = $user->getRoles();
             $this->user_infos['cntx_valid'] = true;
 
-            $cntx = $this->ws_manager->getDemarre(WsAlgorithmOpenSSL::NONE);
-
             if(in_array('ROLE_COMMERCIAL', $user->getRoles()) || in_array('ROLE_MARKET_LEADER', $user->getRoles())) {
 
                 $TTRetour = $this->ws_manager->getUtilisateur($user);
@@ -77,7 +75,7 @@ class UserService
                     $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_UTIL);
                     $wsUtil = $TTParam->getItem(0);
 
-                    if(!is_null($wsUtil) && $cntx instanceof CntxAdmin) {
+                    if(!is_null($wsUtil)) {
                         $user->setIdSal($wsUtil->getIdSal());
 
                         $this->user_infos['id_sal'] = $wsUtil->getIdSal();
@@ -92,7 +90,7 @@ class UserService
                         $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
                         $wsClient = $TTParam->getItem(0);
 
-                        if(!is_null($wsClient) && $cntx instanceof CntxAdmin) {
+                        if(!is_null($wsClient)) {
                             $user->setIdCli($wsClient->getIdCli());
                             $user->setIdDepotCli($wsClient->getIdDep());
                             $user->setNomDepotCli($wsClient->getNomDep());

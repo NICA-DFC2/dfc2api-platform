@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "932a74818e6bd378feb54712c209c2ea",
+    "content-hash": "50bef32f3c2ac478b87b53bc82d5dfd4",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -1650,16 +1650,16 @@
         },
         {
             "name": "lexik/jwt-authentication-bundle",
-            "version": "v2.5.3",
+            "version": "v2.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "85b05784fbad7d6435626915edeeb55ed0bcd6a7"
+                "reference": "f1c8c9a33c55eeb6105de5a2aedb9ba44a6efbed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/85b05784fbad7d6435626915edeeb55ed0bcd6a7",
-                "reference": "85b05784fbad7d6435626915edeeb55ed0bcd6a7",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/f1c8c9a33c55eeb6105de5a2aedb9ba44a6efbed",
+                "reference": "f1c8c9a33c55eeb6105de5a2aedb9ba44a6efbed",
                 "shasum": ""
             },
             "require": {
@@ -1742,7 +1742,7 @@
                 "rest",
                 "symfony"
             ],
-            "time": "2018-07-06T10:21:24+00:00"
+            "time": "2018-08-02T19:32:29+00:00"
         },
         {
             "name": "mashape/unirest-php",
@@ -6455,7 +6455,8 @@
         "php": "^7.1.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-openssl": "*"
     },
     "platform-dev": []
 }

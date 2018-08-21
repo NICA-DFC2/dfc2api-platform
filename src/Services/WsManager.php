@@ -59,8 +59,6 @@ class WsManager
         $this->setWsAdminPassword($wsAdminPassword);
         $this->setCache(new FilesystemCache());
         $this->caller = new CallerService();
-
-        $this->instantiateDepots();
     }
 
 
@@ -245,28 +243,36 @@ class WsManager
                 }
             }
 
-            if(!$this->getPublicKey()) {
+            $TTparam = new TTParam();
+
+            if(!$this->getPublicKey() && $algorithme != WsAlgorithmOpenSSL::NONE) {
                 return new Notif('WsManager::class', 'Impossible de lire la clé publique', 'Appel échoué', '', __FUNCTION__);
             }
+            else if($algorithme != WsAlgorithmOpenSSL::NONE){
+                $publicKeyNumber = $this->getValPublicKeyNumber();
 
-            $publicKeyNumber = $this->getValPublicKeyNumber();
+                $TTparam->addItem(new CritParam('Login', (!is_null($this->wsAdminUser)) ? $this->encryptByOpenSSL($this->wsAdminUser, $algorithme) : ''));
+                $TTparam->addItem(new CritParam('MotDePasse', (!is_null($this->wsAdminPassword)) ? $this->encryptByOpenSSL($this->wsAdminPassword, $algorithme) : ''));
+                $TTparam->addItem(new CritParam('Algorithme', $algorithme));
+                $TTparam->addItem(new CritParam('NumClePublique', $publicKeyNumber));
+            }
+            else {
+                $TTparam->addItem(new CritParam('Login', (!is_null($this->wsAdminUser)) ? $this->encryptByOpenSSL($this->wsAdminUser, $algorithme) : ''));
+                $TTparam->addItem(new CritParam('MotDePasse', (!is_null($this->wsAdminPassword)) ? $this->encryptByOpenSSL($this->wsAdminPassword, $algorithme) : ''));
+                $TTparam->addItem(new CritParam('Algorithme', $algorithme));
+            }
 
-            $TTparam = new TTParam();
-            $TTparam->addItem(new CritParam('Login', (!is_null($this->wsAdminUser)) ? $this->encryptByOpenSSL($this->wsAdminUser, $algorithme) : ''));
-            $TTparam->addItem(new CritParam('MotDePasse', (!is_null($this->wsAdminPassword)) ? $this->encryptByOpenSSL($this->wsAdminPassword, $algorithme) : ''));
-            $TTparam->addItem(new CritParam('Algorithme', $algorithme));
-            $TTparam->addItem(new CritParam('NumClePublique', $publicKeyNumber));
-
-            $response = $this->getCaller()
+            $this->getCaller()
                 ->setCache($this->getCache())
                 ->setModule(WsParameters::MODULE_DEMARRE)
                 ->setParamsAppel($TTparam)
                 ->setCritsSelect(new TTParam())
                 ->get();
 
-            $responseDecode = new ResponseDecode($response);
+            $responseDecode = new ResponseDecode($this->getCaller()->getResponse());
             $context = $responseDecode->decodeCntxAdmin();
             if ($context instanceof CntxAdmin) {
+                $this->instantiateDepots();
                 // met en cache le contexte de connexion
                 $this->getCache()->clear();
                 $this->getCache()->set($this->cache_key_admin, $context->__toValsString());
@@ -286,7 +292,7 @@ class WsManager
                 return $value;
             }
 
-            if($this->getValPublicKey() === "") {
+            if($this->getValPublicKey() === "" && $algorithme != WsAlgorithmOpenSSL::NONE) {
                 return new \Exception('The public key is empty !');
             }
             else if($algorithme === WsAlgorithmOpenSSL::RSASSA_PKCS1_v1_5 || $algorithme === WsAlgorithmOpenSSL::RSAES_OAEP) {
@@ -336,7 +342,6 @@ class WsManager
 
             $responseDecode = new ResponseDecode($response);
             if($responseDecode instanceof Notif){
-
                 return false;
             }
 
@@ -569,6 +574,8 @@ class WsManager
                     ->setParamsAppel(new TTParam())
                     ->setCritsSelect($TTCritSel)
                     ->get();
+
+                print_r($response);
 
                 $responseDecode = new ResponseDecode($response);
                 return $responseDecode->decodeRetour();

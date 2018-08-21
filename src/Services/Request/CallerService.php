@@ -43,6 +43,11 @@ class CallerService
     protected $url = '';
 
     /**
+     * @var Unirest\Response
+     */
+    protected $response;
+
+    /**
      * @var array
      */
     protected $filter = array();
@@ -312,6 +317,13 @@ class CallerService
         return '{ "request": { "pijDSOrig": '.$this->getOrigin().', "pijDSModif": '.$this->getModif().'}}';
     }
 
+    /**
+     * @return Unirest\Response
+     */
+    public function getResponse() {
+        return $this->response;
+    }
+
 
     /**
      * Appel GET
@@ -320,8 +332,8 @@ class CallerService
     public function get() {
         $this->setUrl();
         Unirest\Request::timeout(30);
-        $response = Unirest\Request::get($this->getUrl(), $this->getHeaders(), null);
-        return $response;
+        $this->response = Unirest\Request::get($this->getUrl(), $this->getHeaders(), null);
+        return $this->response;
     }
 
     /**
@@ -330,7 +342,7 @@ class CallerService
      */
     public function put() {
         $this->setUrl();
-        $response = Unirest\Request::put($this->getUrl(), $this->getHeaders(), $this->getBody());
-        return $response;
+        $this->response = Unirest\Request::put($this->getUrl(), $this->getHeaders(), $this->getBody());
+        return $this->response;
     }
 }
