@@ -363,14 +363,15 @@ class WsManagerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $manager->expects($this->any())
-            ->method('setDepotsClass')
-            ->with($this->getDepotWS());
+        $caller = $this->getMockBuilder(CallerService::class)
+            ->setMethods(array('get'))
+            ->disableOriginalConstructor()
+            ->getMock();
 
         // On précise les attentes concernant les méthodes getCaller et getCache
         $manager->expects($this->any())
-            ->method('getCaller')
-            ->willReturn(new CallerService());
+            ->method('setDepotsClass')
+            ->with($this->getDepotWS());
 
         $manager->expects($this->any())
             ->method('getCache')
@@ -379,6 +380,19 @@ class WsManagerTest extends TestCase
         $manager->expects($this->any())
             ->method('getDemarre')
             ->willReturn(new CntxAdmin('7','5','','986','2458319032855713246','1','544','18/07/2018 10:07:35.599 02:00'));
+
+        $response = new Response(200,
+            '{"response":{"pojDSCntxClient":"{\"ProDataSet\":{\"ttParam\":[{\"IdCais\":\"7\",\"IdDep\":\"5\",\"IdentAppliCli\":\"\",\"IdSal\":\"986\",\"IdSession\":\"2458335053865014656\",\"IdSoc\":\"1\",\"IdU\":\"544\",\"Valid\":\"03/08/2018 16:39:53.314+02:00\"}]}}","pojDSParamRetour":"{\"ProDataSet\":{\"ttParam\":[{\"FamPar\":\"\",\"NomPar\":\"RowIdEnrSuiv\",\"IndPar\":1,\"ValPar\":null}]}}","pojDSNotif":"{\"ProDataSet\":{}}","pojDSRetour":"{\"ProDataSet\":{\"ttCli\":[{\"IdCli\":56610,\"IdSal\":55,\"IdSoc\":1,\"RgpCli\":\"DFC2\",\"NoCli\":3850,\"CodCli\":\"PERSO124\",\"RSocCli\":\"NICOLAS CARTIER\",\"IdDep\":1,\"NomDep\":\"VERTOU\",\"SiretCli\":\"\",\"SirenCli\":\"\",\"LivNonFact\":0.0,\"DateHeureModCli\":\"2018-06-29T23:17:24.696+02:00\",\"IdAdr\":23414,\"RSocAdr\":\"NICOLAS CARTIER\",\"CorpsAdr\":\"5 ALLEE DE LA CASTILLE\",\"CPAdr\":\"44190\",\"VilleAdr\":\"GORGES\",\"PaysAdr\":\"\",\"TypeAdr\":\"Livraison\",\"LibTypeAdr\":\"Livraison\",\"MailAdr\":\"n.cartier@dfc2.biz\",\"Tel1Adr\":\"\",\"Tel2Adr\":\"0633521481\",\"FaxAdr\":\"\",\"ComCmrxCli\":\"\",\"RespAdr\":\"\",\"PrenomAdr\":\"\",\"IdCpt\":19339,\"IdTC\":624,\"CodTC\":\"T027\",\"LibTC\":\"T027 - PERSONNEL\",\"TypeCli\":\"R\",\"LibTypeCli\":\"Relevé\",\"IdCliSoc\":56612,\"IdCSS\":56611,\"CodSuspCli\":\"3\",\"LibCodSuspCli\":\"Suspendu (sauf vente comptant)\",\"CauseSuspCli\":\"\",\"EchRegCli\":\"0\",\"FraisFacturation\":\"0\",\"JRegCli\":0,\"MRegCli\":\"1\",\"ModeReg\":\"Règlement par Chèque Comptant Fin de mois\",\"Echeances\":0.0,\"SectGeoCli\":\"44SE\",\"LstJourLivCli\":\"L,M,Me,J,V\",\"TypeTvaCli\":\"01\",\"LibTypeTvaCli\":\"Soumis TVA\",\"NoComptaCli\":\"00PERSO124\",\"CSPCli\":\"\",\"CSP2Cli\":\"A\",\"TypeLimiteCredit\":\"AMT\",\"LimiteCredit\":1000.0,\"DateLimiteCredit\":\"2018-06-27\",\"LimiteTmpCredit\":0.0,\"DateLimiteTmpCredit\":null,\"MontantAssure\":7000.0,\"DateMontantAssure\":\"2016-10-21\",\"DateDebMontantAssure\":\"2016-10-21\",\"DateFinMontantAssure\":\"9999-12-31\",\"LimComplCliSoc\":0.0,\"TypeLimComplCliSoc\":\"\",\"DatLimComplCliSoc\":null,\"DatDebComplCliSoc\":null,\"DatFinComplCliSoc\":null,\"RisqueInterne\":-6000.0,\"EncoursRetard\":0.0,\"EncoursTotal\":0.0,\"EncoursDisponible\":1000.0,\"EncoursCommande\":0.0,\"CalcEncCmdCliSoc\":\"O\",\"EdPxNetCli\":\"1\",\"ComConcCli\":\"\",\"ComSfacCliSoc\":\"\",\"ComLimCliSoc\":\"\",\"ComLimComplCliSoc\":\"\",\"NumTvaCli\":\"\",\"FlgAssujettiTvaCli\":true,\"TypeVCDCli\":\"\",\"TypeObjCli\":\"Aucun\",\"DateLimFoncCli\":\"2012-11-06\",\"StrucFactCli\":\"0\",\"SocieteAssurance\":true,\"RelFMCli\":false,\"FinMoisCli\":false,\"DecalRegCli\":\"AUCUN\",\"Jour1factCli\":0,\"Jour2factCli\":0,\"ChiffBLCli\":\"N\",\"IdTG\":0,\"FlgTTCCli\":false,\"CodPortCli\":\"02\",\"FlgEncCmdAncCliSoc\":false,\"FlgFacPayCli\":true,\"VFrancoCli\":0.0,\"UFrancoCli\":\"AUC\",\"TypEdtFacCli\":\"\",\"CodGroupeCli\":\"\",\"DatSuspCli\":\"2018-06-27\",\"FlgComptaCli\":true,\"FlgExclureAnoCli\":false,\"MotPasseCli\":\"\",\"MontFFCliSoc\":0.0,\"MotsClesAutoCli\":\" NICOLAS CARTIER PERSO124 44190 GORGES 1IDDEP CHPETATRETARDCLI1CHPAUCUN CHPETATRETARDCLICHPAUCUN 55IDSAL CHPFLGRELANCECLICHPNON 0IDSALREL !§!\",\"EtatRetardCli\":\"Aucun\",\"FlgRelanceCli\":false,\"IdSalRel\":0}]}}"}}'
+            , null);
+
+        $caller->expects($this->any())
+            ->method('get')
+            ->willReturn($response);
+
+        $manager->expects($this->any())
+            ->method('getCaller')
+            ->willReturn($caller);
+
 
         // On déroule notre code normalement
         $retour = $manager->getArticles($depots);

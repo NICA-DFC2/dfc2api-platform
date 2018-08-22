@@ -52,9 +52,6 @@ class FacturesEnAttentesController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-
-        $user = $this->user_service->getCurrentUser();
-        $this->ws_manager->setUser($user);
     }
 
     /**
@@ -76,6 +73,9 @@ class FacturesEnAttentesController extends Controller
      */
     public function facturesEnAttentesGetAction(Request $request)
     {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $this->ws_manager->setFilter($request->query->all());
 
         $TTRetour = $this->ws_manager->getFacturesEnAttentes();

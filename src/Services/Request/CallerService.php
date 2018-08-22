@@ -111,7 +111,6 @@ class CallerService
     private function getContext(): string
     {
         $this->context = '';
-
         if($this->cache->has($this->cache_key_admin)) {
             $data = $this->cache->get($this->cache_key_admin);
             $contexte = new CntxAdmin();
@@ -333,6 +332,7 @@ class CallerService
         $this->setUrl();
         Unirest\Request::timeout(30);
         $this->response = Unirest\Request::get($this->getUrl(), $this->getHeaders(), null);
+
         return $this->response;
     }
 

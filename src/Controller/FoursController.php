@@ -52,8 +52,6 @@ class FoursController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-
-        $this->getDemarre();
     }
 
 
@@ -107,12 +105,5 @@ class FoursController extends Controller
         }
 
         return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
-    }
-
-    /**
-     * Démarrage du webservice gimel avec le compte ADMIN
-     */
-    private function getDemarre() {
-        $this->ws_manager->getDemarre();
     }
 }

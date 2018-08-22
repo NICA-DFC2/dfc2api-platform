@@ -51,9 +51,6 @@ class DepotsController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-
-        $user = $this->user_service->getCurrentUser();
-        $this->ws_manager->setUser($user);
     }
 
     /**

@@ -53,9 +53,6 @@ class CommandesController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-
-        $user = $this->user_service->getCurrentUser();
-        $this->ws_manager->setUser($user);
     }
 
     /**
@@ -77,6 +74,9 @@ class CommandesController extends Controller
      */
     public function commandesGetAction(Request $request)
     {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $this->ws_manager->setFilter($request->query->all());
 
         $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_CMDCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
@@ -135,6 +135,9 @@ class CommandesController extends Controller
      */
     public function editionsCommandeGetAction($id)
     {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $TTRetour = $this->ws_manager->getEdition($id, WsParameters::TYPE_PRENDRE_EDITION_CMDCLI, WsParameters::FORMAT_EDITION_BLOB);
 
         if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {

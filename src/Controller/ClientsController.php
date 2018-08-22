@@ -54,13 +54,7 @@ class ClientsController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-
-        $user = $this->user_service->getCurrentUser();
-        $this->ws_manager->setUser($user);
     }
-
-
-
 
     /**
      * Retourne les infos du client connecté par les webservices.
@@ -80,7 +74,9 @@ class ClientsController extends Controller
      * )
      */
     public function callWebserviceClientCurrentGetAction(Request $request) {
-        // set the query parameters for create filter
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $this->ws_manager->setFilter($request->query->all());
 
         $TTRetour = $this->ws_manager->getClient();
@@ -132,7 +128,9 @@ class ClientsController extends Controller
      * )
      */
     public function callWebserviceClientsForRepGetAction(Request $request) {
-        // set the query parameters for create filter
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $this->ws_manager->setFilter($request->query->all());
 
         $TTRetour = $this->ws_manager->getClientsWithRep();

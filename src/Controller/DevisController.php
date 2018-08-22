@@ -40,8 +40,6 @@ class DevisController extends Controller
      */
     private $user_service;
 
-    private $serializer;
-
     /**
      * DevisController constructor.
      * @param WsManager $wsManager
@@ -58,9 +56,6 @@ class DevisController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-
-        $user = $this->user_service->getCurrentUser();
-        $this->ws_manager->setUser($user);
     }
 
     /**
@@ -82,6 +77,9 @@ class DevisController extends Controller
      */
     public function devisGetAction(Request $request)
     {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $this->ws_manager->setFilter($request->query->all());
 
         $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_DEVIS, WsParameters::FORMAT_DOCUMENT_VIDE);
@@ -141,6 +139,9 @@ class DevisController extends Controller
      */
     public function editionsDevisGetAction($id)
     {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $TTRetour = $this->ws_manager->getEdition($id, WsParameters::TYPE_PRENDRE_EDITION_DEVIS, WsParameters::FORMAT_EDITION_BLOB);
 
         if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {

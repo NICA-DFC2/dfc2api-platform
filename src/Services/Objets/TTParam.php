@@ -43,7 +43,9 @@ class TTParam
                 $param instanceof WsInstCat ||
                 $param instanceof WsCateg ||
                 $param instanceof WsFour ||
-                $param instanceof WsUtil
+                $param instanceof WsUtil  ||
+                $param instanceof WsStatClient ||
+                $param instanceof WsStatClientArt
             ) {
                 $string .= ($string !== "") ? ',' : '';
                 $string .= $param->__toString();
@@ -76,7 +78,9 @@ class TTParam
             $param instanceof WsInstCat ||
             $param instanceof WsCateg ||
             $param instanceof WsFour ||
-            $param instanceof WsUtil
+            $param instanceof WsUtil  ||
+            $param instanceof WsStatClient ||
+            $param instanceof WsStatClientArt
         ) {
             $this->params[] = $param;
         }
@@ -102,7 +106,9 @@ class TTParam
             $param instanceof WsInstCat ||
             $param instanceof WsCateg ||
             $param instanceof WsFour ||
-            $param instanceof WsUtil
+            $param instanceof WsUtil  ||
+            $param instanceof WsStatClient ||
+            $param instanceof WsStatClientArt
         ) {
             $this->params->removeElement($param);
         }

@@ -59,6 +59,8 @@ class WsManager
         $this->setWsAdminPassword($wsAdminPassword);
         $this->setCache(new FilesystemCache());
         $this->caller = new CallerService();
+
+        $this->instantiateDepots();
     }
 
 
@@ -189,14 +191,12 @@ class WsManager
         if($this->getCache()->has($this->cache_key_depots)) {
             $this->depots = $this->getCache()->get($this->cache_key_depots);
         }
-
         $TTDepotRetour = $this->getDepots();
         if(!is_null($TTDepotRetour) && $TTDepotRetour instanceof TTRetour) {
             $this->depots = $TTDepotRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DEPOT);
             $this->getCache()->set($this->cache_key_depots, $this->depots);
-
         }
-        $this->getCache()->set($this->cache_key_depots, new TTParam());
+
     }
 
     /**
@@ -205,13 +205,6 @@ class WsManager
      */
     private function getDepotClass($id_depot){
         return $this->depots->getItemByFilter('IdDep', $id_depot);
-    }
-
-    /**
-     * @return TTParam
-     */
-    private function getDepotsClass(){
-        return $this->depots;
     }
 
     /**
@@ -237,7 +230,6 @@ class WsManager
             if($this->getCache()->has($this->cache_key_admin)) {
                 $cntxAdmin =  new Objets\CntxAdmin();
                 $cntxAdmin->__parse($this->getCache()->get($this->cache_key_admin));
-
                 if($cntxAdmin->isValid()) {
                     return $cntxAdmin;
                 }
@@ -271,10 +263,11 @@ class WsManager
 
             $responseDecode = new ResponseDecode($this->getCaller()->getResponse());
             $context = $responseDecode->decodeCntxAdmin();
+
             if ($context instanceof CntxAdmin) {
+                $this->getCache()->clear();
                 $this->instantiateDepots();
                 // met en cache le contexte de connexion
-                $this->getCache()->clear();
                 $this->getCache()->set($this->cache_key_admin, $context->__toValsString());
             }
 
@@ -406,24 +399,26 @@ class WsManager
          */
         public function getClient()
         {
-            if($this->getUser()->getIdCli() > 0) {
-                $TTParamAppel = new TTParam();
-                $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
+            if(!is_null($this->getUser())) {
+                if ($this->getUser()->getIdCli() > 0) {
+                    $TTParamAppel = new TTParam();
+                    $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
 
-                $TTCritSel = new TTParam();
-                $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                    $TTCritSel = new TTParam();
+                    $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
 
-                $response = $this->getCaller()
-                    ->setCache($this->getCache())
-                    ->setModule(WsParameters::MODULE_CLIENT)
-                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                    ->setFilter($this->getFilter())
-                    ->setParamsAppel($TTParamAppel)
-                    ->setCritsSelect($TTCritSel)
-                    ->get();
+                    $response = $this->getCaller()
+                        ->setCache($this->getCache())
+                        ->setModule(WsParameters::MODULE_CLIENT)
+                        ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                        ->setFilter($this->getFilter())
+                        ->setParamsAppel($TTParamAppel)
+                        ->setCritsSelect($TTCritSel)
+                        ->get();
 
-                $responseDecode = new ResponseDecode($response);
-                return $responseDecode->decodeRetour();
+                    $responseDecode = new ResponseDecode($response);
+                    return $responseDecode->decodeRetour();
+                }
             }
 
             return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdCli() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
@@ -435,27 +430,29 @@ class WsManager
          */
         public function getClientsWithRep()
         {
-            if($this->getUser()->getIdSal() > 0) {
-                $TTParamAppel = new TTParam();
-                $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
+            if(!is_null($this->getUser())) {
+                if ($this->getUser()->getIdSal() > 0) {
+                    $TTParamAppel = new TTParam();
+                    $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_CLI_ADRESSE));
 
-                $TTCritSel = new TTParam();
-                $TTCritSel->addItem(new CritParam('IdSal', $this->getUser()->getIdSal()));
+                    $TTCritSel = new TTParam();
+                    $TTCritSel->addItem(new CritParam('IdSal', $this->getUser()->getIdSal()));
 
-                $response = $this->getCaller()
-                    ->setCache($this->getCache())
-                    ->setModule(WsParameters::MODULE_CLIENT)
-                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                    ->setFilter($this->getFilter())
-                    ->setParamsAppel($TTParamAppel)
-                    ->setCritsSelect($TTCritSel)
-                    ->get();
+                    $response = $this->getCaller()
+                        ->setCache($this->getCache())
+                        ->setModule(WsParameters::MODULE_CLIENT)
+                        ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                        ->setFilter($this->getFilter())
+                        ->setParamsAppel($TTParamAppel)
+                        ->setCritsSelect($TTCritSel)
+                        ->get();
 
-                $responseDecode = new ResponseDecode($response);
-                return $responseDecode->decodeRetour();
+                    $responseDecode = new ResponseDecode($response);
+                    return $responseDecode->decodeRetour();
+                }
             }
 
-            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getIdSal() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdSal() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
         }
 
         /**
@@ -574,8 +571,6 @@ class WsManager
                     ->setParamsAppel(new TTParam())
                     ->setCritsSelect($TTCritSel)
                     ->get();
-
-                print_r($response);
 
                 $responseDecode = new ResponseDecode($response);
                 return $responseDecode->decodeRetour();
@@ -788,66 +783,69 @@ class WsManager
          */
         public function getArticlesByArray(?array $idarts, $calculPrixNet = false, $filter_depots = array())
         {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
-            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
+            if(!is_null($this->getUser())) {
+                $TTParamAppel = new TTParam();
+                $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
+                $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
 
-            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
-            }
-
-            $TTCritSel = new TTParam();
-            for($i=0;$i<count($idarts);$i++) {
-                if($i==0) {
-                    $TTCritSel->addItem(new CritParam('IdArt', $idarts[$i], 1));
+                if ($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
+                    $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
                 }
-                else {
-                    $TTCritSel->addItem(new CritParam('IdArt', $idarts[$i], 1));
-                    $TTCritSel->addItem(new CritParam('IdArt', 'OR', 4));
-                }
-            }
 
-            $response = $this->getCaller()
-                ->setCache($this->getCache())
-                ->setModule(WsParameters::MODULE_ARTICLE)
-                ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                ->setFilter($this->getFilter())
-                ->setParamsAppel($TTParamAppel)
-                ->setCritsSelect($TTCritSel)
-                ->get();
-
-            $responseDecode = new ResponseDecode($response);
-            $decode = $responseDecode->decodeRetour($filter_depots);
-
-            if(!$decode instanceof Notif) {
-                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
-                for ($i = 0; $i < $TTParam->countItems(); $i++) {
-                    $wsArticle = $TTParam->getItem($i);
-
-                    // Lecture du tableau des stocks
-                    // Le retour est complexe on doit créer un tableau simplifié
-                    $stocks = $wsArticle->getStocks();
-
-                    $arrayStocks = array();
-                    if (!is_null($stocks) && count($stocks) > 0) {
-                        // Création d'un tableau des stocks simplifié
-                        for ($iS = 0; $iS < count($stocks); $iS++) {
-                            $wsStock = $stocks[$iS];
-
-                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
-
-                            $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
-                        }
-                        $wsArticle->setStocks($arrayStocks);
+                $TTCritSel = new TTParam();
+                for ($i = 0; $i < count($idarts); $i++) {
+                    if ($i == 0) {
+                        $TTCritSel->addItem(new CritParam('IdArt', $idarts[$i], 1));
+                    } else {
+                        $TTCritSel->addItem(new CritParam('IdArt', $idarts[$i], 1));
+                        $TTCritSel->addItem(new CritParam('IdArt', 'OR', 4));
                     }
-                    $TTParam->setItem($i, $wsArticle);
                 }
 
-                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                $response = $this->getCaller()
+                    ->setCache($this->getCache())
+                    ->setModule(WsParameters::MODULE_ARTICLE)
+                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                    ->setFilter($this->getFilter())
+                    ->setParamsAppel($TTParamAppel)
+                    ->setCritsSelect($TTCritSel)
+                    ->get();
+
+                $responseDecode = new ResponseDecode($response);
+                $decode = $responseDecode->decodeRetour($filter_depots);
+
+                if (!$decode instanceof Notif && !is_null($decode)) {
+                    $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                    for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                        $wsArticle = $TTParam->getItem($i);
+
+                        // Lecture du tableau des stocks
+                        // Le retour est complexe on doit créer un tableau simplifié
+                        $stocks = $wsArticle->getStocks();
+
+                        $arrayStocks = array();
+                        if (!is_null($stocks) && count($stocks) > 0) {
+                            // Création d'un tableau des stocks simplifié
+                            for ($iS = 0; $iS < count($stocks); $iS++) {
+                                $wsStock = $stocks[$iS];
+
+                                $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                                $stockDepot = new StockDepot();
+                                $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                                $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                            }
+                            $wsArticle->setStocks($arrayStocks);
+                        }
+                        $TTParam->setItem($i, $wsArticle);
+                    }
+
+                    $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                }
+                return $decode;
             }
-            return $decode;
+            
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdCli() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
         }
 
         /**
@@ -1182,8 +1180,10 @@ class WsManager
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
             $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
-            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+            if(!is_null($this->getUser())) {
+                if ($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
+                    $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                }
             }
 
             $TTCritSel = new TTParam();
@@ -1244,8 +1244,10 @@ class WsManager
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
             $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
-            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+            if(!is_null($this->getUser())) {
+                if ($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
+                    $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                }
             }
 
             $TTCritSel = new TTParam();
@@ -1306,8 +1308,10 @@ class WsManager
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
             $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
-            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+            if(!is_null($this->getUser())) {
+                if ($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
+                    $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                }
             }
 
             $TTCritSel = new TTParam();
@@ -1369,8 +1373,10 @@ class WsManager
             $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
             $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
 
-            if($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
-                $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+            if(!is_null($this->getUser())) {
+                if ($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
+                    $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                }
             }
 
             $TTCritSel = new TTParam();
@@ -1390,31 +1396,33 @@ class WsManager
 
             if(!$decode instanceof Notif) {
                 $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
-                for ($i = 0; $i < $TTParam->countItems(); $i++) {
-                    $wsArticle = $TTParam->getItem($i);
 
-                    // Lecture du tableau des stocks
-                    // Le retour est complexe on doit créer un tableau simplifié
-                    $stocks = $wsArticle->getStocks();
+                if(!is_null($TTParam)) {
+                    for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                        $wsArticle = $TTParam->getItem($i);
 
-                    $arrayStocks = array();
-                    if (!is_null($stocks) && count($stocks) > 0) {
-                        // Création d'un tableau des stocks simplifié
-                        for ($iS = 0; $iS < count($stocks); $iS++) {
-                            $wsStock = $stocks[$iS];
+                        // Lecture du tableau des stocks
+                        // Le retour est complexe on doit créer un tableau simplifié
+                        $stocks = $wsArticle->getStocks();
 
-                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+                        $arrayStocks = array();
+                        if (!is_null($stocks) && count($stocks) > 0) {
+                            // Création d'un tableau des stocks simplifié
+                            for ($iS = 0; $iS < count($stocks); $iS++) {
+                                $wsStock = $stocks[$iS];
 
-                            $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                                $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                                $stockDepot = new StockDepot();
+                                $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
+                                $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                            }
+                            $wsArticle->setStocks($arrayStocks);
                         }
-                        $wsArticle->setStocks($arrayStocks);
+                        $TTParam->setItem($i, $wsArticle);
                     }
-                    $TTParam->setItem($i, $wsArticle);
+                    $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
                 }
-
-                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
             }
             return $decode;
         }
@@ -1489,8 +1497,10 @@ class WsManager
             }
 
             $TTCritSel = new TTParam();
-            if($this->getUser()->getIdCli() > 0) {
-                $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+            if(!is_null($this->getUser())) {
+                if ($this->getUser()->getIdCli() > 0) {
+                    $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                }
             }
 
             $response = $this->getCaller()
@@ -1579,22 +1589,26 @@ class WsManager
         public function getFactureEnAttente($id)
         {
             $TTCritSel = new TTParam();
-            if($this->getUser()->getIdCli() > 0) {
-                $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+            if(!is_null($this->getUser())) {
+                if ($this->getUser()->getIdCli() > 0) {
+                    $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                }
+                $TTCritSel->addItem(new CritParam('IdFac', $id));
+
+                $response = $this->getCaller()
+                    ->setCache($this->getCache())
+                    ->setModule(WsParameters::MODULE_FACCLIATT)
+                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                    ->setFilter($this->getFilter())
+                    ->setParamsAppel(new TTParam())
+                    ->setCritsSelect($TTCritSel)
+                    ->get();
+
+                $responseDecode = new ResponseDecode($response);
+                return $responseDecode->decodeRetour();
             }
-            $TTCritSel->addItem(new CritParam('IdFac', $id));
-
-            $response = $this->getCaller()
-                ->setCache($this->getCache())
-                ->setModule(WsParameters::MODULE_FACCLIATT)
-                ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                ->setFilter($this->getFilter())
-                ->setParamsAppel(new TTParam())
-                ->setCritsSelect($TTCritSel)
-                ->get();
-
-            $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour();
+            
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdCli() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
         }
 
 
@@ -1720,28 +1734,33 @@ class WsManager
          * @param $type_donnee
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getStatistiquesClient($avecBlEnCours = "oui", $type_donnee = WsParameters::TYPE_DONNEE_STAT_CLI)
+        public function getStatistiquesClient($type_donnee = WsParameters::TYPE_DONNEE_STAT_CLI, $avecBlEnCours = "oui")
         {
-            $TTParamAppel = new TTParam();
-            $TTParamAppel->addItem(new CritParam("TypeDonnee", $type_donnee));
-            $TTParamAppel->addItem(new CritParam("AvecBLenCours", $avecBlEnCours));
+            if(!is_null($this->getUser())) {
+                $TTParamAppel = new TTParam();
+                $TTParamAppel->addItem(new CritParam("TypeDonnee", $type_donnee));
+                $TTParamAppel->addItem(new CritParam("AvecBLenCours", $avecBlEnCours));
 
-            $TTCritSel = new TTParam();
-            if($this->getUser()->getIdCli() > 0) {
-                $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                $TTCritSel = new TTParam();
+                if ($this->getUser()->getIdCli() > 0) {
+                    $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
+                }
+
+                $response = $this->getCaller()
+                    ->setCache($this->getCache())
+                    ->setModule(WsParameters::MODULE_STATISTIQUE)
+                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                    ->setFilter($this->getFilter())
+                    ->setParamsAppel($TTParamAppel)
+                    ->setCritsSelect($TTCritSel)
+                    ->get();
+
+                $responseDecode = new ResponseDecode($response);
+                return $responseDecode->decodeRetour();
             }
-
-            $response = $this->getCaller()
-                ->setCache($this->getCache())
-                ->setModule(WsParameters::MODULE_STATISTIQUE)
-                ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                ->setFilter($this->getFilter())
-                ->setParamsAppel($TTParamAppel)
-                ->setCritsSelect($TTCritSel)
-                ->get();
-
-            $responseDecode = new ResponseDecode($response);
-            return $responseDecode->decodeRetour();
+            
+            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdCli() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
         }
+
 
 }

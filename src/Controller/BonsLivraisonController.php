@@ -55,9 +55,6 @@ class BonsLivraisonController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-
-        $user = $this->user_service->getCurrentUser();
-        $this->ws_manager->setUser($user);
     }
 
     /**
@@ -79,6 +76,9 @@ class BonsLivraisonController extends Controller
      */
     public function bonsLivraisonGetAction(Request $request)
     {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $this->ws_manager->setFilter($request->query->all());
 
         $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_BL, WsParameters::FORMAT_DOCUMENT_VIDE);
@@ -139,6 +139,9 @@ class BonsLivraisonController extends Controller
      */
     public function editionsBonLivraisonGetAction($id)
     {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $TTRetour = $this->ws_manager->getEdition($id, WsParameters::TYPE_PRENDRE_EDITION_BL, WsParameters::FORMAT_EDITION_BLOB);
 
         if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {

@@ -662,6 +662,107 @@ class Article
         }
     }
 
+    public function __toString() {
+        $string = '{';
+        $string .= '"IdAD": '. $this->getIdAD() .', ';
+        $string .= '"IdArt": '. $this->getIdArtEvoAD() .', ';
+        $string .= '"IdSoc": '. $this->getIdSocWS() .', ';
+        $string .= '"IdDep": '. $this->getIdDepWS() .', ';
+        $string .= '"IdIC": '. $this->getIdICWS() .', ';
+        $string .= '"NoAD": '. $this->getNoADWS() .', ';
+        $string .= '"CodAD": "'. $this->getCodADWS() .'", ';
+        $string .= '"DesiAutoAD": "'. $this->getDesiAutoADWS() .'", ';
+        $string .= '"ValNivAD": "'. $this->getValNivADWS() .'", ';
+        $string .= '"StkReelAD": '. $this->getStkReelADWS() .', ';
+        $string .= '"StkResAD": '. $this->getStkResADWS() .', ';
+        $string .= '"StkCmdeAD": '. $this->getStkCmdeADWS() .', ';
+        $string .= '"CodGesStkAD": "'. $this->getCodGesStkADWS() .'", ';
+        $string .= '"EtatStockAD": "'. $this->getEtatStockADWS() .'", ';
+        $string .= '"StockDisponible": '. $this->getStockDisponibleWS() .', ';
+        $string .= '"StockDisponibleSoc": '. $this->getStockDisponibleSocWS() .', ';
+        $string .= '"StockPratique": '. $this->getStockPratiqueWS() .', ';
+        $string .= '"StkReelPlat1": '. $this->getStkReelPlat1WS() .', ';
+        $string .= '"QteCIDSsCFAD": '. $this->getQteCIDSsCFADWS() .', ';
+        $string .= '"UVteArt": "'. $this->getUVteArtWS() .'", ';
+        $string .= '"UStoArt": "'. $this->getUStoArtWS() .'", ';
+        $string .= '"CvStoVteAD": '. $this->getCvStoVteADWS() .', ';
+
+        $val = ($this->getTypCvStoVteADWS()) ? 'true' : 'false';
+        $string .= '"TypCvStoVteAD": '. $val .', ';
+
+        $string .= '"NbUStoCondVteAD": "'. $this->getNbUStoCondVteADWS() .'", ';
+        $string .= '"PoidsUVteArt": "'. $this->getPoidsUVteArtWS() .'", ';
+        $string .= '"NbUVteUCondVte": '. $this->getNbUVteUCondVteWS() .', ';
+        $string .= '"PrixPubUCondVte": '. $this->getPrixPubUCondVteWS() .', ';
+        $string .= '"PrixNetUCondVte": '. $this->getPrixNetUCondVteWS() .', ';
+        $string .= '"NbUStoUVte": '. $this->getNbUStoUVteWS() .', ';
+        $string .= '"NbUVteUSto": '. $this->getNbUVteUStoWS() .', ';
+        $string .= '"NbrDecArt": '. $this->getNbrDecArtWS() .', ';
+        $string .= '"LongAD": '. $this->getLongADWS() .', ';
+        $string .= '"LargAD": '. $this->getLargADWS() .', ';
+        $string .= '"EpaisAD": '. $this->getEpaisADWS() .', ';
+        $string .= '"CondVteAD": "'. $this->getCondVteADWS() .'", ';
+
+        $val = ($this->getFlgDecondADWS()) ? 'true' : 'false';
+        $string .= '"FlgDecondAD": "'. $val .'", ';
+
+        $string .= '"Desi2Art": "'. $this->getDesi2ArtWS() .'", ';
+        $string .= '"IdFour": '. $this->getIdFourWS() .', ';
+        $string .= '"NomDep": "'. $this->getNomDepWS() .'", ';
+        $string .= '"CodSuspAD": "'. $this->getCodSuspADWS() .'", ';
+        $string .= '"MultimediaArt": "'. $this->getMultimediaArtWS() .'", ';
+        $string .= '"ComTechAD": "'. $this->getComTechADWS() .'", ';
+        $string .= '"DocLie": "'. $this->getDocLieWS() .'", ';
+        $string .= '"GenCodAD": "'. $this->getGenCodADWS() .'", ';
+        $string .= '"CodEcoTaxeAD": "'. $this->getCodEcoTaxeADWS() .'", ';
+        $string .= '"MtEcoTaxe": "'. $this->getMtEcoTaxeWS() .'", ';
+        $string .= '"ValEcoTaxe": '. $this->getValEcoTaxeWS() .', ';
+        $string .= '"IdDepPlat": '. $this->getIdDepPlatWS() .', ';
+        $string .= '"IdADF": '. $this->getIdADFWS() .', ';
+        $string .= '"CodADF": "'. $this->getCodADFWS() .'", ';
+        $string .= '"GenCod1ADF": "'. $this->getGenCod1ADFWS() .'", ';
+        $string .= '"GenCod2ADF": "'. $this->getGenCod2ADFWS() .'", ';
+        $string .= '"CodCatAD": "'. $this->getCodCatADWS() .'", ';
+        $string .= '"PrixNet": '. $this->getPrixNetWS() .', ';
+        $string .= '"PrixPubCli": '. $this->getPrixPubCliWS() .', ';
+        $string .= '"PrixPubAD": '. $this->getPrixPubADWS() .', ';
+        $string .= '"TypeTarif": "'. $this->getTypeTarifWS() .'", ';
+        $string .= '"PrixRevConvAD": '. $this->getPrixRevConvADWS() .', ';
+        $string .= '"PrixRevReelAD": '. $this->getPrixRevReelADWS() .', ';
+        $string .= '"CoefPRRAD": '. $this->getCoefPRRADWS() .', ';
+        $string .= '"CoefPRCAD": '. $this->getCoefPRCADWS() .', ';
+        $string .= '"MargeReelleAD": '. $this->getMargeReelleADWS() .', ';
+        $string .= '"MargeConvAD": '. $this->getMargeConvADWS();
+
+        if(!is_null($this->getStocks())) {
+            $string .= ', "Stocks": '. $this->getStocks()->__toString();
+        }
+
+        $string .= '}';
+
+        return $string;
+    }
+
+    public function __shortToString() {
+        $string = '{';
+        $string .= '"IdAD": '. $this->getIdAD() .', ';
+        $string .= '"NoAD": '. $this->getNoADWS() .', ';
+        $string .= '"CodAD": "'. $this->getCodADWS() .'", ';
+        $string .= '"DesiAutoAD": "'. $this->getDesiAutoADWS() .'", ';
+        $string .= '"UVteArt": "'. $this->getUVteArtWS() .'", ';
+        $string .= '"UStoArt": "'. $this->getUStoArtWS() .'", ';
+        $string .= '"CondVteAD": "'. $this->getCondVteADWS() .'", ';
+        $string .= '"CodSuspAD": "'. $this->getCodSuspADWS() .'", ';
+        $string .= '"GenCodAD": "'. $this->getGenCodADWS() .'", ';
+        $string .= '"CodADF": "'. $this->getCodADFWS() .'", ';
+        $string .= '"GenCod1ADF": "'. $this->getGenCod1ADFWS() .'", ';
+        $string .= '"GenCod2ADF": "'. $this->getGenCod2ADFWS() .'", ';
+        $string .= '"PrixPubAD": '. $this->getPrixPubADWS() .' ';
+        $string .= '}';
+
+        return $string;
+    }
+
     /**
      * @return mixed
      */
