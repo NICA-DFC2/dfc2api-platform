@@ -37,7 +37,9 @@ class FacturesEnAttentesController extends Controller
     private $user_service;
 
     /**
-     * BonsLivraisonController constructor.
+     * FacturesEnAttentesController constructor.
+     * @param WsManager $wsManager
+     * @param UserService $userService
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {
@@ -50,7 +52,6 @@ class FacturesEnAttentesController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-        $this->setCurrentUser();
     }
 
     /**
@@ -58,7 +59,7 @@ class FacturesEnAttentesController extends Controller
      *
      * @Route(
      *     name = "api_factures_en_attentes_items_get",
-     *     path = "/api/factures-en-attentes",
+     *     path = "/api/ws/factures-en-attentes",
      *     methods= "GET"
      * )
      * @SWG\Response(
@@ -72,6 +73,9 @@ class FacturesEnAttentesController extends Controller
      */
     public function facturesEnAttentesGetAction(Request $request)
     {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $this->ws_manager->setFilter($request->query->all());
 
         $TTRetour = $this->ws_manager->getFacturesEnAttentes();
@@ -97,37 +101,7 @@ class FacturesEnAttentesController extends Controller
         else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
             return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
         }
-    }
 
-
-    private function setCurrentUser()
-    {
-        $user_data = $this->user_service->getCurrentUser();
-        // Appel service web d'un client par son code client (CodCli)
-        $TTRetour = $this->ws_manager->getClientByCodCli($user_data->getCode());
-
-        // si le retour est de type Notif
-        // Message d'erreur retourné par les webservices
-        if($TTRetour instanceof Notif) {
-            //throw new \ErrorException(sprintf('Il y a une erreur:  %s.', $TTRetour->__toString()), 401 ,1, __FILE__);
-        }
-
-        if(!is_null($TTRetour)) {
-            $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
-            $wsClient = $TTParam->getItem(0);
-
-            if(!is_null($wsClient)) {
-                $user_data->setIdCli($wsClient->getIdCli());
-                $user_data->setNoCli($wsClient->getNoCli());
-                $user_data->setIdDepotCli($wsClient->getIdDep());
-                $user_data->setNomDepotCli($wsClient->getNomDep());
-            }
-        }
-
-        // si user connecté et de type User
-        if($user_data instanceof User) {
-            // instancie la propriété user du manager des services web gimel
-            $this->ws_manager->setUser($user_data);
-        }
+        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
     }
 }

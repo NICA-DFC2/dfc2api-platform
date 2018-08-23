@@ -27,6 +27,13 @@ class AuthenticationFailureListener
 
         $response = new JWTAuthenticationFailureResponse($message, $status);
 
+        $response->setData([
+            'code' => $response->getStatusCode(),
+            'message' => $response->getMessage(),
+            'user' => null,
+            'token' => null
+        ]);
+
         $event->setResponse($response);
     }
 }

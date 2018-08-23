@@ -48,6 +48,19 @@ class LoadUsers extends Fixture implements OrderedFixtureInterface, ContainerAwa
         $this->addReference('user.super_admin', $superAdmin);
         unset($superAdmin);
 
+        $rep = $manager->createUser();
+        $rep->setUsername('DIBL');
+        $rep->setRaisonSociale("DFC2");
+        $rep->setEmail('d.blanloeil@dfc2.biz');
+        $rep->setFullname('Didier Blanloeil');
+        $rep->setRoles(array('ROLE_COMMERCIAL'));
+        $rep->setEnabled(true);
+        $rep->setPlainPassword($test_password);
+        $rep->setCode("DIBL");
+        $manager->updateUser($rep);
+        $this->addReference('user.commercial', $rep);
+        unset($rep);
+
         /** @var $admin \App\Entity\User */
         $admin = $manager->createUser();
         $admin->setUsername('admin');

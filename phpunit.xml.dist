@@ -29,9 +29,10 @@
             <directory>tests/Utils/</directory>
             <directory>tests/Entity/</directory>
             <directory>tests/EventListener/</directory>
-            <directory>tests/WsManagerTest.php</directory>
+            <directory>tests/Services/WsManagerTest.php</directory>
             <directory>tests/Services/Filter/</directory>
             <directory>tests/Services/Json/</directory>
+            <directory>tests/Validator/</directory>
         </testsuite>
     </testsuites>
 

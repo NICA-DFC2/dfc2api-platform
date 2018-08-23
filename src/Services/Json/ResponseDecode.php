@@ -17,9 +17,12 @@ use App\Services\Objets\WsFacCliAtt;
 use App\Services\Objets\WsFour;
 use App\Services\Objets\WsInstCat;
 use App\Services\Objets\WsLibelle;
+use App\Services\Objets\WsStatClient;
+use App\Services\Objets\WsStatClientArt;
 use App\Services\Objets\WsStock;
 use App\Services\Objets\WsClient;
 use App\Services\Objets\WsArticle;
+use App\Services\Objets\WsUtil;
 use App\Services\Parameters\WsTableNamesRetour;
 use Unirest\Response;
 
@@ -127,6 +130,7 @@ class ResponseDecode
                         $ttparam->{'IdU'},
                         $ttparam->{'Valid'}
                     );
+
                     return $CntxAdmin;
                 }
                 else {
@@ -278,6 +282,9 @@ class ResponseDecode
                 }
                 if(isset($ProDataSet->ttFour)) {
                     $ttRetour->addTable($this->decodeRetourTTFour($ProDataSet->ttFour), WsTableNamesRetour::TABLENAME_TT_FOUR);
+                }
+                if(isset($ProDataSet->ttUtil)) {
+                    $ttRetour->addTable($this->decodeRetourTTUtil($ProDataSet->ttUtil), WsTableNamesRetour::TABLENAME_TT_UTIL);
                 }
 
                 return $ttRetour;
@@ -528,17 +535,38 @@ class ResponseDecode
         return $ttReturn;
     }
 
-    //******
-    // NON TERMINEE
+    /**
+     * Decode la collection des utilisateurs de la réponse
+     * @param $ttUtil
+     * @return TTParam
+     */
+    private function decodeRetourTTUtil($ttUtil){
+        $ttReturn = new TTParam();
+        foreach ($ttUtil as $item){
+            $util = new WsUtil($item);
+            $ttReturn->addItem($util);
+        }
+        return $ttReturn;
+    }
+
+    /**
+     * Decode la collection des statistiques de la réponse
+     * @param $ttStat
+     * @return TTParam
+     */
     private function decodeRetourTTStat($ttStat){
         $ttReturn = new TTParam();
-/*        foreach ($ttSal as $item){
-            $critParam = new CritParam($item->{'NomPar'}, $item->{'ValPar'}, $item->{'IndPar'}, $item->{'FamPar'});
-            $ttReturn->addItem($critParam);
+        foreach ($ttStat as $item){
+            // stats client article
+            if(isset($item->{'IdArt'})) {
+                $stat = new WsStatClientArt($item);
+            }
+            // stats client/ rep client
+            else {
+                $stat = new WsStatClient($item);
+            }
+            $ttReturn->addItem($stat);
         }
-
-        $notif = $this->decodeNotif(__FUNCTION__);
-        $ttReturn->setNotif($notif);*/
         return $ttReturn;
     }
 

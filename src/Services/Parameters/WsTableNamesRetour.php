@@ -14,6 +14,7 @@ class WsTableNamesRetour
     public const TABLENAME_TT_DOCUM_LIG = 'ttDocumLig';
     public const TABLENAME_TT_EDITION = 'ttEdition';
     public const TABLENAME_TT_STAT = 'ttStat';
+    public const TABLENAME_TT_UTIL = 'ttUtil';
     public const TABLENAME_TT_DEPOT = 'ttDepot';
     public const TABLENAME_TT_CONTACT = 'ttContact';
     public const TABLENAME_TT_INSTCAT = 'ttInstCat';

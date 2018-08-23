@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\Contact;
+use App\Entity\User;
 use App\Services\Objets\Notif;
 use App\Services\Objets\TTRetour;
 use App\Services\Parameters\WsTableNamesRetour;
@@ -38,7 +39,9 @@ class ClientsController extends Controller
     private $user_service;
 
     /**
-     * ArticlesController constructor.
+     * ClientsController constructor.
+     * @param WsManager $wsManager
+     * @param UserService $userService
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {
@@ -51,36 +54,32 @@ class ClientsController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-
-        $this->getDemarre();
     }
 
-
-
-
     /**
-     * Liste de clients par les webservices pour un représentant.
+     * Retourne les infos du client connecté par les webservices.
      *
      * @Route(
-     *     name = "api_ws_clients_items_idrep_get",
-     *     path = "/api/ws/clients/{id_rep}/representant",
-     *     methods= "GET",
-     *     requirements={"id_rep"="\d+"}
+     *     name = "api_ws_client_item_current_get",
+     *     path = "/api/ws/client/current",
+     *     methods= "GET"
      * )
      * @SWG\Response(
      *     response=200,
-     *     description="Retourne une liste de clients par les webservices pour un représentant.",
+     *     description="Retourne les infos du client connecté par les webservices.",
      *     @SWG\Schema(
      *         type="array",
      *         @SWG\Items(ref=@Model(type=Client::class, groups={"full"}))
      *     )
      * )
      */
-    public function callWebserviceClientsWithRepGetAction($id_rep, Request $request) {
-        // set the query parameters for create filter
+    public function callWebserviceClientCurrentGetAction(Request $request) {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $this->ws_manager->setFilter($request->query->all());
 
-        $TTRetour = $this->ws_manager->getClientsWithRep($id_rep);
+        $TTRetour = $this->ws_manager->getClient();
 
         if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
             if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_CLI)) {
@@ -93,27 +92,61 @@ class ClientsController extends Controller
                     $client = new Client();
                     $client->parseObject($wsClient);
 
-                    /**
-                     * TODO: L'appel webservice pour lire les contacts ne retourne pas d'enregistrements. A VERIFIER AVEC GIMEL
-                     *
-                     */
-//                    $TTRetourCt = $this->ws_manager->getContacts($client->getIdCli());
-//                    if (!is_null($TTRetourCt) && $TTRetourCt instanceof TTRetour) {
-//                        if($TTRetourCt->containsKey(WsTableNamesRetour::TABLENAME_TT_CONTACT)) {
-//                            $TTContacts = $TTRetourCt->getTable(WsTableNamesRetour::TABLENAME_TT_CONTACT);
-//
-//                            $list_contacts = new ArrayCollection();
-//                            for ($iCt = 0; $iCt < $TTContacts->countItems(); $iCt++) {
-//                                $wsContact = $TTContacts->getItem($iCt);
-//
-//                                $contact = new Contact();
-//                                $contact->parseObject($wsContact);
-//
-//                                $list_contacts->add($contact);
-//                            }
-//                            $client->setContacts($list_contacts);
-//                        }
-//                    }
+                    $client->setLienContacts('/api/ws/contacts/'.$client->getIdCli().'/client');
+
+                    array_push($list_cli, $client);
+                }
+
+                return $this->json($list_cli);
+            }
+            else {
+                return $this->json(array());
+            }
+        }
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
+
+        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
+    }
+
+    /**
+     * Liste de clients par les webservices pour un représentant.
+     *
+     * @Route(
+     *     name = "api_ws_clients_items_rep_get",
+     *     path = "/api/ws/clients",
+     *     methods= "GET"
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne une liste de clients par les webservices pour un représentant.",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Client::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function callWebserviceClientsForRepGetAction(Request $request) {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
+        $this->ws_manager->setFilter($request->query->all());
+
+        $TTRetour = $this->ws_manager->getClientsWithRep();
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_CLI)) {
+                $TTCli = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
+
+                $list_cli = array();
+                for ($i = 0; $i < $TTCli->countItems(); $i++) {
+                    $wsClient = $TTCli->getItem($i);
+
+                    $client = new Client();
+                    $client->parseObject($wsClient);
+
+                    $client->setLienContacts('/api/ws/contacts/'.$client->getIdCli().'/client');
 
                     array_push($list_cli, $client);
                 }
@@ -166,27 +199,7 @@ class ClientsController extends Controller
                     $client = new Client();
                     $client->parseObject($wsClient);
 
-                    /**
-                     * TODO: L'appel webservice pour lire les contacts ne retourne pas d'enregistrements. A VERIFIER AVEC GIMEL
-                     *
-                     */
-//                    $TTRetourCt = $this->ws_manager->getContacts($client->getIdCli());
-//                    if (!is_null($TTRetourCt) && $TTRetourCt instanceof TTRetour) {
-//                        if($TTRetourCt->containsKey(WsTableNamesRetour::TABLENAME_TT_CONTACT)) {
-//                            $TTContacts = $TTRetourCt->getTable(WsTableNamesRetour::TABLENAME_TT_CONTACT);
-//
-//                            $list_contacts = new ArrayCollection();
-//                            for ($iCt = 0; $iCt < $TTContacts->countItems(); $iCt++) {
-//                                $wsContact = $TTContacts->getItem($iCt);
-//
-//                                $contact = new Contact();
-//                                $contact->parseObject($wsContact);
-//
-//                                $list_contacts->add($contact);
-//                            }
-//                            $client->setContacts($list_contacts);
-//                        }
-//                    }
+                    $client->setLienContacts('/api/ws/contacts/'.$client->getIdCli().'/client');
 
                     array_push($list_cli, $client);
                 }
@@ -239,27 +252,7 @@ class ClientsController extends Controller
                     $client = new Client();
                     $client->parseObject($wsClient);
 
-                    /**
-                     * TODO: L'appel webservice pour lire les contacts ne retourne pas d'enregistrements. A VERIFIER AVEC GIMEL
-                     *
-                     */
-//                    $TTRetourCt = $this->ws_manager->getContacts($client->getIdCli());
-//                    if (!is_null($TTRetourCt) && $TTRetourCt instanceof TTRetour) {
-//                        if($TTRetourCt->containsKey(WsTableNamesRetour::TABLENAME_TT_CONTACT)) {
-//                            $TTContacts = $TTRetourCt->getTable(WsTableNamesRetour::TABLENAME_TT_CONTACT);
-//
-//                            $list_contacts = new ArrayCollection();
-//                            for ($iCt = 0; $iCt < $TTContacts->countItems(); $iCt++) {
-//                                $wsContact = $TTContacts->getItem($iCt);
-//
-//                                $contact = new Contact();
-//                                $contact->parseObject($wsContact);
-//
-//                                $list_contacts->add($contact);
-//                            }
-//                            $client->setContacts($list_contacts);
-//                        }
-//                    }
+                    $client->setLienContacts('/api/ws/contacts/'.$client->getIdCli().'/client');
 
                     array_push($list_cli, $client);
                 }
@@ -311,27 +304,7 @@ class ClientsController extends Controller
                     $client = new Client();
                     $client->parseObject($wsClient);
 
-                    /**
-                     * TODO: L'appel webservice pour lire les contacts ne retourne pas d'enregistrements. A VERIFIER AVEC GIMEL
-                     *
-                     */
-//                    $TTRetourCt = $this->ws_manager->getContacts($client->getIdCli());
-//                    if (!is_null($TTRetourCt) && $TTRetourCt instanceof TTRetour) {
-//                        if($TTRetourCt->containsKey(WsTableNamesRetour::TABLENAME_TT_CONTACT)) {
-//                            $TTContacts = $TTRetourCt->getTable(WsTableNamesRetour::TABLENAME_TT_CONTACT);
-//
-//                            $list_contacts = new ArrayCollection();
-//                            for ($iCt = 0; $iCt < $TTContacts->countItems(); $iCt++) {
-//                                $wsContact = $TTContacts->getItem($iCt);
-//
-//                                $contact = new Contact();
-//                                $contact->parseObject($wsContact);
-//
-//                                $list_contacts->add($contact);
-//                            }
-//                            $client->setContacts($list_contacts);
-//                        }
-//                    }
+                    $client->setLienContacts('/api/ws/contacts/'.$client->getIdCli().'/client');
 
                     array_push($list_cli, $client);
                 }
@@ -347,12 +320,5 @@ class ClientsController extends Controller
         }
 
         return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
-    }
-
-    /**
-     * Démarrage du webservice gimel avec le compte ADMIN
-     */
-    private function getDemarre() {
-        $this->ws_manager->getDemarre();
     }
 }

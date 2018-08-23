@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Services\Objets\Notif;
 use App\Services\Objets\TTRetour;
 use App\Services\Parameters\WsParameters;
@@ -40,6 +39,8 @@ class CommandesController extends Controller
 
     /**
      * CommandesController constructor.
+     * @param WsManager $wsManager
+     * @param UserService $userService
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {
@@ -52,7 +53,6 @@ class CommandesController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-        $this->setCurrentUser();
     }
 
     /**
@@ -60,7 +60,7 @@ class CommandesController extends Controller
      *
      * @Route(
      *     name = "api_commandes_items_get",
-     *     path = "/api/commandes",
+     *     path = "/api/ws/commandes",
      *     methods= "GET"
      * )
      * @SWG\Response(
@@ -74,6 +74,9 @@ class CommandesController extends Controller
      */
     public function commandesGetAction(Request $request)
     {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $this->ws_manager->setFilter($request->query->all());
 
         $TTRetour = $this->ws_manager->getDocuments(WsParameters::TYPE_PRENDRE_CMDCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
@@ -95,6 +98,9 @@ class CommandesController extends Controller
                         $ligne->parseObject($wsLignes[$iL]);
                         $doc->setLignes($ligne);
                     }
+
+                    $doc->setLienEdition('/api/ws/commandes/'.$wsDocs->getIdDocDE().'/edition');
+
                     array_push($list_docs, $doc);
                 }
 
@@ -114,7 +120,7 @@ class CommandesController extends Controller
      *
      * @Route(
      *     name = "api_commandes_edition_item_get",
-     *     path = "/api/commandes/{id}/edition",
+     *     path = "/api/ws/commandes/{id}/edition",
      *     methods= "GET",
      *     requirements={"id"="\d+"}
      * )
@@ -129,6 +135,9 @@ class CommandesController extends Controller
      */
     public function editionsCommandeGetAction($id)
     {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
         $TTRetour = $this->ws_manager->getEdition($id, WsParameters::TYPE_PRENDRE_EDITION_CMDCLI, WsParameters::FORMAT_EDITION_BLOB);
 
         if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
@@ -154,36 +163,5 @@ class CommandesController extends Controller
         }
 
         return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
-    }
-
-    private function setCurrentUser()
-    {
-        $user_data = $this->user_service->getCurrentUser();
-        // Appel service web d'un client par son code client (CodCli)
-        $TTRetour = $this->ws_manager->getClientByCodCli($user_data->getCode());
-
-        // si le retour est de type Notif
-        // Message d'erreur retourné par les webservices
-        if($TTRetour instanceof Notif) {
-            //throw new \ErrorException(sprintf('Il y a une erreur:  %s.', $TTRetour->__toString()), 401 ,1, __FILE__);
-        }
-
-        if(!is_null($TTRetour)) {
-            $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
-            $wsClient = $TTParam->getItem(0);
-
-            if(!is_null($wsClient)) {
-                $user_data->setIdCli($wsClient->getIdCli());
-                $user_data->setNoCli($wsClient->getNoCli());
-                $user_data->setIdDepotCli($wsClient->getIdDep());
-                $user_data->setNomDepotCli($wsClient->getNomDep());
-            }
-        }
-
-        // si user connecté et de type User
-        if($user_data instanceof User) {
-            // instancie la propriété user du manager des services web gimel
-            $this->ws_manager->setUser($user_data);
-        }
     }
 }

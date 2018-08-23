@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use App\Services\Objets\WsDocumEnt;
+use App\Utils\Edition;
 use App\Utils\Extensions\Document;
 use App\Utils\Ligne;
 
@@ -30,6 +31,11 @@ class Devis extends Document
     public function setLigne(Ligne $ligne)
     {
         parent::setLignes($ligne);
+    }
+
+    public function setEdition(Edition $edition)
+    {
+        parent::setEdition($edition);
     }
 
     /**

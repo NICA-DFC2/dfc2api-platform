@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use Symfony\Component\Debug\Exception\UndefinedMethodException;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -26,6 +27,16 @@ class ExceptionListener
                 'trace' => $exception->getTrace()
             );
             $response->setStatusCode('504');
+        }
+        else if($exception instanceof UndefinedMethodException) {
+            $message = array(
+                'message' => str_replace('"', "'", $exception->getMessage()),
+                'code' => 500,
+                'file' => str_replace('"', "'", $exception->getFile()),
+                'line' => str_replace('"', "'", $exception->getLine()),
+                'trace' => $exception->getTrace()
+            );
+            $response->setStatusCode('500');
         }
         else {
             $message = array(

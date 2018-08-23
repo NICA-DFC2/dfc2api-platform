@@ -3,9 +3,21 @@
 namespace App\Entity;
 
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Services\Objets\WsClient;
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * Entité qui représente les clients. Certain champs sont hydratés par un appel aux services web GIMEL.
+ *
+ * @ApiResource(
+ *      collectionOperations={
+ *          "all"={"route_name"="api_ws_clients_items_rep_get"},
+*           "current"={"route_name"="api_ws_client_item_current_get"}
+ *      }
+ * )
+ *
+ */
 class Client
 {
 
@@ -106,7 +118,7 @@ class Client
     private $MotPasseCli;
     private $MontFFCliSoc;
     
-    private $Contacts;
+    private $LienContacts;
 
 
     /**
@@ -114,7 +126,7 @@ class Client
      */
     public function __construct()
     {
-        $this->Contacts = new ArrayCollection();
+
     }
 
     /**
@@ -1760,19 +1772,19 @@ class Client
     }
 
     /**
-     * @return ArrayCollection
+     * @return string
      */
-    public function getContacts(): ArrayCollection
+    public function getLienContacts()
     {
-        return $this->Contacts;
+        return $this->LienContacts;
     }
 
     /**
-     * @param ArrayCollection $Contacts
+     * @param string $lien
      */
-    public function setContacts(ArrayCollection $Contacts)
+    public function setLienContacts($lien)
     {
-        $this->Contacts = $Contacts;
+        $this->LienContacts = $lien;
     }
     
     

@@ -43,7 +43,9 @@ class InstancesCategorieController extends Controller
     private $instances_categories;
 
     /**
-     * ArticlesController constructor.
+     * InstancesCategorieController constructor.
+     * @param WsManager $wsManager
+     * @param UserService $userService
      */
     public function __construct(WsManager $wsManager, UserService $userService)
     {
@@ -56,8 +58,6 @@ class InstancesCategorieController extends Controller
 
         $this->ws_manager = $wsManager;
         $this->user_service = $userService;
-
-        $this->getDemarre();
     }
 
     /**
@@ -112,13 +112,6 @@ class InstancesCategorieController extends Controller
         }
 
         return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
-    }
-
-    /**
-     * Démarrage du webservice gimel avec le compte ADMIN
-     */
-    private function getDemarre() {
-        $this->ws_manager->getDemarre();
     }
 
     private function getEnfants(InstCat $instCat) {

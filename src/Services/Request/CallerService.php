@@ -43,6 +43,11 @@ class CallerService
     protected $url = '';
 
     /**
+     * @var Unirest\Response
+     */
+    protected $response;
+
+    /**
      * @var array
      */
     protected $filter = array();
@@ -105,14 +110,13 @@ class CallerService
      */
     private function getContext(): string
     {
-        $this->context = 'pijDSCntxClient={"ProDataSet":{}}';
-
+        $this->context = '';
         if($this->cache->has($this->cache_key_admin)) {
             $data = $this->cache->get($this->cache_key_admin);
             $contexte = new CntxAdmin();
             if($contexte->__parse($data)) {
                 if($contexte->isValid()) {
-                    $this->context = 'pijDSCntxClient=' . $contexte->__toString();
+                    $this->context = '&pijDSCntxClient=' . $contexte->__toString();
                     return $this->context;
                 }
             }
@@ -135,10 +139,18 @@ class CallerService
      */
     private function getParamsAppel(): string
     {
-        if($this->paramsAppel->countItems() > 0) {
-            return 'pijDSParamAppel={"ProDataSet":{"ttParam":' . $this->paramsAppel->__toString() . '}}';
+        $filters = $this->getFilter();
+
+        if(!is_null($filters) && count($filters) > 0) {
+            foreach ($filters['params_appel'] as $param) {
+                $this->paramsAppel->addItem($param);
+            }
         }
-        return 'pijDSParamAppel={"ProDataSet":{}}';
+
+        if($this->paramsAppel->countItems() > 0) {
+            return '&pijDSParamAppel={"ProDataSet":{"ttParam":' . $this->paramsAppel->__toString() . '}}';
+        }
+        return '';
     }
 
     /**
@@ -159,17 +171,16 @@ class CallerService
         $filters = $this->getFilter();
 
         if(!is_null($filters) && count($filters) > 0) {
-            foreach ($filters as $param) {
+            foreach ($filters['criteres_selection'] as $param) {
                 $this->critsSelect->addItem($param);
             }
         }
 
         if($this->critsSelect->countItems() > 0) {
-            return 'pijDSCritSel={"ProDataSet":{"ttParam":' . $this->critsSelect->__toString() . '}}';
+            return '&pijDSCritSel={"ProDataSet":{"ttParam":' . $this->critsSelect->__toString() . '}}';
         }
-        else {
-            return 'pijDSCritSel={"ProDataSet":{}}';
-        }
+
+        return '';
     }
 
     /**
@@ -259,7 +270,7 @@ class CallerService
      * @return string
      */
     private function getBaseUrl() {
-        return 'http://www.dfc2.fr' . WsParameters::URL_SUFFIX;
+        return WsParameters::HOST . WsParameters::URL_SUFFIX;
     }
 
     /**
@@ -281,17 +292,17 @@ class CallerService
             case WsTypeContext::CONTEXT_NONE:
                 break;
             default:
-                $this->url .= '&' . $this->getContext();
+                $this->url .= $this->getContext();
                 break;
         }
 
         if (!empty($this->getParamsAppel())){
-            $this->url .= '&' . $this->getParamsAppel();
+            $this->url .= $this->getParamsAppel();
         }
 
         $critsSelect = $this->getCritsSelect();
         if (!empty($critsSelect)){
-            $this->url .= '&' . $critsSelect;
+            $this->url .= $critsSelect;
         }
 
         return $this->url;
@@ -305,6 +316,13 @@ class CallerService
         return '{ "request": { "pijDSOrig": '.$this->getOrigin().', "pijDSModif": '.$this->getModif().'}}';
     }
 
+    /**
+     * @return Unirest\Response
+     */
+    public function getResponse() {
+        return $this->response;
+    }
+
 
     /**
      * Appel GET
@@ -313,8 +331,9 @@ class CallerService
     public function get() {
         $this->setUrl();
         Unirest\Request::timeout(30);
-        $response = Unirest\Request::get($this->getUrl(), $this->getHeaders(), null);
-        return $response;
+        $this->response = Unirest\Request::get($this->getUrl(), $this->getHeaders(), null);
+
+        return $this->response;
     }
 
     /**
@@ -323,7 +342,7 @@ class CallerService
      */
     public function put() {
         $this->setUrl();
-        $response = Unirest\Request::put($this->getUrl(), $this->getHeaders(), $this->getBody());
-        return $response;
+        $this->response = Unirest\Request::put($this->getUrl(), $this->getHeaders(), $this->getBody());
+        return $this->response;
     }
 }

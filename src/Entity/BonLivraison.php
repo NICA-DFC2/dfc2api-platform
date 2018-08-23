@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Services\Objets\WsDocumEnt;
+use App\Utils\Edition;
 use App\Utils\Extensions\Document;
 use App\Utils\Ligne;
 
@@ -27,6 +28,11 @@ class BonLivraison extends Document
     public function setLigne(Ligne $ligne)
     {
         parent::setLignes($ligne);
+    }
+
+    public function setEdition(Edition $edition)
+    {
+        parent::setEdition($edition);
     }
 
     /**
