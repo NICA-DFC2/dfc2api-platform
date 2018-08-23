@@ -58,7 +58,7 @@ class LibellesController extends Controller
      *
      * @Route(
      *     name = "api_libelles_item_get",
-     *     path = "/api/libelles",
+     *     path = "/api/ws/libelles",
      *     methods= "GET"
      * )
      * @SWG\Response(

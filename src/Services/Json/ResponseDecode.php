@@ -561,7 +561,7 @@ class ResponseDecode
             if(isset($item->{'IdArt'})) {
                 $stat = new WsStatClientArt($item);
             }
-            // stats client
+            // stats client/ rep client
             else {
                 $stat = new WsStatClient($item);
             }

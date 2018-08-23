@@ -60,7 +60,7 @@ class CommandesController extends Controller
      *
      * @Route(
      *     name = "api_commandes_items_get",
-     *     path = "/api/commandes",
+     *     path = "/api/ws/commandes",
      *     methods= "GET"
      * )
      * @SWG\Response(
@@ -99,7 +99,7 @@ class CommandesController extends Controller
                         $doc->setLignes($ligne);
                     }
 
-                    $doc->setLienEdition('/api/commandes/'.$wsDocs->getIdDocDE().'/edition');
+                    $doc->setLienEdition('/api/ws/commandes/'.$wsDocs->getIdDocDE().'/edition');
 
                     array_push($list_docs, $doc);
                 }
@@ -120,7 +120,7 @@ class CommandesController extends Controller
      *
      * @Route(
      *     name = "api_commandes_edition_item_get",
-     *     path = "/api/commandes/{id}/edition",
+     *     path = "/api/ws/commandes/{id}/edition",
      *     methods= "GET",
      *     requirements={"id"="\d+"}
      * )

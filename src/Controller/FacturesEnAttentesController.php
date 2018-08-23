@@ -59,7 +59,7 @@ class FacturesEnAttentesController extends Controller
      *
      * @Route(
      *     name = "api_factures_en_attentes_items_get",
-     *     path = "/api/factures-en-attentes",
+     *     path = "/api/ws/factures-en-attentes",
      *     methods= "GET"
      * )
      * @SWG\Response(
@@ -101,5 +101,7 @@ class FacturesEnAttentesController extends Controller
         else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
             return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
         }
+
+        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
     }
 }

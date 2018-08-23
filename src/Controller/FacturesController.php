@@ -62,7 +62,7 @@ class FacturesController extends Controller
      *
      * @Route(
      *     name = "api_factures_items_get",
-     *     path = "/api/factures",
+     *     path = "/api/ws/factures",
      *     methods= "GET"
      * )
      * @SWG\Response(
@@ -118,7 +118,7 @@ class FacturesController extends Controller
                         }
                     }
 
-                    $doc->setLienEdition('/api/factures/'.$wsDocs->getIdDocDE().'/edition');
+                    $doc->setLienEdition('/api/ws/factures/'.$wsDocs->getIdDocDE().'/edition');
 
                     array_push($list_docs, $doc);
                 }
@@ -136,7 +136,7 @@ class FacturesController extends Controller
      *
      * @Route(
      *     name = "api_factures_client_items_get",
-     *     path = "/api/factures/{id_cli}/client",
+     *     path = "/api/ws/factures/{id_cli}/client",
      *     methods= "GET",
      *     requirements={"id_cli"="\d+"}
      * )
@@ -190,7 +190,7 @@ class FacturesController extends Controller
                         }
                     }
 
-                    $doc->setLienEdition('/api/factures/'.$wsDocs->getIdDocDE().'/edition');
+                    $doc->setLienEdition('/api/ws/factures/'.$wsDocs->getIdDocDE().'/edition');
 
                     array_push($list_docs, $doc);
                 }
@@ -208,7 +208,7 @@ class FacturesController extends Controller
      *
      * @Route(
      *     name = "api_factures_edition_item_get",
-     *     path = "/api/factures/{id}/edition",
+     *     path = "/api/ws/factures/{id}/edition",
      *     methods= "GET",
      *     requirements={"id"="\d+"}
      * )

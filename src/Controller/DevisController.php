@@ -63,7 +63,7 @@ class DevisController extends Controller
      *
      * @Route(
      *     name = "api_devis_items_get",
-     *     path = "/api/devis",
+     *     path = "/api/ws/devis",
      *     methods= "GET"
      * )
      * @SWG\Response(
@@ -124,7 +124,7 @@ class DevisController extends Controller
      *
      * @Route(
      *     name = "api_devis_edition_item_get",
-     *     path = "/api/devis/{id}/edition",
+     *     path = "/api/ws/devis/{id}/edition",
      *     methods= "GET",
      *     requirements={"id"="\d+"}
      * )

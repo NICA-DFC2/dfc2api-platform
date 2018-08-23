@@ -200,10 +200,21 @@ class WsManager
     }
 
     /**
+     * @return mixed
+     */
+    public function getDepotsClass(){
+        return $this->depots;
+    }
+
+
+    /**
      * @param $id_depot
      * @return mixed
      */
     private function getDepotClass($id_depot){
+        if(is_null($this->depots))
+            return null;
+
         return $this->depots->getItemByFilter('IdDep', $id_depot);
     }
 
@@ -689,6 +700,9 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($response);
+
+            var_dump($responseDecode);
+
             return $responseDecode->decodeRetour();
         }
 
@@ -748,8 +762,8 @@ class WsManager
                             $wsDepot = $this->getDepotClass($wsStock->getIdDep());
 
                             $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                            $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                            $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
                         }
                         $wsArticle->setStocks($arrayStocks);
                     }
@@ -832,8 +846,8 @@ class WsManager
                                 $wsDepot = $this->getDepotClass($wsStock->getIdDep());
 
                                 $stockDepot = new StockDepot();
-                                $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                                $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                                $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                                $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
                             }
                             $wsArticle->setStocks($arrayStocks);
                         }
@@ -894,8 +908,8 @@ class WsManager
                             $wsDepot = $this->getDepotClass($wsStock->getIdDep());
 
                             $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                            $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                            $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
                         }
                         $wsArticle->setStocks($arrayStocks);
                     }
@@ -968,8 +982,8 @@ class WsManager
                             $wsDepot = $this->getDepotClass($wsStock->getIdDep());
 
                             $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                            $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                            $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
                         }
                         $wsArticle->setStocks($arrayStocks);
                     }
@@ -1030,8 +1044,8 @@ class WsManager
                             $wsDepot = $this->getDepotClass($wsStock->getIdDep());
 
                             $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                            $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                            $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
                         }
                         $wsArticle->setStocks($arrayStocks);
                     }
@@ -1092,8 +1106,8 @@ class WsManager
                             $wsDepot = $this->getDepotClass($wsStock->getIdDep());
 
                             $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                            $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                            $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
                         }
                         $wsArticle->setStocks($arrayStocks);
                     }
@@ -1155,8 +1169,8 @@ class WsManager
                             $wsDepot = $this->getDepotClass($wsStock->getIdDep());
 
                             $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                            $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                            $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
                         }
                         $wsArticle->setStocks($arrayStocks);
                     }
@@ -1219,8 +1233,8 @@ class WsManager
                             $wsDepot = $this->getDepotClass($wsStock->getIdDep());
 
                             $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                            $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                            $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
                         }
                         $wsArticle->setStocks($arrayStocks);
                     }
@@ -1283,8 +1297,8 @@ class WsManager
                             $wsDepot = $this->getDepotClass($wsStock->getIdDep());
 
                             $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                            $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                            $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
                         }
                         $wsArticle->setStocks($arrayStocks);
                     }
@@ -1347,8 +1361,8 @@ class WsManager
                             $wsDepot = $this->getDepotClass($wsStock->getIdDep());
 
                             $stockDepot = new StockDepot();
-                            $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                            $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                            $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                            $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
                         }
                         $wsArticle->setStocks($arrayStocks);
                     }
@@ -1414,8 +1428,8 @@ class WsManager
                                 $wsDepot = $this->getDepotClass($wsStock->getIdDep());
 
                                 $stockDepot = new StockDepot();
-                                $stockDepot->parseObject($wsStock, $wsDepot->getNomDep());
-                                $arrayStocks[$wsDepot->getNomDepLower()] = $stockDepot->parseString();
+                                $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                                $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
                             }
                             $wsArticle->setStocks($arrayStocks);
                         }
@@ -1644,6 +1658,8 @@ class WsManager
                 ->setParamsAppel($TTParamAppel)
                 ->setCritsSelect($TTCritSel)
                 ->get();
+
+            print_r($this->getCaller()->getUrl());
 
             $responseDecode = new ResponseDecode($response);
             return $responseDecode->decodeRetour();

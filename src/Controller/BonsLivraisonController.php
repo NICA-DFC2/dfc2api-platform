@@ -62,7 +62,7 @@ class BonsLivraisonController extends Controller
      *
      * @Route(
      *     name = "api_bonslivraison_items_get",
-     *     path = "/api/bonslivraison",
+     *     path = "/api/ws/bonslivraison",
      *     methods= "GET"
      * )
      * @SWG\Response(
@@ -101,7 +101,7 @@ class BonsLivraisonController extends Controller
                         $doc->setLignes($ligne);
                     }
 
-                    $doc->setLienEdition('/api/bonslivraison/'.$wsDocs->getIdDocDE().'/edition');
+                    $doc->setLienEdition('/api/ws/bonslivraison/'.$wsDocs->getIdDocDE().'/edition');
 
                     array_push($list_docs, $doc);
                 }
@@ -124,7 +124,7 @@ class BonsLivraisonController extends Controller
      *
      * @Route(
      *     name = "api_bonslivraison_edition_item_get",
-     *     path = "/api/bonslivraison/{id}/edition",
+     *     path = "/api/ws/bonslivraison/{id}/edition",
      *     methods= "GET",
      *     requirements={"id"="\d+"}
      * )
