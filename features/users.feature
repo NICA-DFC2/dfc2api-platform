@@ -19,7 +19,6 @@ Feature: User
     And the response should be in JSON
     And the header "Content-Type" should be equal to "application/json"
     And the JSON node "code" should be equal to "504"
-    And the JSON node "message" should be equal to "Gateway Timeout"
 
 
   Scenario: Read User If not authorized NOK
@@ -29,7 +28,6 @@ Feature: User
     And the response should be in JSON
     And the header "Content-Type" should be equal to "application/json"
     And the JSON node "code" should be equal to "504"
-    And the JSON node "message" should be equal to "Gateway Timeout"
 
 
   Scenario: Read User If not authorized NOK
