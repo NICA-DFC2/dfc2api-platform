@@ -3,6 +3,7 @@ security:
         FOS\UserBundle\Model\UserInterface: bcrypt
 
     role_hierarchy:
+        ROLE_CLIENT: ROLE_USER
         ROLE_COMMERCIAL: ROLE_USER
         ROLE_MARKET_LEADER: ROLE_USER
         ROLE_ADMIN: ROLE_USER
@@ -13,23 +14,17 @@ security:
             id: fos_user.user_provider.username
 
     firewalls:
-        login:
-            pattern:  ^/login
+        main:
+            pattern:   ^/
+            provider: fos_userbundle
             stateless: true
             anonymous: true
-            provider: fos_userbundle
             json_login:
                 check_path: /login_check
                 username_path: username
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
-        main:
-            pattern:   ^/
-            provider: fos_userbundle
-            stateless: true
-            anonymous: true
             logout:
                 path:   fos_user_security_logout
                 target: /
@@ -49,26 +44,30 @@ security:
 
     access_control:
         - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login$, role: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
-        - { path: ^/logout$, role: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/login$, role: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/logout$, role: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/resetting$, role: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
 
         - { path: ^/api$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/api/users, roles: [ ROLE_ADMIN ] }
 
-        - { path: ^/api/articles, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
-        - { path: ^/api/ws$, roles: [ ROLE_COMMERCIAL, ROLE_MARKET_LEADER ] }
+        - { path: ^/api/articles, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/api/article_categories, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/api/ws$, roles: [ ROLE_COMMERCIAL, ROLE_MARKET_LEADER ] }
         - { path: ^/api/ws/clients, roles: [ ROLE_COMMERCIAL, ROLE_MARKET_LEADER ] }
         - { path: ^/api/ws/contacts, roles: [ ROLE_COMMERCIAL, ROLE_MARKET_LEADER ] }
 
-        - { path: ^/api/devis, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
-        - { path: ^/api/factures, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
-        - { path: ^/api/bonslivraison, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
-        - { path: ^/api/commandes, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
-        - { path: ^/api/factures-en-attentes, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/api/ws/devis$, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/api/ws/factures$, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/api/ws/bonslivraison$, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/api/ws/commandes$, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/api/ws/factures-en-attentes$, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
 
-        - { path: ^/api/editions$, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/api/ws/editions, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
 
-        - { path: ^/api/libelles, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/api/ws/libelles, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
 
-        - { path: ^/api/depots, roles: [ ROLE_USER, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+        - { path: ^/api/ws/depots, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+
+        - { path: ^/api/ws/statistiques, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }

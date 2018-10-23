@@ -118,7 +118,7 @@ class FacturesController extends Controller
                         }
                     }
 
-                    $doc->setLienEdition('/api/ws/factures/'.$wsDocs->getIdDocDE().'/edition');
+                    $doc->setLienEdition('api/ws/factures/'.$wsDocs->getIdDocDE().'/edition');
 
                     array_push($list_docs, $doc);
                 }
@@ -176,11 +176,10 @@ class FacturesController extends Controller
                     }
 
                     // Etat de la facture
-                    $TTRetourFacCliAtt = $this->ws_manager->getFactureEnAttente($doc->getIdDocDE());
+                    $TTRetourFacCliAtt = $this->ws_manager->getFactureEnAttente($doc->getIdDocDE(), $id_cli);
                     if (!is_null($TTRetourFacCliAtt) && $TTRetourFacCliAtt instanceof TTRetour) {
                         if($TTRetourFacCliAtt->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
                             $TTFacCliAtt = $TTRetourFacCliAtt->getTable(WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
-
                             for ($iFA = 0; $iFA < $TTFacCliAtt->countItems(); $iFA++) {
                                 $wsFacCliAtt = $TTFacCliAtt->getItem($iFA);
                                 $etat = new EtatFacture();
@@ -190,7 +189,78 @@ class FacturesController extends Controller
                         }
                     }
 
-                    $doc->setLienEdition('/api/ws/factures/'.$wsDocs->getIdDocDE().'/edition');
+                    $doc->setLienEdition('api/ws/factures/'.$wsDocs->getIdDocDE().'/edition');
+
+                    array_push($list_docs, $doc);
+                }
+
+                return $this->json($list_docs);
+            }
+            else {
+                return $this->json(array());
+            }
+        }
+    }
+
+    /**
+     * Liste d'entêtes de facture état en cours pour le client connecté dans un ordre décroissant.
+     *
+     * @Route(
+     *     name = "api_factures_client_items_get",
+     *     path = "/api/ws/factures/{id_cli}/client/current",
+     *     methods= "GET",
+     *     requirements={"id_cli"="\d+"}
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne une liste de factures état en cours pour le client renseigné dans un ordre décroissant",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Facture::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function facturesCurrentGetWithClientAction($id_cli, Request $request)
+    {
+        $this->ws_manager->setFilter($request->query->all());
+
+        $TTRetour = $this->ws_manager->getDocumentsCurrentWithClient($id_cli, WsParameters::TYPE_PRENDRE_FACCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
+                $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
+                $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
+
+                $list_docs = array();
+                for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
+                    $wsDocs = $TTParamEnt->getItem($i);
+                    $doc = new Facture();
+                    $doc->parseObject($wsDocs);
+
+                    $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
+                    if(!is_null($wsLignes)) {
+                        for ($iL = 0; $iL < count($wsLignes); $iL++) {
+                            $ligne = new Ligne();
+                            $ligne->parseObject($wsLignes[$iL]);
+                            $doc->setLignes($ligne);
+                        }
+                    }
+
+                    // Etat de la facture
+                    $TTRetourFacCliAtt = $this->ws_manager->getFactureEnAttente($doc->getIdDocDE(), $id_cli);
+                    if (!is_null($TTRetourFacCliAtt) && $TTRetourFacCliAtt instanceof TTRetour) {
+                        if($TTRetourFacCliAtt->containsKey(WsTableNamesRetour::TABLENAME_TT_FACCLIATT)) {
+                            $TTFacCliAtt = $TTRetourFacCliAtt->getTable(WsTableNamesRetour::TABLENAME_TT_FACCLIATT);
+                            for ($iFA = 0; $iFA < $TTFacCliAtt->countItems(); $iFA++) {
+                                $wsFacCliAtt = $TTFacCliAtt->getItem($iFA);
+                                $etat = new EtatFacture();
+                                $etat->parseObject($wsFacCliAtt);
+                                $doc->setEtatFacDE($etat);
+                            }
+                        }
+                    }
+
+                    $doc->setLienEdition('api/ws/factures/'.$wsDocs->getIdDocDE().'/edition');
 
                     array_push($list_docs, $doc);
                 }

@@ -47,11 +47,23 @@ class AuthenticationSuccessListener
         // hydratation des propriétés de l'utilisateur via les webservice GIMEL
         $user = $this->user_service->getCurrentUser();
 
+        $userInfos = $this->user_service->getUserInfos();
+        $code = $event->getResponse()->getStatusCode();
+        $token = $event->getData()['token'];
+        $message = "Connexion réussie.";
+
+        if(!$userInfos['cntx_valid']) {
+            $message = "Connexion réussie mais sans les informations WS du client. Plus d'informations dans la propriété 'erreur' de l'objet user.";
+            $userInfos = null;
+            $token = null;
+            $code = 403;
+        }
+
         $event->setData([
-            'code' => $event->getResponse()->getStatusCode(),
-            'message' => "Connexion réussie.",
-            'user' => $this->user_service->getUserInfos(),
-            'token' => $event->getData()['token']
+            'code' => $code,
+            'message' => $message,
+            'user' => $userInfos,
+            'token' => $token
         ]);
     }
 }

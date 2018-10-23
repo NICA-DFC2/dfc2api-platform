@@ -324,7 +324,7 @@
         "version": "v1.8.0"
     },
     "symfony/process": {
-        "version": "v4.1.0"
+        "version": "v4.1.4"
     },
     "symfony/property-access": {
         "version": "v4.1.0"

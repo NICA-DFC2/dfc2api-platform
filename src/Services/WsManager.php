@@ -273,16 +273,21 @@ class WsManager
                 ->get();
 
             $responseDecode = new ResponseDecode($this->getCaller()->getResponse());
-            $context = $responseDecode->decodeCntxAdmin();
+            $notif = $responseDecode->decodeNotif(__FUNCTION__);
 
-            if ($context instanceof CntxAdmin) {
-                $this->getCache()->clear();
-                $this->instantiateDepots();
-                // met en cache le contexte de connexion
-                $this->getCache()->set($this->cache_key_admin, $context->__toValsString());
+            if(is_null($notif)) {
+                $context = $responseDecode->decodeCntxAdmin();
+                if ($context instanceof CntxAdmin) {
+                    $this->getCache()->clear();
+                    $this->instantiateDepots();
+                    // met en cache le contexte de connexion
+                    $this->getCache()->set($this->cache_key_admin, $context->__toValsString());
+                }
+
+                return $context;
             }
 
-            return $context;
+            return $notif;
         }
 
         /**
@@ -1499,9 +1504,11 @@ class WsManager
          * Lecture des documents d'un client
          * @param $format : Indique le type de retour (Tout, Entete ou ligne)
          * @param $type_prendre : Indique le type de document à lire
+         * @param $tailleLot : Nombre d'enregistrement à retourner
+         * @param $tri : valeur de tri peut prendre comme valeurs ASC ou DESC(défaut)
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getDocuments($type_prendre=null, $format = WsParameters::FORMAT_DOCUMENT_VIDE)
+        public function getDocuments($type_prendre=null, $format = WsParameters::FORMAT_DOCUMENT_VIDE, $tailleLot = 25, $tri = 'DESC')
         {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
@@ -1509,6 +1516,7 @@ class WsManager
             if ($format !== WsParameters::FORMAT_DOCUMENT_VIDE) {
                 $TTParamAppel->addItem(new CritParam("FormatDocument", $format));
             }
+            $TTParamAppel->addItem(new CritParam("TailleLotEnr", $tailleLot));
 
             $TTCritSel = new TTParam();
             if(!is_null($this->getUser())) {
@@ -1516,6 +1524,7 @@ class WsManager
                     $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
                 }
             }
+            $TTCritSel->addItem(new CritParam('DateDE', $tri, 1,'|Tri|'));
 
             $response = $this->getCaller()
                 ->setCache($this->getCache())
@@ -1535,9 +1544,11 @@ class WsManager
          * @param $id_cli
          * @param $format : Indique le type de retour (Tout, Entete ou ligne)
          * @param $type_prendre : Indique le type de document à lire
+         * @param $tailleLot : Nombre d'enregistrement à retourner
+         * @param $tri : valeur de tri peut prendre comme valeurs ASC ou DESC(défaut)
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getDocumentsWithClient($id_cli, $type_prendre=null, $format = WsParameters::FORMAT_DOCUMENT_VIDE)
+        public function getDocumentsWithClient($id_cli, $type_prendre=null, $format = WsParameters::FORMAT_DOCUMENT_VIDE, $tailleLot = 25, $tri = 'DESC')
         {
             $TTParamAppel = new TTParam();
             $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
@@ -1545,11 +1556,52 @@ class WsManager
             if ($format !== WsParameters::FORMAT_DOCUMENT_VIDE) {
                 $TTParamAppel->addItem(new CritParam("FormatDocument", $format));
             }
+            $TTParamAppel->addItem(new CritParam("TailleLotEnr", $tailleLot));
 
             $TTCritSel = new TTParam();
             if($id_cli > 0) {
                 $TTCritSel->addItem(new CritParam('IdCli', $id_cli));
             }
+            $TTCritSel->addItem(new CritParam('DateDE', $tri, 1,'|Tri|'));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_DOCUMENT)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
+        }
+
+        /**
+         * Lecture des documents état en cours d'un client
+         * @param $id_cli
+         * @param $format : Indique le type de retour (Tout, Entete ou ligne)
+         * @param $type_prendre : Indique le type de document à lire
+         * @param $tailleLot : Nombre d'enregistrement à retourner
+         * @param $tri : valeur de tri peut prendre comme valeurs ASC ou DESC(défaut)
+         * @return Objets\TTRetour|\Exception|mixed
+         */
+        public function getDocumentsCurrentWithClient($id_cli, $type_prendre=null, $format = WsParameters::FORMAT_DOCUMENT_VIDE, $tailleLot = 25, $tri = 'DESC')
+        {
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypePds', WsParameters::TYPE_PDS_SIMPLE));
+            $TTParamAppel->addItem(new CritParam("TypePrendre", $type_prendre));
+            if ($format !== WsParameters::FORMAT_DOCUMENT_VIDE) {
+                $TTParamAppel->addItem(new CritParam("FormatDocument", $format));
+            }
+            $TTParamAppel->addItem(new CritParam("TailleLotEnr", $tailleLot));
+
+            $TTCritSel = new TTParam();
+            if($id_cli > 0) {
+                $TTCritSel->addItem(new CritParam('IdCli', $id_cli));
+            }
+            $TTCritSel->addItem(new CritParam('DateDE', $tri, 1,'|Tri|'));
+            $TTCritSel->addItem(new CritParam('EtatDE', 'E'));
 
             $response = $this->getCaller()
                 ->setCache($this->getCache())
@@ -1598,31 +1650,37 @@ class WsManager
         /**
          * Lecture d'une facture en attentes d'un client
          * @param integer $id
+         * @param integer $id_cli
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getFactureEnAttente($id)
+        public function getFactureEnAttente($id, $id_cli=0)
         {
             $TTCritSel = new TTParam();
-            if(!is_null($this->getUser())) {
+            if ($id_cli > 0) {
+                $TTCritSel->addItem(new CritParam('IdCli', $id_cli));
+            }
+            else if(!is_null($this->getUser())) {
                 if ($this->getUser()->getIdCli() > 0) {
                     $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
                 }
-                $TTCritSel->addItem(new CritParam('IdFac', $id));
-
-                $response = $this->getCaller()
-                    ->setCache($this->getCache())
-                    ->setModule(WsParameters::MODULE_FACCLIATT)
-                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                    ->setFilter($this->getFilter())
-                    ->setParamsAppel(new TTParam())
-                    ->setCritsSelect($TTCritSel)
-                    ->get();
-
-                $responseDecode = new ResponseDecode($response);
-                return $responseDecode->decodeRetour();
             }
-            
-            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdCli() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
+            else {
+                return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdCli() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
+            }
+
+            $TTCritSel->addItem(new CritParam('IdFac', $id));
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_FACCLIATT)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel(new TTParam())
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
         }
 
 
@@ -1658,8 +1716,6 @@ class WsManager
                 ->setParamsAppel($TTParamAppel)
                 ->setCritsSelect($TTCritSel)
                 ->get();
-
-            print_r($this->getCaller()->getUrl());
 
             $responseDecode = new ResponseDecode($response);
             return $responseDecode->decodeRetour();
@@ -1746,37 +1802,41 @@ class WsManager
 
         /**
          * Lecture des statistiques client
+         * @param $id_cli : identifiant unique du client
          * @param $avecBlEnCours : valeur possible oui ou non
          * @param $type_donnee
          * @return Objets\TTRetour|\Exception|mixed
          */
-        public function getStatistiquesClient($type_donnee = WsParameters::TYPE_DONNEE_STAT_CLI, $avecBlEnCours = "oui")
+        public function getStatistiquesClient($id_cli=0, $type_donnee = WsParameters::TYPE_DONNEE_STAT_CLI, $avecBlEnCours = "oui")
         {
-            if(!is_null($this->getUser())) {
-                $TTParamAppel = new TTParam();
-                $TTParamAppel->addItem(new CritParam("TypeDonnee", $type_donnee));
-                $TTParamAppel->addItem(new CritParam("AvecBLenCours", $avecBlEnCours));
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam("TypeDonnee", $type_donnee));
+            $TTParamAppel->addItem(new CritParam("AvecBLenCours", $avecBlEnCours));
 
-                $TTCritSel = new TTParam();
+            $TTCritSel = new TTParam();
+            $TTCritSel->addItem(new CritParam('Mois', 'ASC', 1,'|Tri|'));
+            if ($id_cli > 0) {
+                $TTCritSel->addItem(new CritParam('IdCli', $id_cli));
+            }
+            else if(!is_null($this->getUser())) {
                 if ($this->getUser()->getIdCli() > 0) {
                     $TTCritSel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
                 }
-
-                $response = $this->getCaller()
-                    ->setCache($this->getCache())
-                    ->setModule(WsParameters::MODULE_STATISTIQUE)
-                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                    ->setFilter($this->getFilter())
-                    ->setParamsAppel($TTParamAppel)
-                    ->setCritsSelect($TTCritSel)
-                    ->get();
-
-                $responseDecode = new ResponseDecode($response);
-                return $responseDecode->decodeRetour();
             }
-            
-            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdCli() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
+            else {
+                return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdCli() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
+            }
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_STATISTIQUE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            return $responseDecode->decodeRetour();
         }
-
-
 }

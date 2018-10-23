@@ -101,7 +101,133 @@ class BonsLivraisonController extends Controller
                         $doc->setLignes($ligne);
                     }
 
-                    $doc->setLienEdition('/api/ws/bonslivraison/'.$wsDocs->getIdDocDE().'/edition');
+                    $doc->setLienEdition('api/ws/bonslivraison/'.$wsDocs->getIdDocDE().'/edition');
+
+                    array_push($list_docs, $doc);
+                }
+
+                return $this->json($list_docs);
+            }
+            else {
+                return $this->json(array());
+            }
+        }
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
+
+        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
+    }
+
+    /**
+     * Liste d'entêtes de bons livraison pour le client.
+     *
+     * @Route(
+     *     name = "api_bonslivraison_items_get",
+     *     path = "/api/ws/bonslivraison/{id_cli}/client",
+     *     methods= "GET",
+     *     requirements={"id_cli"="\d+"}
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne une liste de bons livraison pour le client",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=BonLivraison::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function bonsLivraisonClientGetAction($id_cli, Request $request)
+    {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
+        $this->ws_manager->setFilter($request->query->all());
+
+        $TTRetour = $this->ws_manager->getDocumentsWithClient($id_cli,WsParameters::TYPE_PRENDRE_BL, WsParameters::FORMAT_DOCUMENT_VIDE);
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
+                $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
+                $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
+
+                $list_docs = array();
+                for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
+                    $wsDocs = $TTParamEnt->getItem($i);
+                    $doc = new Devis();
+                    $doc->parseObject($wsDocs);
+
+                    $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
+                    for ($iL = 0; $iL < count($wsLignes); $iL++) {
+                        $ligne = new Ligne();
+                        $ligne->parseObject($wsLignes[$iL]);
+                        $doc->setLignes($ligne);
+                    }
+
+                    $doc->setLienEdition('api/ws/bonslivraison/'.$wsDocs->getIdDocDE().'/edition');
+
+                    array_push($list_docs, $doc);
+                }
+
+                return $this->json($list_docs);
+            }
+            else {
+                return $this->json(array());
+            }
+        }
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
+
+        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
+    }
+
+    /**
+     * Liste d'entêtes de bons livraison état en cours pour le client.
+     *
+     * @Route(
+     *     name = "api_bonslivraison_current_items_get",
+     *     path = "/api/ws/bonslivraison/{id_cli}/client/current",
+     *     methods= "GET",
+     *     requirements={"id_cli"="\d+"}
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne une liste de bons livraison état en cours pour le client",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=BonLivraison::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function bonsLivraisonCurrentClientGetAction($id_cli, Request $request)
+    {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
+        $this->ws_manager->setFilter($request->query->all());
+
+        $TTRetour = $this->ws_manager->getDocumentsCurrentWithClient($id_cli,WsParameters::TYPE_PRENDRE_BL, WsParameters::FORMAT_DOCUMENT_VIDE);
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
+                $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
+                $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
+
+                $list_docs = array();
+                for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
+                    $wsDocs = $TTParamEnt->getItem($i);
+                    $doc = new Devis();
+                    $doc->parseObject($wsDocs);
+
+                    $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
+                    for ($iL = 0; $iL < count($wsLignes); $iL++) {
+                        $ligne = new Ligne();
+                        $ligne->parseObject($wsLignes[$iL]);
+                        $doc->setLignes($ligne);
+                    }
+
+                    $doc->setLienEdition('api/ws/bonslivraison/'.$wsDocs->getIdDocDE().'/edition');
 
                     array_push($list_docs, $doc);
                 }

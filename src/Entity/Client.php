@@ -119,6 +119,15 @@ class Client
     private $MontFFCliSoc;
     
     private $LienContacts;
+    private $LienDevis;
+    private $LienCommandes;
+    private $LienBL;
+    private $LienFactures;
+
+    private $LienNbDevisEtatE = 0;
+    private $LienNbCommandesEtatE = 0;
+    private $LienNbBLEtatE = 0;
+    private $LienNbFacturesEtatE = 0;
 
 
     /**
@@ -1786,7 +1795,133 @@ class Client
     {
         $this->LienContacts = $lien;
     }
-    
-    
+
+    /**
+     * @return mixed
+     */
+    public function getLienDevis()
+    {
+        return $this->LienDevis;
+    }
+
+    /**
+     * @param mixed $LienDevis
+     */
+    public function setLienDevis($LienDevis)
+    {
+        $this->LienDevis = $LienDevis;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLienCommandes()
+    {
+        return $this->LienCommandes;
+    }
+
+    /**
+     * @param mixed $LienCommandes
+     */
+    public function setLienCommandes($LienCommandes)
+    {
+        $this->LienCommandes = $LienCommandes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLienBL()
+    {
+        return $this->LienBL;
+    }
+
+    /**
+     * @param mixed $LienBL
+     */
+    public function setLienBL($LienBL)
+    {
+        $this->LienBL = $LienBL;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLienFactures()
+    {
+        return $this->LienFactures;
+    }
+
+    /**
+     * @param mixed $LienFactures
+     */
+    public function setLienFactures($LienFactures)
+    {
+        $this->LienFactures = $LienFactures;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLienNbDevisEtatE()
+    {
+        return $this->LienNbDevisEtatE;
+    }
+
+    /**
+     * @param mixed $LienNbDevisEtatE
+     */
+    public function setLienNbDevisEtatE($LienNbDevisEtatE)
+    {
+        $this->LienNbDevisEtatE = $LienNbDevisEtatE;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLienNbCommandesEtatE()
+    {
+        return $this->LienNbCommandesEtatE;
+    }
+
+    /**
+     * @param mixed $LienNbCommandesEtatE
+     */
+    public function setLienNbCommandesEtatE($LienNbCommandesEtatE)
+    {
+        $this->LienNbCommandesEtatE = $LienNbCommandesEtatE;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLienNbBLEtatE()
+    {
+        return $this->LienNbBLEtatE;
+    }
+
+    /**
+     * @param mixed $LienNbBLEtatE
+     */
+    public function setLienNbBLEtatE($LienNbBLEtatE)
+    {
+        $this->LienNbBLEtatE = $LienNbBLEtatE;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLienNbFacturesEtatE()
+    {
+        return $this->LienNbFacturesEtatE;
+    }
+
+    /**
+     * @param mixed $LienNbFacturesEtatE
+     */
+    public function setLienNbFacturesEtatE($LienNbFacturesEtatE)
+    {
+        $this->LienNbFacturesEtatE = $LienNbFacturesEtatE;
+    }
 
 }

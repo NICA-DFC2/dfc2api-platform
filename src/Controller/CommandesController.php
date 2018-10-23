@@ -99,7 +99,129 @@ class CommandesController extends Controller
                         $doc->setLignes($ligne);
                     }
 
-                    $doc->setLienEdition('/api/ws/commandes/'.$wsDocs->getIdDocDE().'/edition');
+                    $doc->setLienEdition('api/ws/commandes/'.$wsDocs->getIdDocDE().'/edition');
+
+                    array_push($list_docs, $doc);
+                }
+
+                return $this->json($list_docs);
+            }
+            else {
+                return $this->json(array());
+            }
+        }
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
+    }
+
+    /**
+     * Liste d'entêtes des commandes pour le client connecté.
+     *
+     * @Route(
+     *     name = "api_commandes_items_get",
+     *     path = "/api/ws/commandes/{id_cli}/client",
+     *     methods= "GET",
+     *     requirements={"id_cli"="\d+"}
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne une liste des commandes pour le client",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Commande::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function commandesClientGetAction($id_cli, Request $request)
+    {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
+        $this->ws_manager->setFilter($request->query->all());
+
+        $TTRetour = $this->ws_manager->getDocumentsWithClient($id_cli, WsParameters::TYPE_PRENDRE_CMDCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
+                $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
+                $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
+
+                $list_docs = array();
+                for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
+                    $wsDocs = $TTParamEnt->getItem($i);
+                    $doc = new Commande();
+                    $doc->parseObject($wsDocs);
+
+                    $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
+                    for ($iL = 0; $iL < count($wsLignes); $iL++) {
+                        $ligne = new Ligne();
+                        $ligne->parseObject($wsLignes[$iL]);
+                        $doc->setLignes($ligne);
+                    }
+
+                    $doc->setLienEdition('api/ws/commandes/'.$wsDocs->getIdDocDE().'/edition');
+
+                    array_push($list_docs, $doc);
+                }
+
+                return $this->json($list_docs);
+            }
+            else {
+                return $this->json(array());
+            }
+        }
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
+    }
+
+    /**
+     * Liste d'entêtes des commandes état en cours pour le client connecté.
+     *
+     * @Route(
+     *     name = "api_commandes_current_items_get",
+     *     path = "/api/ws/commandes/{id_cli}/client/current",
+     *     methods= "GET",
+     *     requirements={"id_cli"="\d+"}
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne une liste des commandes etat en cours pour le client",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Commande::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function commandesCurrentClientGetAction($id_cli, Request $request)
+    {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
+        $this->ws_manager->setFilter($request->query->all());
+
+        $TTRetour = $this->ws_manager->getDocumentsCurrentWithClient($id_cli, WsParameters::TYPE_PRENDRE_CMDCLI, WsParameters::FORMAT_DOCUMENT_VIDE);
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT) && $TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG)) {
+                $TTParamEnt = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_ENT);
+                $TTParamLig = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_DOCUM_LIG);
+
+                $list_docs = array();
+                for ($i = 0; $i < $TTParamEnt->countItems(); $i++) {
+                    $wsDocs = $TTParamEnt->getItem($i);
+                    $doc = new Commande();
+                    $doc->parseObject($wsDocs);
+
+                    $wsLignes = $TTParamLig->getItemsByFilter('IdDocDE', $wsDocs->getIdDocDE());
+                    for ($iL = 0; $iL < count($wsLignes); $iL++) {
+                        $ligne = new Ligne();
+                        $ligne->parseObject($wsLignes[$iL]);
+                        $doc->setLignes($ligne);
+                    }
+
+                    $doc->setLienEdition('api/ws/commandes/'.$wsDocs->getIdDocDE().'/edition');
 
                     array_push($list_docs, $doc);
                 }

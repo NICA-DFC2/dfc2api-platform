@@ -55,6 +55,57 @@ class StatistiquesController extends Controller
     }
 
     /**
+     * Retourne les statistiques du client.
+     *
+     * @Route(
+     *     name = "api_stats_client_byid_items_get",
+     *     path = "/api/ws/statistiques/{id_cli}/client",
+     *     methods= "GET",
+     *     requirements={"id_cli"="\d+"}
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne les statistiques du client",
+     *     @SWG\Schema(
+     *         type="",
+     *         @SWG\Items(ref=@Model(type=StatClient::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function statistiquesClientByIdGetAction($id_cli, Request $request)
+    {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
+        $this->ws_manager->setFilter($request->query->all());
+
+        $TTRetour = $this->ws_manager->getStatistiquesClient($id_cli);
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_STAT)) {
+                $TTStat = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_STAT);
+
+                $list_stats = array();
+                for ($i = 0; $i < $TTStat->countItems(); $i++) {
+                    $wsStat = $TTStat->getItem($i);
+                    $stat = new StatClient();
+                    $stat->parseObject($wsStat);
+                    array_push($list_stats, $stat);
+                }
+
+                return $this->json($list_stats);
+            }
+
+            return $this->json(new StatClient());
+        }
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
+
+        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
+    }
+
+    /**
      * Retourne les statistiques du client connecté.
      *
      * @Route(
@@ -128,7 +179,58 @@ class StatistiquesController extends Controller
 
         $this->ws_manager->setFilter($request->query->all());
 
-        $TTRetour = $this->ws_manager->getStatistiquesClient(WsParameters::TYPE_DONNEE_STAT_CLI_ART);
+        $TTRetour = $this->ws_manager->getStatistiquesClient(0,WsParameters::TYPE_DONNEE_STAT_CLI_ART);
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_STAT)) {
+                $TTStat = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_STAT);
+
+                $list_stats = array();
+                for ($i = 0; $i < $TTStat->countItems(); $i++) {
+                    $wsStat = $TTStat->getItem($i);
+                    $stat = new StatClientArt();
+                    $stat->parseObject($wsStat);
+                    array_push($list_stats, $stat);
+                }
+
+                return $this->json($list_stats);
+            }
+
+            return $this->json(new StatClientArt());
+        }
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
+
+        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
+    }
+
+    /**
+     * Retourne les statistiques du client connecté.
+     *
+     * @Route(
+     *     name = "api_stats_client_article_byid_items_get",
+     *     path = "/api/ws/statistiques/{id_cli}/client/article",
+     *     methods= "GET",
+     *     requirements={"id_cli"="\d+"}
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne les statistiques du client connecté",
+     *     @SWG\Schema(
+     *         type="",
+     *         @SWG\Items(ref=@Model(type=StatClientArt::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function statistiquesClientArticleByIdGetAction($id_cli, Request $request)
+    {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
+        $this->ws_manager->setFilter($request->query->all());
+
+        $TTRetour = $this->ws_manager->getStatistiquesClient($id_cli, WsParameters::TYPE_DONNEE_STAT_CLI_ART);
 
         if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
             if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_STAT)) {
@@ -179,6 +281,57 @@ class StatistiquesController extends Controller
         $this->ws_manager->setFilter($request->query->all());
 
         $TTRetour = $this->ws_manager->getStatistiquesClient(WsParameters::TYPE_DONNEE_STAT_REP_CLI);
+
+        if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
+            if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_STAT)) {
+                $TTStat = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_STAT);
+
+                $list_stats = array();
+                for ($i = 0; $i < $TTStat->countItems(); $i++) {
+                    $wsStat = $TTStat->getItem($i);
+                    $stat = new StatClient();
+                    $stat->parseObject($wsStat);
+                    array_push($list_stats, $stat);
+                }
+
+                return $this->json($list_stats);
+            }
+
+            return $this->json(new StatClient());
+        }
+        else if(!is_null($TTRetour) && $TTRetour instanceof Notif) {
+            return new JsonResponse(new ErrorRoute($TTRetour->getTexte(), 400), 400, array(), true);
+        }
+
+        return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
+    }
+
+    /**
+     * Retourne les statistiques du client connecté.
+     *
+     * @Route(
+     *     name = "api_stats_client_rep_byid_items_get",
+     *     path = "/api/ws/statistiques/{id_cli}/client/representant",
+     *     methods= "GET",
+     *     requirements={"id_cli"="\d+"}
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne les statistiques du client connecté",
+     *     @SWG\Schema(
+     *         type="",
+     *         @SWG\Items(ref=@Model(type=StatClient::class, groups={"full"}))
+     *     )
+     * )
+     */
+    public function statistiquesClientRepByIdGetAction($id_cli, Request $request)
+    {
+        $user = $this->user_service->getCurrentUser();
+        $this->ws_manager->setUser($user);
+
+        $this->ws_manager->setFilter($request->query->all());
+
+        $TTRetour = $this->ws_manager->getStatistiquesClient($id_cli,WsParameters::TYPE_DONNEE_STAT_REP_CLI);
 
         if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
             if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_STAT)) {

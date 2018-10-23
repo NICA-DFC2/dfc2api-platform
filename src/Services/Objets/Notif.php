@@ -35,6 +35,19 @@ class Notif
         return $string;
     }
 
+    public function __ShorttoString()
+    {
+        $string = '{';
+        $string .= '"Metier": "'.$this->getMetier().'", ';
+        $string .= '"Texte": "'.$this->getTexte().'", ';
+        $string .= '"Titre": "'. $this->getTitre().'", ';
+        $string .= '"Type": "'. $this->getType().'", ';
+        $string .= '"Function": "'. $this->getFunction(). '"';
+        $string .= '}';
+
+        return $string;
+    }
+
     /**
      * @return mixed
      */

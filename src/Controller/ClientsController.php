@@ -92,7 +92,17 @@ class ClientsController extends Controller
                     $client = new Client();
                     $client->parseObject($wsClient);
 
-                    $client->setLienContacts('/api/ws/contacts/'.$client->getIdCli().'/client');
+                    $client->setLienContacts('api/ws/contacts/'.$client->getIdCli().'/client');
+
+                    $client->setLienDevis('api/ws/devis/'.$client->getIdCli().'/client');
+                    $client->setLienCommandes('api/ws/commandes/'.$client->getIdCli().'/client');
+                    $client->setLienBL('api/ws/bonslivraison/'.$client->getIdCli().'/client');
+                    $client->setLienFactures('api/ws/factures/'.$client->getIdCli().'/client');
+
+                    $client->setLienNbDevisEtatE('api/ws/devis/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbCommandesEtatE('api/ws/commandes/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbBLEtatE('api/ws/bonslivraison/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbFacturesEtatE('api/ws/factures/'.$client->getIdCli().'/client/current');
 
                     array_push($list_cli, $client);
                 }
@@ -146,7 +156,17 @@ class ClientsController extends Controller
                     $client = new Client();
                     $client->parseObject($wsClient);
 
-                    $client->setLienContacts('/api/ws/contacts/'.$client->getIdCli().'/client');
+                    $client->setLienContacts('api/ws/contacts/'.$client->getIdCli().'/client');
+
+                    $client->setLienDevis('api/ws/devis/'.$client->getIdCli().'/client');
+                    $client->setLienCommandes('api/ws/commandes/'.$client->getIdCli().'/client');
+                    $client->setLienBL('api/ws/bonslivraison/'.$client->getIdCli().'/client');
+                    $client->setLienFactures('api/ws/factures/'.$client->getIdCli().'/client');
+
+                    $client->setLienNbDevisEtatE('api/ws/devis/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbCommandesEtatE('api/ws/commandes/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbBLEtatE('api/ws/bonslivraison/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbFacturesEtatE('api/ws/factures/'.$client->getIdCli().'/client/current');
 
                     array_push($list_cli, $client);
                 }
@@ -199,7 +219,17 @@ class ClientsController extends Controller
                     $client = new Client();
                     $client->parseObject($wsClient);
 
-                    $client->setLienContacts('/api/ws/contacts/'.$client->getIdCli().'/client');
+                    $client->setLienContacts('api/ws/contacts/'.$client->getIdCli().'/client');
+
+                    $client->setLienDevis('api/ws/devis/'.$client->getIdCli().'/client');
+                    $client->setLienCommandes('api/ws/commandes/'.$client->getIdCli().'/client');
+                    $client->setLienBL('api/ws/bonslivraison/'.$client->getIdCli().'/client');
+                    $client->setLienFactures('api/ws/factures/'.$client->getIdCli().'/client');
+
+                    $client->setLienNbDevisEtatE('api/ws/devis/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbCommandesEtatE('api/ws/commandes/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbBLEtatE('api/ws/bonslivraison/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbFacturesEtatE('api/ws/factures/'.$client->getIdCli().'/client/current');
 
                     array_push($list_cli, $client);
                 }
@@ -252,7 +282,17 @@ class ClientsController extends Controller
                     $client = new Client();
                     $client->parseObject($wsClient);
 
-                    $client->setLienContacts('/api/ws/contacts/'.$client->getIdCli().'/client');
+                    $client->setLienContacts('api/ws/contacts/'.$client->getIdCli().'/client');
+
+                    $client->setLienDevis('api/ws/devis/'.$client->getIdCli().'/client');
+                    $client->setLienCommandes('api/ws/commandes/'.$client->getIdCli().'/client');
+                    $client->setLienBL('api/ws/bonslivraison/'.$client->getIdCli().'/client');
+                    $client->setLienFactures('api/ws/factures/'.$client->getIdCli().'/client');
+
+                    $client->setLienNbDevisEtatE('api/ws/devis/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbCommandesEtatE('api/ws/commandes/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbBLEtatE('api/ws/bonslivraison/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbFacturesEtatE('api/ws/factures/'.$client->getIdCli().'/client/current');
 
                     array_push($list_cli, $client);
                 }
@@ -304,7 +344,17 @@ class ClientsController extends Controller
                     $client = new Client();
                     $client->parseObject($wsClient);
 
-                    $client->setLienContacts('/api/ws/contacts/'.$client->getIdCli().'/client');
+                    $client->setLienContacts('api/ws/contacts/'.$client->getIdCli().'/client');
+
+                    $client->setLienDevis('api/ws/devis/'.$client->getIdCli().'/client');
+                    $client->setLienCommandes('api/ws/commandes/'.$client->getIdCli().'/client');
+                    $client->setLienBL('api/ws/bonslivraison/'.$client->getIdCli().'/client');
+                    $client->setLienFactures('api/ws/factures/'.$client->getIdCli().'/client');
+
+                    $client->setLienNbDevisEtatE('api/ws/devis/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbCommandesEtatE('api/ws/commandes/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbBLEtatE('api/ws/bonslivraison/'.$client->getIdCli().'/client/current');
+                    $client->setLienNbFacturesEtatE('api/ws/factures/'.$client->getIdCli().'/client/current');
 
                     array_push($list_cli, $client);
                 }
