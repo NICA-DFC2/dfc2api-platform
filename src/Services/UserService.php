@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entity\User;
+use App\Services\Objets\Notif;
 use App\Services\Objets\TTRetour;
 use App\Services\Parameters\WsAlgorithmOpenSSL;
 use App\Services\Parameters\WsTableNamesRetour;
@@ -42,7 +43,9 @@ class UserService
             'id_depot' => null,
             'nom_depot' => null,
             'roles' => null,
-            'cntx_valid' => false
+            'cntx_valid' => false,
+            'erreur' => null,
+            'interface' => null
         ];
     }
 
@@ -79,7 +82,12 @@ class UserService
                         $user->setIdSal($wsUtil->getIdSal());
 
                         $this->user_infos['id_sal'] = $wsUtil->getIdSal();
+                        $this->user_infos['interface'] = serialize($token);
                     }
+                }
+                else if($TTRetour instanceof Notif) {
+                    $this->user_infos['cntx_valid'] = false;
+                    $this->user_infos['erreur'] = json_decode($TTRetour->__ShorttoString());
                 }
             }
             else {
@@ -100,8 +108,13 @@ class UserService
                             $this->user_infos['id_depot'] = $wsClient->getIdDep();
                             $this->user_infos['nom_depot'] = $wsClient->getNomDep();
                             $this->user_infos['no_cli'] = $wsClient->getNoCli();
+                            $this->user_infos['interface'] = serialize($token);
                         }
                     }
+                }
+                else if($TTRetour instanceof Notif) {
+                    $this->user_infos['cntx_valid'] = false;
+                    $this->user_infos['erreur'] = json_decode($TTRetour->__ShorttoString());
                 }
             }
 

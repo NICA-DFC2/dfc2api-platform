@@ -141,7 +141,7 @@ class WsDocumLig
             $this->setMontTVADL($json_object->{'MontTVADL'});
             $this->setMontTgapDL($json_object->{'MontTgapDL'});
             $this->setMontParafDL($json_object->{'MontParafDL'});
-            $this->setNbUCondDL($json_object->{'NbUCondDL'});
+            $this->setNbUCondDL((isset($json_object->{'NbUCondDL'})) ? $json_object->{'NbUCondDL'} : 0);
             $this->setFlgBonniDL($json_object->{'FlgBonniDL'});
             $this->setTypeQteDL($json_object->{'TypeQteDL'});
             $this->setIdPTA($json_object->{'IdPTA'});

@@ -211,11 +211,17 @@ class CntxAdmin
         if(!is_null($this->Valid)) {
             // séparation de la date et du time de la date Valid
             $args_fulldate = explode(' ', $this->Valid);
-            // séparation de la date
-            $args_date = explode('/', $args_fulldate[0]);
-            // on créé la nouvelle date
-            $date = new \DateTime($args_date[2].'-'.$args_date[1].'-'.$args_date[0]. ' '.$args_fulldate[1]);
-            return ($date > new \DateTime('now'));
+            if(is_array($args_fulldate)) {
+                // séparation de la date
+                $args_date = explode('/', $args_fulldate[0]);
+                if (is_array($args_date)) {
+                    if($args_date[2] !== '' && $args_date[1]  !== '' && $args_date[0] !== '') {
+                        // on créé la nouvelle date
+                        $date = new \DateTime($args_date[2] . '-' . $args_date[1] . '-' . $args_date[0] . ' ' . $args_fulldate[1]);
+                        return ($date > new \DateTime('now'));
+                    }
+                }
+            }
         }
         return false;
     }

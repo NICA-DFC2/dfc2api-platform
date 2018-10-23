@@ -38,6 +38,26 @@ class ExceptionListener
             );
             $response->setStatusCode('500');
         }
+        else if($exception instanceof \RuntimeException) {
+            $message = array(
+                'message' => str_replace('"', "'", $exception->getMessage()),
+                'code' => 500,
+                'file' => str_replace('"', "'", $exception->getFile()),
+                'line' => str_replace('"', "'", $exception->getLine()),
+                'trace' => $exception->getTrace()
+            );
+            $response->setStatusCode('500');
+        }
+        else if($exception instanceof \Exception) {
+            $message = array(
+                'message' => str_replace('"', "'", $exception->getMessage()),
+                'code' => 500,
+                'file' => str_replace('"', "'", $exception->getFile()),
+                'line' => str_replace('"', "'", $exception->getLine()),
+                'trace' => $exception->getTrace()
+            );
+            $response->setStatusCode('500');
+        }
         else {
             $message = array(
                 'message' => str_replace('"', "'", $exception->getMessage()),

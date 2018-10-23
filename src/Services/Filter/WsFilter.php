@@ -109,6 +109,7 @@ class WsFilter
                 }
             }
         }
+
         return $this->criteres_selection;
     }
 
@@ -143,13 +144,16 @@ class WsFilter
      * @return bool
      */
     private function is_date($value){
-        $value = str_replace('/', '-', $value);
-        $stamp = strtotime($value);
-        if (is_numeric($stamp)){
-            $month = date( 'm', $stamp );
-            $day   = date( 'd', $stamp );
-            $year  = date( 'Y', $stamp );
-            return checkdate($month, $day, $year);
+
+        if(strpos($value, '/') !== false || strpos($value, '-') !== false) {
+            $value = str_replace('/', '-', $value);
+            $stamp = strtotime($value);
+            if (is_numeric($stamp)) {
+                $month = date('m', $stamp);
+                $day = date('d', $stamp);
+                $year = date('Y', $stamp);
+                return checkdate($month, $day, $year);
+            }
         }
         return false;
     }
