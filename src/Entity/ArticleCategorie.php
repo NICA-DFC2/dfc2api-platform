@@ -32,7 +32,7 @@ class ArticleCategorie
 
     /**
      * @Gedmo\Slug(fields={"name"})
-     * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     * @ORM\Column(name="slug", type="string", unique=true)
      */
     private $slug;
 
@@ -92,6 +92,7 @@ class ArticleCategorie
 
     /**
      * @param mixed $slug
+     * @return mixed
      */
     public function setSlug($slug)
     {
