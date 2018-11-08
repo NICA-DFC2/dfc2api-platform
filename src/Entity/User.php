@@ -15,7 +15,11 @@ use JMS\Serializer\Annotation as JMSSerializer;
  *
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
- * @ApiResource(attributes={
+ * @ApiResource(,
+ *     itemOperations={
+ *          "logincheck"={"route_name"="fos_user_security_check" }
+ *     },
+ *     attributes={
  *     "normalization_context"={"groups"={"user", "user-read"}},
  *     "denormalization_context"={"groups"={"user", "user-write"}}
  * })

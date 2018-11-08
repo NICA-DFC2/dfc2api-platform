@@ -9,11 +9,7 @@ class WsParameters
     public const ACCEPT = 'application/json';
     public const ORIGIN = 'http://www.dfc2.fr';
     public const REFERER = 'http://www.dfc2.fr/';
-//    public const HOST = 'http://www.dfc2.fr';
-
     public const HOST = 'http://192.168.46.14:4791';
-//    public const ORIGIN = 'http://192.168.46.8';
-//    public const REFERER = 'http://192.168.46.8/';
 
     public const ID_DEP_PLATEFORME = 5;
 
