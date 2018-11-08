@@ -32,7 +32,7 @@ class ArticleCategorie
 
     /**
      * @Gedmo\Slug(fields={"name"})
-     * @ORM\Column(name="slug", type="string", unique=true)
+     * @ORM\Column(name="slug", type="string", length=255, unique=true)
      */
     private $slug;
 
