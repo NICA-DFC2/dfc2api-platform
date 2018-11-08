@@ -54,7 +54,7 @@ security:
 
   - { path: ^/api/articles, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
   - { path: ^/api/article_categories, role: IS_AUTHENTICATED_ANONYMOUSLY }
-  #- { path: ^/api/ws$, roles: [ ROLE_COMMERCIAL, ROLE_MARKET_LEADER ] }
+
   - { path: ^/api/ws/clients, roles: [ ROLE_COMMERCIAL, ROLE_MARKET_LEADER ] }
   - { path: ^/api/ws/contacts, roles: [ ROLE_COMMERCIAL, ROLE_MARKET_LEADER ] }
 
