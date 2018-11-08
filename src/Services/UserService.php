@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Entity\User;
 use App\Services\Objets\Notif;
 use App\Services\Objets\TTRetour;
+use App\Services\Objets\WsClient;
+use App\Services\Objets\WsUtil;
 use App\Services\Parameters\WsAlgorithmOpenSSL;
 use App\Services\Parameters\WsTableNamesRetour;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -42,10 +44,21 @@ class UserService
             'no_cli' => null,
             'id_depot' => null,
             'nom_depot' => null,
+            'cod_cli' => null,
+            'rsoc_cli' => null,
+            'codsusp_cli' => null,
+            'causesusp_cli' => null,
+            'mail_adr' => null,
+            'tel1_adr' => null,
+            'tel2_adr' => null,
             'roles' => null,
             'cntx_valid' => false,
             'erreur' => null,
-            'interface' => null
+            'interface' => null,
+            'lien_cmd' => null,
+            'lien_bl' => null,
+            'lien_dev' => null,
+            'lien_fac' => null
         ];
     }
 
@@ -76,13 +89,14 @@ class UserService
 
                 if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
                     $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_UTIL);
+                    /* @var $wsUtil WsUtil */
                     $wsUtil = $TTParam->getItem(0);
 
                     if(!is_null($wsUtil)) {
                         $user->setIdSal($wsUtil->getIdSal());
 
                         $this->user_infos['id_sal'] = $wsUtil->getIdSal();
-                        $this->user_infos['interface'] = serialize($token);
+                        //$this->user_infos['interface'] = serialize($token);
                     }
                 }
                 else if($TTRetour instanceof Notif) {
@@ -96,6 +110,7 @@ class UserService
                 if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
                     if (!is_null($TTRetour)) {
                         $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_CLI);
+                        /* @var $wsClient WsClient */
                         $wsClient = $TTParam->getItem(0);
 
                         if(!is_null($wsClient)) {
@@ -108,7 +123,19 @@ class UserService
                             $this->user_infos['id_depot'] = $wsClient->getIdDep();
                             $this->user_infos['nom_depot'] = $wsClient->getNomDep();
                             $this->user_infos['no_cli'] = $wsClient->getNoCli();
-                            $this->user_infos['interface'] = serialize($token);
+                            $this->user_infos['cod_cli'] = $wsClient->getCodCli();
+                            $this->user_infos['rsoc_cli'] = $wsClient->getRSocCli();
+                            $this->user_infos['codsusp_cli'] = $wsClient->getCodSuspCli();
+                            $this->user_infos['causesusp_cli'] = $wsClient->getCauseSuspCli();
+                            $this->user_infos['mail_adr'] = $wsClient->getMailAdr();
+                            $this->user_infos['tel1_adr'] = $wsClient->getTel1Adr();
+                            $this->user_infos['tel2_adr'] = $wsClient->getTel2Adr();
+                            $this->user_infos['lien_bl'] = 'api/ws/bonslivraison/'.$wsClient->getIdCli().'/client';
+                            $this->user_infos['lien_cmd'] = 'api/ws/commandes/'.$wsClient->getIdCli().'/client';
+                            $this->user_infos['lien_dev'] = 'api/ws/devis/'.$wsClient->getIdCli().'/client';
+                            $this->user_infos['lien_fac'] = 'api/ws/factures/'.$wsClient->getIdCli().'/client';
+                            //$this->user_infos['interface'] = serialize($token);
+
                         }
                     }
                 }

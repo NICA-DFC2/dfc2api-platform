@@ -1603,6 +1603,10 @@ class WsManager
             $TTCritSel->addItem(new CritParam('DateDE', $tri, 1,'|Tri|'));
             $TTCritSel->addItem(new CritParam('EtatDE', 'E'));
 
+            if($type_prendre === WsParameters::TYPE_PRENDRE_DEVIS){
+                $TTCritSel->addItem(new CritParam('FlgValidDE', 'true'));
+            }
+
             $response = $this->getCaller()
                 ->setCache($this->getCache())
                 ->setModule(WsParameters::MODULE_DOCUMENT)
