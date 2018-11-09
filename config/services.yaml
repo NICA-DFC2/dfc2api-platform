@@ -51,8 +51,8 @@ services:
         arguments: [ '@dfc2.api.manager', '@dfc2.user.service' ]
 
     App\Repository\:
-      resource: '../src/Repository'
-      arguments: [ 'doctrine.repository_service' ]
+        resource: '../src/Repository'
+        autowire: true
 
 
     App\EventSubscriber\TransformResponseSubscriber:
