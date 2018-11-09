@@ -1,23 +1,23 @@
 <?php
 namespace App\Validator\Constraints;
-use App\Entity\ArticleCategorie;
+use App\Entity\Categorie;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class ParentArticleCategorieIsEmptyValidator extends ConstraintValidator
+class ParentCategorieIsEmptyValidator extends ConstraintValidator
 {
     /**
-     * @param ArticleCategorie $articleCategorie
+     * @param Categorie $categorie
      * @param Constraint $constraint
      */
-    public function validate($articleCategorie, Constraint $constraint)
+    public function validate($categorie, Constraint $constraint)
     {
-        //var_dump($articleCategorie->getParent()->getArticles()[0]);
+        //var_dump($categorie->getParent()->getArticles()[0]);
         /**
          * On verifie que la catégorie n'a pas d'articles
-         * @var ArticleCategorie $articleCategorie
+         * @var Categorie $categorie
          */
-        if ($articleCategorie->getParent()->getArticles()[0]) {
+        if ($categorie->getParent()->getArticles()[0]) {
             $this->context->buildViolation($constraint->message)
                     ->addViolation();
         }

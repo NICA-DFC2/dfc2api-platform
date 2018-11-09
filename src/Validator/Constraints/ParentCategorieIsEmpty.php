@@ -5,9 +5,9 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-class ArticleCategorieOfArticleHaveNoChildren extends Constraint
+class ParentCategorieIsEmpty extends Constraint
 {
-    public $message = 'Cette categorie n\'est pas une categorie de dernier niveau';
+    public $message = 'La catégorie parente n\'est pas vide';
 
     public function validatedBy()
     {

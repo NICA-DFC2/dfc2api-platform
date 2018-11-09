@@ -178,12 +178,12 @@ class Article
     private $UModAD;
 
     /**
-     * @ORM\ManyToMany(targetEntity="ArticleCategorie", mappedBy="articles", cascade={"persist"})
-     * @ORM\JoinTable(name="article_category")
+     * @ORM\ManyToMany(targetEntity="Categorie", mappedBy="articles", cascade={"persist"})
+     * @ORM\JoinTable(name="article_categorie")
      *
-     * @ApiAssert\ArticleCategorieOfArticleHaveNoChildren()
+     * @ApiAssert\CategorieOfArticleHaveNoChildren()
      */
-    private $articleCategories;
+    private $categories;
 
 
 
@@ -609,7 +609,7 @@ class Article
     public function __construct()
     {
         $this->Stocks = array();
-        $this->articleCategories = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     /**
@@ -1230,28 +1230,28 @@ class Article
     }
 
     /**
-     * @return Collection|ArticleCategorie[]
+     * @return Collection|Categorie[]
      */
-    public function getArticleCategories(): Collection
+    public function getCategories(): Collection
     {
-        return $this->articleCategories;
+        return $this->categories;
     }
 
-    public function addArticleCategory(ArticleCategorie $articleCategory): self
+    public function addCategory(Categorie $categorie): self
     {
-        if (!$this->articleCategories->contains($articleCategory)) {
-            $this->articleCategories[] = $articleCategory;
-            $articleCategory->addArticle($this);
+        if (!$this->categories->contains($categorie)) {
+            $this->categories[] = $categorie;
+            $categorie->addArticle($this);
         }
 
         return $this;
     }
 
-    public function removeArticleCategory(ArticleCategorie $articleCategory): self
+    public function removeCategory(Categorie $categorie): self
     {
-        if ($this->articleCategories->contains($articleCategory)) {
-            $this->articleCategories->removeElement($articleCategory);
-            $articleCategory->removeArticle($this);
+        if ($this->categories->contains($categorie)) {
+            $this->categories->removeElement($categorie);
+            $categorie->removeArticle($this);
         }
 
         return $this;

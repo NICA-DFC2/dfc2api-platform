@@ -3,19 +3,19 @@
 namespace App\Validator\Constraints;
 
 use App\Entity\Article;
-use App\Entity\ArticleCategorie;
+use App\Entity\Categorie;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class ArticleCategorieOfArticleHaveNoChildrenValidatorTest extends KernelTestCase
+class CategorieOfArticleHaveNoChildrenValidatorTest extends KernelTestCase
 {
 
     /**
-     * Configure a ArticleCategorieOfArticleHaveNoChildrenValidato.
+     * Configure a CategorieOfArticleHaveNoChildrenValidato.
      *
      * @param string $expectedMessage The expected message on a validation violation, if any.
      *
-     * @return ArticleCategorieOfArticleHaveNoChildrenValidator
+     * @return CategorieOfArticleHaveNoChildrenValidator
      */
     public function configureValidator($expectedMessage = null)
     {
@@ -41,28 +41,28 @@ class ArticleCategorieOfArticleHaveNoChildrenValidatorTest extends KernelTestCas
                 ->method ( 'buildViolation' );
         }
         // initialize the validator with the mocked context
-        $validator = new ArticleCategorieOfArticleHaveNoChildrenValidator();
+        $validator = new CategorieOfArticleHaveNoChildrenValidator();
         $validator->initialize ( $context );
-        // return the ParentArticleCategorieIsEmptyValidator
+        // return the ParentCategorieIsEmptyValidator
         return $validator;
     }
 
     public function testWithChildren()
     {
 
-        $constraint = new ArticleCategorieOfArticleHaveNoChildren();
+        $constraint = new CategorieOfArticleHaveNoChildren();
         $validator = $this->configureValidator ( $constraint->message );
 
 
-        $parentCategory = new ArticleCategorie();
+        $parentCategory = new Categorie();
         $parentCategory->setName ( "testWithChildren-parent" );
 
-        $category = new ArticleCategorie();
+        $category = new Categorie();
         $category->setName ( "testWithChildren-enfant" );
         $parentCategory->addChildren ($category);
 
         $article = new Article();
-        $article->addArticleCategory ( $parentCategory );
+        $article->addCategory ( $parentCategory );
 
 
 
@@ -74,19 +74,19 @@ class ArticleCategorieOfArticleHaveNoChildrenValidatorTest extends KernelTestCas
     public function testWithoutChildren()
     {
 
-        $constraint = new ArticleCategorieOfArticleHaveNoChildren();
+        $constraint = new CategorieOfArticleHaveNoChildren();
         $validator = $this->configureValidator ();
 
 
-        $parentCategory = new ArticleCategorie();
+        $parentCategory = new Categorie();
         $parentCategory->setName ( "testWithoutChildren-parent2" );
 
-        $category = new ArticleCategorie();
+        $category = new Categorie();
         $category->setName ( "testWithoutChildren-enfant2" );
         $category->setParent ( $parentCategory );
 
         $article = new Article();
-        $article->addArticleCategory ( $category );
+        $article->addCategory ( $category );
 
 
         $validator->validate ( $article, $constraint );

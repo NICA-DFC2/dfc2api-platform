@@ -14,9 +14,9 @@ use App\Validator\Constraints as ApiAssert;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass="App\Repository\ArticleCategorieRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CategorieRepository")
  */
-class ArticleCategorie
+class Categorie
 {
     /**
      * @ORM\Id()
@@ -37,23 +37,23 @@ class ArticleCategorie
     private $slug;
 
     /**
-     * One Category has Many children ArticleCategories.
-     * @OneToMany(targetEntity="ArticleCategorie", mappedBy="parent", cascade={"persist"})
+     * One Category has Many children Categories.
+     * @OneToMany(targetEntity="Categorie", mappedBy="parent", cascade={"persist"})
      */
     private $children;
 
     /**
-     * Many ArticleCategories have One parent ArticleCategory.
-     * @ManyToOne(targetEntity="ArticleCategorie", inversedBy="children", cascade={"persist"})
+     * Many ArticleCategories have One parent ArticleCategorie.
+     * @ManyToOne(targetEntity="Categorie", inversedBy="children", cascade={"persist"})
      * @JoinColumn(name="parent_id", referencedColumnName="id")
-     * @ApiAssert\ParentArticleCategorieIsEmpty()
+     * @ApiAssert\ParentCategorieIsEmpty()
      */
     private $parent;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Article", inversedBy="articleCategories", cascade={"persist"})
-     * @ORM\JoinTable(name="article_category",
-     *      joinColumns={@JoinColumn(name="category_id", referencedColumnName="id")},
+     * @ORM\ManyToMany(targetEntity="Article", inversedBy="categories", cascade={"persist"})
+     * @ORM\JoinTable(name="article_categorie",
+     *      joinColumns={@JoinColumn(name="categorie_id", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="article_id", referencedColumnName="IdAD")}
      *      )
      */
@@ -102,14 +102,14 @@ class ArticleCategorie
 
 
     /**
-     * @return Collection|ArticleCategorie[]
+     * @return Collection|Categorie[]
      */
     public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    public function addChildren(ArticleCategorie $children): self
+    public function addChildren(Categorie $children): self
     {
         if (!$this->children->contains($children)) {
             $this->children[] = $children;
@@ -120,10 +120,10 @@ class ArticleCategorie
     }
 
     /**
-     * @param ArticleCategorie $children
-     * @return ArticleCategorie
+     * @param Categorie $children
+     * @return Categorie
      */
-    public function removeChildren(ArticleCategorie $children): self
+    public function removeChildren(Categorie $children): self
     {
         if ($this->children->contains($children)) {
             $this->children->removeElement($children);
@@ -137,7 +137,7 @@ class ArticleCategorie
     }
 
     /**
-     * @return ArticleCategorie
+     * @return Categorie
      */
     public function getParent()
     {
@@ -145,10 +145,10 @@ class ArticleCategorie
     }
 
     /**
-     * @param ArticleCategorie $parent
+     * @param Categorie $parent
      * @return $this
      */
-    public function setParent(ArticleCategorie $parent)
+    public function setParent(Categorie $parent)
     {
         $this->parent = $parent;
         return $this;

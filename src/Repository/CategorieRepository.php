@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\ArticleCategorie;
+use App\Entity\Categorie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method ArticleCategorie|null find($id, $lockMode = null, $lockVersion = null)
- * @method ArticleCategorie|null findOneBy(array $criteria, array $orderBy = null)
- * @method ArticleCategorie[]    findAll()
- * @method ArticleCategorie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Categorie|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Categorie|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Categorie[]    findAll()
+ * @method Categorie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ArticleCategorieRepository extends ServiceEntityRepository
+class CategorieRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, ArticleCategorie::class);
+        parent::__construct($registry, Categorie::class);
     }
 
 //    /**
-//     * @return ArticleCategorie[] Returns an array of ArticleCategorie objects
+//     * @return Categorie[] Returns an array of Categorie objects
 //     */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class ArticleCategorieRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ArticleCategorie
+    public function findOneBySomeField($value): ?Categorie
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')

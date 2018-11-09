@@ -1,19 +1,19 @@
 <?php
 namespace App\Validator\Constraints;
 use App\Entity\Article;
-use App\Entity\ArticleCategorie;
+use App\Entity\Categorie;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class ParentArticleCategorieIsEmptyValidatorTest extends KernelTestCase
+class ParentCategorieIsEmptyValidatorTest extends KernelTestCase
 {
 
     /**
-     * Configure a ParentArticleCategorieIsEmptyValidator.
+     * Configure a ParentCategorieIsEmptyValidator.
      *
      * @param string $expectedMessage The expected message on a validation violation, if any.
      *
-     * @return ParentArticleCategorieIsEmptyValidator
+     * @return ParentCategorieIsEmptyValidator
      */
     public function configureValidator($expectedMessage = null)
     {
@@ -39,7 +39,7 @@ class ParentArticleCategorieIsEmptyValidatorTest extends KernelTestCase
                 ->method('buildViolation');
         }
         // initialize the validator with the mocked context
-        $validator = new ParentArticleCategorieIsEmptyValidator();
+        $validator = new ParentCategorieIsEmptyValidator();
         $validator->initialize($context);
         // return the ParentArticleCategorieIsEmptyValidator
         return $validator;
@@ -47,17 +47,17 @@ class ParentArticleCategorieIsEmptyValidatorTest extends KernelTestCase
 
     public function testWithNotEmptyArticleCategorie(){
 
-        $constraint = new ParentArticleCategorieIsEmpty();
+        $constraint = new ParentCategorieIsEmpty();
         $validator = $this->configureValidator($constraint->message);
 
 
-        $parentCategory = new ArticleCategorie();
+        $parentCategory = new Categorie();
         $parentCategory->setName("parent");
 
         $articleInParent = new Article();
-        $articleInParent->addArticleCategory($parentCategory);
+        $articleInParent->addCategory($parentCategory);
 
-        $category = new ArticleCategorie();
+        $category = new Categorie();
         $category->setParent($parentCategory);
 
 
@@ -66,16 +66,16 @@ class ParentArticleCategorieIsEmptyValidatorTest extends KernelTestCase
 
     }
 
-    public function testWithEmptyArticleCategorie(){
+    public function testWithEmptyCategorie(){
 
-        $constraint = new ParentArticleCategorieIsEmpty();
+        $constraint = new ParentCategorieIsEmpty();
         $validator = $this->configureValidator();
 
 
-        $parentCategory = new ArticleCategorie();
+        $parentCategory = new Categorie();
         $parentCategory->setName("parent");
 
-        $category = new ArticleCategorie();
+        $category = new Categorie();
         $category->setParent($parentCategory);
 
 

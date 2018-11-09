@@ -1,11 +1,11 @@
 <?php
 namespace App\Validator\Constraints;
 use App\Entity\Article;
-use App\Entity\ArticleCategorie;
+use App\Entity\Categorie;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class ArticleCategorieOfArticleHaveNoChildrenValidator extends ConstraintValidator
+class CategorieOfArticleHaveNoChildrenValidator extends ConstraintValidator
 {
     /**
      * @param Article $article
@@ -13,10 +13,10 @@ class ArticleCategorieOfArticleHaveNoChildrenValidator extends ConstraintValidat
      */
     public function validate($article, Constraint $constraint)
     {
-        $articleCategories = $article->getArticleCategories();
+        $articleCategories = $article->getCategories();
 
         /**
-         * @var ArticleCategorie $articleCategory
+         * @var Categorie $articleCategory
          */
         foreach ($articleCategories as $articleCategory){
             $children = $articleCategory->getChildren();
