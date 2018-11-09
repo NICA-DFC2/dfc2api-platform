@@ -54,7 +54,7 @@ class UserService
             'roles' => null,
             'cntx_valid' => false,
             'erreur' => null,
-            'interface' => null,
+            //'interface' => null,
             'lien_cmd' => null,
             'lien_bl' => null,
             'lien_dev' => null,
@@ -65,6 +65,7 @@ class UserService
     public function getCurrentUser()
     {
         $token = $this->tokenStorage->getToken();
+
         if ($token instanceof TokenInterface)
         {
             $this->ws_manager->getDemarre(WsAlgorithmOpenSSL::NONE);

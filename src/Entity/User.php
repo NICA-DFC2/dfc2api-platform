@@ -15,14 +15,7 @@ use JMS\Serializer\Annotation as JMSSerializer;
  *
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
- * @ApiResource(
- *     itemOperations={
- *          "logincheck"={"route_name"="fos_user_security_check" }
- *     },
- *     attributes={
- *     "normalization_context"={"groups"={"user", "user-read"}},
- *     "denormalization_context"={"groups"={"user", "user-write"}}
- * })
+ * @ApiResource()
  */
 class User extends BaseUser
 {
@@ -37,7 +30,6 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @Groups({"user"})
      *
      * @var string
      * @SWG\Property(description="Email du user.", type="string")
@@ -46,7 +38,6 @@ class User extends BaseUser
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"user"})
      *
      * @var string
      * @SWG\Property(description="Nom complet du user.", type="string", maxLength=255)
@@ -54,7 +45,6 @@ class User extends BaseUser
     protected $fullname;
 
     /**
-     * @Groups({"user-write"})
      *
      * @var string
      * @SWG\Property(description="Mot de passe du user.", type="string")
@@ -62,7 +52,6 @@ class User extends BaseUser
     protected $plainPassword;
 
     /**
-     * @Groups({"user"})
      *
      * @var string
      * @SWG\Property(description="Login/Nom d'utilisateur du user.", type="string")
@@ -71,7 +60,6 @@ class User extends BaseUser
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Groups({"user"})
      *
      * @var string
      * @SWG\Property(description="La raison sociale du user.", type="string")
@@ -80,7 +68,6 @@ class User extends BaseUser
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Groups({"user"})
      *
      * @var string
      * @SWG\Property(description="Code unique du user.", type="string")
@@ -88,7 +75,6 @@ class User extends BaseUser
     protected $code;
 
     /**
-     * @Groups({"user", "user-read"})
      *
      * @var integer
      * @SWG\Property(description="Identifiant unique Evolubat du user.", type="integer")
@@ -96,7 +82,6 @@ class User extends BaseUser
     protected $id_cli = null;
 
     /**
-     * @Groups({"user", "user-read"})
      *
      * @var integer
      * @SWG\Property(description="Identifiant unique Evolubat du salarié.", type="integer")
@@ -104,7 +89,6 @@ class User extends BaseUser
     protected $id_sal = null;
 
     /**
-     * @Groups({"user", "user-read"})
      *
      * @var integer
      * @SWG\Property(description="Numéro unique Evolubat du user.", type="integer")
@@ -112,7 +96,6 @@ class User extends BaseUser
     protected $no_cli = null;
 
     /**
-     * @Groups({"user", "user-read"})
      *
      * @var string
      * @SWG\Property(description="Identifiant unique Evolubat du dépot d'appartenance du user.", type="string")
@@ -120,7 +103,6 @@ class User extends BaseUser
     protected $id_depot_cli;
 
     /**
-     * @Groups({"user", "user-read"})
      *
      * @var string
      * @SWG\Property(description="Nom du dépot d'appartenance du user.", type="string")
