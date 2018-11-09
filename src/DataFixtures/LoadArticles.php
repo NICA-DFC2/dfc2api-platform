@@ -20,8 +20,10 @@ class LoadArticles extends Fixture implements OrderedFixtureInterface
             $category = new Categorie();
             $childrenCategory = new Categorie();
             $childrenCategory->setName ($faker->text (10));
+            $childrenCategory->setIcon($faker->imageUrl(100, 100));
             $category->addChildren ($childrenCategory);
             $category->setName ($faker->text (10));
+            $category->setIcon($faker->imageUrl(100, 100));
             $article = new Article();
             $article->setIdArtEvoAD(271507); // IdArt qui existe
             $article->setDesiAD($faker->text(50));

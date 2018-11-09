@@ -37,6 +37,11 @@ class Categorie
     private $slug;
 
     /**
+     * @ORM\Column(name="icon", type="string", length=255, nullable=true)
+     */
+    private $icon;
+
+    /**
      * One Category has Many children Categories.
      * @OneToMany(targetEntity="Categorie", mappedBy="parent", cascade={"persist"})
      */
@@ -78,6 +83,21 @@ class Categorie
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(string $icon): self
+    {
+        $this->icon = $icon;
 
         return $this;
     }
