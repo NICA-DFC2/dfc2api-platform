@@ -72,6 +72,8 @@ class UserService
             /** @var User $user */
             $user = $token->getUser();
 
+            var_dump($user);
+
             $this->user_infos['id'] = $user->getId();
             $this->user_infos['username'] = $user->getUsername();
             $this->user_infos['code'] = $user->getCode();
