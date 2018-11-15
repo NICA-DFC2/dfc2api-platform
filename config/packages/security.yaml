@@ -61,7 +61,7 @@ security:
   - { path: ^/api/ws/devis$, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
   - { path: ^/api/ws/factures$, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
   - { path: ^/api/ws/bonslivraison$, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
-  - { path: ^/api/ws/commandes$, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
+  - { path: ^/api/ws/commandes$, roles: [ IS_AUTHENTICATED_ANONYMOUSLY, ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
   - { path: ^/api/ws/factures-en-attentes$, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
 
   - { path: ^/api/ws/editions, roles: [ ROLE_CLIENT, ROLE_COMMERCIAL, ROLE_MARKET_LEADER, ROLE_ADMIN ] }
