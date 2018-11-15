@@ -15,7 +15,7 @@ use App\Utils\Ligne;
  * @ApiResource(
  *      collectionOperations={
  *          "all"={"route_name"="api_factures_items_get"},
- *          "all_client"={"route_name"="api_factures_client_items_get"}
+ *          "current"={"route_name"="api_factures_current_items_get"}
  *      },
  *     itemOperations={
  *          "edition"={"route_name"="api_factures_edition_item_get"}

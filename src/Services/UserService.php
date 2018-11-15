@@ -131,10 +131,10 @@ class UserService
                             $this->user_infos['mail_adr'] = $wsClient->getMailAdr();
                             $this->user_infos['tel1_adr'] = $wsClient->getTel1Adr();
                             $this->user_infos['tel2_adr'] = $wsClient->getTel2Adr();
-                            $this->user_infos['lien_bl'] = 'api/ws/bonslivraison/'.$wsClient->getIdCli().'/client';
-                            $this->user_infos['lien_cmd'] = 'api/ws/commandes/'.$wsClient->getIdCli().'/client';
-                            $this->user_infos['lien_dev'] = 'api/ws/devis/'.$wsClient->getIdCli().'/client';
-                            $this->user_infos['lien_fac'] = 'api/ws/factures/'.$wsClient->getIdCli().'/client';
+                            $this->user_infos['lien_bl'] = 'api/ws/bonslivraison/'.$wsClient->getIdCli().'/client/current';
+                            $this->user_infos['lien_cmd'] = 'api/ws/commandes/'.$wsClient->getIdCli().'/client/current';
+                            $this->user_infos['lien_dev'] = 'api/ws/devis/'.$wsClient->getIdCli().'/client/current';
+                            $this->user_infos['lien_fac'] = 'api/ws/factures/'.$wsClient->getIdCli().'/client/current';
                             //$this->user_infos['interface'] = serialize($token);
 
                         }

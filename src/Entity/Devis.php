@@ -14,7 +14,8 @@ use App\Utils\Ligne;
  *
  * @ApiResource(
  *      collectionOperations={
- *          "all"={"route_name"="api_devis_items_get"}
+ *          "all"={"route_name"="api_devis_items_get"},
+ *          "current"={"route_name"="api_devis_current_items_get"}
  *      },
  *     itemOperations={
  *          "edition"={"route_name"="api_devis_edition_item_get"}

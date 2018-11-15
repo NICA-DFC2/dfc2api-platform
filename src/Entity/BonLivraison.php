@@ -14,6 +14,7 @@ use App\Utils\Ligne;
  * @ApiResource(
  *      collectionOperations={
  *          "all"={"route_name"="api_bonslivraison_items_get"},
+ *          "current"={"route_name"="api_bonslivraison_current_items_get"}
  *      },
  *     itemOperations={
  *          "edition"={"route_name"="api_bonslivraison_edition_item_get"}

@@ -206,7 +206,7 @@ class FacturesController extends Controller
      * Liste d'entêtes de facture état en cours pour le client connecté dans un ordre décroissant.
      *
      * @Route(
-     *     name = "api_factures_client_items_get",
+     *     name = "api_factures_current_items_get",
      *     path = "/api/ws/factures/{id_cli}/client/current",
      *     methods= "GET",
      *     requirements={"id_cli"="\d+"}
