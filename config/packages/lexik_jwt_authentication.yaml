@@ -7,8 +7,8 @@ lexik_jwt_authentication:
     pass_phrase: '%env(JWT_PASSPHRASE)%'
 
     # token extraction settings
-    token_extractors:
-        authorization_header:      # look for a token as Authorization Header
-            enabled: true
-            prefix:  Bearer
-            name:    Authorization
+#    token_extractors:
+#        authorization_header:      # look for a token as Authorization Header
+#            enabled: true
+#            prefix:  Bearer
+#            name:    Authorization
