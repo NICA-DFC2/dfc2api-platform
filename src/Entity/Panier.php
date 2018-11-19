@@ -34,6 +34,16 @@ class Panier
     private $name;
 
     /**
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $date_created;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $date_update;
+
+    /**
      * @ORM\OneToOne(targetEntity="User", inversedBy="panier")
      */
     private $user;
@@ -49,6 +59,8 @@ class Panier
     public function __construct()
     {
         $this->lignes = new ArrayCollection();
+        $this->setDateCreated(new \DateTime('now'));
+        $this->setDateUpdate(new \DateTime('now'));
     }
 
     /**
@@ -156,6 +168,50 @@ class Panier
     public function setName(?string $name)
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Get date_created
+     *
+     * @return \DateTime
+     */
+    public function getDateCreated()
+    {
+        return $this->date_created;
+    }
+
+    /**
+     * Set date_created
+     *
+     * @param mixed $date_created
+     * @return Panier
+     */
+    public function setDateCreated($date_created)
+    {
+        $this->date_created = $date_created;
+        return $this;
+    }
+
+    /**
+     * Get date_update
+     *
+     * @return \DateTime
+     */
+    public function getDateUpdate()
+    {
+        return $this->date_update;
+    }
+
+    /**
+     * Set date_update
+     *
+     * @param mixed $date_update
+     * @return Panier
+     */
+    public function setDateUpdate($date_update)
+    {
+        $this->date_update = $date_update;
         return $this;
     }
 
