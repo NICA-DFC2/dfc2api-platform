@@ -2,141 +2,57 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\PanierLigne;
+use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
-
-//@ApiResource
 /**
- *
- *
- * Entité qui représente une entête de panier. Certain champs sont hydratés par un appel aux services web GIMEL.
- *
+ * @ApiResource()
  * @ORM\Entity
- * @ORM\Table(name="Panier")
+ * @ORM\Table(name="panier")
  */
 class Panier
 {
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
-     * @ORM\Column(name="IdDE", type="integer", options={"default":0}, nullable=true)
+     * @ORM\Column(type="decimal", scale=2)
      */
-    private $IdDE;
+    private $total_price;
 
     /**
-     * @ORM\Column(name="IdDocDE", type="integer", options={"default":0}, nullable=true)
+     * @ORM\Column(type="string", nullable=false)
      */
-    private $IdDocDE;
+    private $name;
 
     /**
-     * @ORM\Column(name="NumDE", type="integer", options={"default":0}, nullable=true)
+     * @ORM\OneToOne(targetEntity="User", inversedBy="panier")
      */
-    private $NumDE;
+    private $user;
 
     /**
-     * @ORM\Column(name="DateDE", type="date", nullable=true)
+    * @ORM\OneToMany(targetEntity="PanierLigne", mappedBy="panier")
      */
-    private $DateDE;
+    protected $lignes;
 
     /**
-     * @ORM\Column(name="IdCli", type="integer", options={"default":0}, nullable=true)
+     * Constructor
      */
-    private $IdCli;
-
-    /**
-     * @ORM\Column(name="IdSoc", type="integer", options={"default":0}, nullable=true)
-     */
-    private $IdSoc;
-
-    /**
-     * @ORM\Column(name="EtatDE", type="string", length=1, nullable=true)
-     */
-    private $EtatDE;
-
-    /**
-     * @ORM\Column(name="TypeDE", type="string", length=50, nullable=true)
-     */
-    private $TypeDE;
-
-    /**
-     * @ORM\Column(name="RefDE", type="string", length=255, nullable=true)
-     */
-    private $RefDE;
-
-    /**
-     * @ORM\Column(name="MontTTCDE", type="decimal", precision=10, scale=2, nullable=true)
-     */
-    private $MontTTCDE;
-
-    /**
-     * @ORM\Column(name="MontHTDE", type="decimal", precision=10, scale=2, nullable=true)
-     */
-    private $MontHTDE;
-
-    /**
-     * @ORM\Column(name="ComDE", type="text", nullable=true)
-     */
-    private $ComDE;
-
-    /**
-     * @ORM\Column(name="DateLivrDE", type="date", nullable=true)
-     */
-    private $DateLivrDE;
-
-    /**
-     * @ORM\Column(name="IdFac", type="integer", options={"default":0}, nullable=true)
-     */
-    private $IdFac;
-
-    /**
-     * @ORM\Column(name="IdDepLiv", type="integer", options={"default":0}, nullable=true)
-     */
-    private $IdDepLiv;
-
-    /**
-     * @ORM\Column(name="FlgValidDE", type="boolean")
-     */
-    private $FlgValidDE;
-
-    /**
-     * @ORM\Column(name="MotsClesAutoDE", type="text", nullable=true)
-     */
-    private $MotsClesAutoDE;
-
-
-    private $PanierLig;
-
-
     public function __construct()
     {
-        $this->PanierLig = new ArrayCollection();
-    }
-
-
-    /**
-     * @return Collection|PanierLig[]
-     */
-    public function getPanierLig(): Collection
-    {
-        return $this->PanierLig;
-    }
-
-    public function setPanierLig(Collection $PanierLig)
-    {
-        $this->PanierLig = $PanierLig;
-
-        return $this;
+        $this->lignes = new ArrayCollection();
     }
 
     /**
+     * Get id
+     *
      * @return integer
      */
     public function getId()
@@ -145,283 +61,101 @@ class Panier
     }
 
     /**
-     * @param integer $Id
+     * Set total_price
+     *
+     * @param string $totalPrice
+     * @return Panier
      */
-    public function setId($Id)
+    public function setTotalPrice(?string $totalPrice)
     {
-        $this->id = $Id;
+        $this->total_price = $totalPrice;
+        return $this;
     }
 
     /**
-     * @return mixed
+     * Get total_price
+     *
+     * @return string
      */
-    public function getIdDE()
+    public function getTotalPrice()
     {
-        return $this->IdDE;
+        return $this->total_price;
     }
 
     /**
-     * @param mixed $IdDE
+     * Set user
+     *
+     * @param User $user
+     * @return Panier
      */
-    public function setIdDE($IdDE)
+    public function setUser(User $user = null)
     {
-        $this->IdDE = $IdDE;
+        $this->user = $user;
+        return $this;
     }
 
     /**
-     * @return mixed
+     * Get user
+     *
+     * @return User
      */
-    public function getIdDocDE()
+    public function getUser()
     {
-        return $this->IdDocDE;
+        return $this->user;
     }
 
     /**
-     * @param mixed $IdDocDE
+     * Add lignes
+     *
+     * @param PanierLigne $lignes
+     * @return Panier
      */
-    public function setIdDocDE($IdDocDE)
+    public function addLignes(PanierLigne $lignes)
     {
-        $this->IdDocDE = $IdDocDE;
+        $this->lignes[] = $lignes;
+        return $this;
     }
 
     /**
-     * @return mixed
+     * Remove lignes
+     *
+     * @param PanierLigne $lignes
      */
-    public function getNumDE()
+    public function removeLigne(PanierLigne $lignes)
     {
-        return $this->NumDE;
+        $this->lignes->removeElement($lignes);
     }
 
     /**
-     * @param mixed $NumDE
+     * Get lignes
+     *
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setNumDE($NumDE)
+    public function getLignes()
     {
-        $this->NumDE = $NumDE;
+        return $this->lignes;
     }
 
     /**
-     * @return mixed
+     * Get name
+     *
+     * @return string
      */
-    public function getDateDE()
+    public function getName()
     {
-        return $this->DateDE;
+        return $this->name;
     }
 
     /**
-     * @param mixed $DateDE
+     * Set name
+     *
+     * @param string $name
+     * @return Panier
      */
-    public function setDateDE($DateDE)
+    public function setName(?string $name)
     {
-        $this->DateDE = $DateDE;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdCli()
-    {
-        return $this->IdCli;
-    }
-
-    /**
-     * @param mixed $IdCli
-     */
-    public function setIdCli($IdCli)
-    {
-        $this->IdCli = $IdCli;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdSoc()
-    {
-        return $this->IdSoc;
-    }
-
-    /**
-     * @param mixed $IdSoc
-     */
-    public function setIdSoc($IdSoc)
-    {
-        $this->IdSoc = $IdSoc;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEtatDE()
-    {
-        return $this->EtatDE;
-    }
-
-    /**
-     * @param mixed $EtatDE
-     */
-    public function setEtatDE($EtatDE)
-    {
-        $this->EtatDE = $EtatDE;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTypeDE()
-    {
-        return $this->TypeDE;
-    }
-
-    /**
-     * @param mixed $TypeDE
-     */
-    public function setTypeDE($TypeDE)
-    {
-        $this->TypeDE = $TypeDE;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRefDE()
-    {
-        return $this->RefDE;
-    }
-
-    /**
-     * @param mixed $RefDE
-     */
-    public function setRefDE($RefDE)
-    {
-        $this->RefDE = $RefDE;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMontTTCDE()
-    {
-        return $this->MontTTCDE;
-    }
-
-    /**
-     * @param mixed $MontTTCDE
-     */
-    public function setMontTTCDE($MontTTCDE)
-    {
-        $this->MontTTCDE = $MontTTCDE;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMontHTDE()
-    {
-        return $this->MontHTDE;
-    }
-
-    /**
-     * @param mixed $MontHTDE
-     */
-    public function setMontHTDE($MontHTDE)
-    {
-        $this->MontHTDE = $MontHTDE;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getComDE()
-    {
-        return $this->ComDE;
-    }
-
-    /**
-     * @param mixed $ComDE
-     */
-    public function setComDE($ComDE)
-    {
-        $this->ComDE = $ComDE;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDateLivrDE()
-    {
-        return $this->DateLivrDE;
-    }
-
-    /**
-     * @param mixed $DateLivrDE
-     */
-    public function setDateLivrDE($DateLivrDE)
-    {
-        $this->DateLivrDE = $DateLivrDE;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdFac()
-    {
-        return $this->IdFac;
-    }
-
-    /**
-     * @param mixed $IdFac
-     */
-    public function setIdFac($IdFac)
-    {
-        $this->IdFac = $IdFac;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdDepLiv()
-    {
-        return $this->IdDepLiv;
-    }
-
-    /**
-     * @param mixed $IdDepLiv
-     */
-    public function setIdDepLiv($IdDepLiv)
-    {
-        $this->IdDepLiv = $IdDepLiv;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFlgValidDE()
-    {
-        return $this->FlgValidDE;
-    }
-
-    /**
-     * @param mixed $FlgValidDE
-     */
-    public function setFlgValidDE($FlgValidDE)
-    {
-        $this->FlgValidDE = $FlgValidDE;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMotsClesAutoDE()
-    {
-        return $this->MotsClesAutoDE;
-    }
-
-    /**
-     * @param mixed $MotsClesAutoDE
-     */
-    public function setMotsClesAutoDE($MotsClesAutoDE)
-    {
-        $this->MotsClesAutoDE = $MotsClesAutoDE;
+        $this->name = $name;
+        return $this;
     }
 
 

@@ -186,10 +186,6 @@ class Article
     private $categories;
 
 
-
-
-
-
     /* ***********************
 
     DEBUT :: A HYDRATER AVEC API WEB SERVICE
@@ -603,6 +599,11 @@ class Article
      */
     private $affinageGroupe;
 
+    /** @ORM\OneToMany(targetEntity="PanierLigne", mappedBy="article") */
+    protected $articles;
+
+
+
     /**
      * ArtDet constructor.
      */
@@ -610,6 +611,7 @@ class Article
     {
         $this->Stocks = array();
         $this->categories = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     /**
@@ -2348,6 +2350,7 @@ class Article
 
         return $this;
     }
+
 
 
     /* ***********************

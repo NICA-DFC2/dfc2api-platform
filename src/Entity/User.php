@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Panier;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use FOS\UserBundle\Model\UserInterface;
@@ -110,45 +111,98 @@ class User extends BaseUser
     protected $nom_depot_cli;
 
 
+    /**
+     * @ORM\OneToOne(targetEntity="Panier", mappedBy="user", cascade={"persist"})
+     */
+    protected $panier;
+
+
+    /**
+     * Set panier
+     *
+     * @param Panier $panier
+     * @return User
+     */
+    public function setPanier(Panier $panier = null)
+    {
+        $this->panier = $panier;
+        return $this;
+    }
+    /**
+     * Get panier
+     *
+     * @return Panier
+     */
+    public function getPanier()
+    {
+        return $this->panier;
+    }
+
+    /**
+     * @param string $fullname
+     * @return User
+     */
     public function setFullname($fullname)
     {
         $this->fullname = $fullname;
+        return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getFullname()
     {
         return $this->fullname;
     }
 
+    /**
+     * @return boolean
+     */
     public function isUser(UserInterface $user = null)
     {
         return $user instanceof self && $user->id === $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getUsername()
     {
         return $this->username;
     }
 
+    /**
+     * @param string $username
+     * @return User
+     */
     public function setUsername($username): self
     {
         $this->username = $username;
-
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getEmail()
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return User
+     */
     public function setEmail($email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getId()
     {
         return $this->id;
@@ -172,10 +226,12 @@ class User extends BaseUser
 
     /**
      * @param string $raison_sociale
+     * @return User
      */
     public function setRaisonSociale($raison_sociale)
     {
         $this->raison_sociale = $raison_sociale;
+        return $this;
     }
 
     /**
@@ -188,10 +244,12 @@ class User extends BaseUser
 
     /**
      * @param string $code
+     * @return User
      */
     public function setCode($code)
     {
         $this->code = $code;
+        return $this;
     }
 
     /**
@@ -204,10 +262,12 @@ class User extends BaseUser
 
     /**
      * @param integer $id_cli
+     * @return User
      */
     public function setIdCli($id_cli)
     {
         $this->id_cli = $id_cli;
+        return $this;
     }
 
     /**
@@ -220,10 +280,12 @@ class User extends BaseUser
 
     /**
      * @param integer $id_sal
+     * @return User
      */
     public function setIdSal($id_sal)
     {
         $this->id_sal = $id_sal;
+        return $this;
     }
 
     /**
@@ -236,10 +298,12 @@ class User extends BaseUser
 
     /**
      * @param integer $no_cli
+     * @return User
      */
     public function setNoCli($no_cli)
     {
         $this->no_cli = $no_cli;
+        return $this;
     }
 
     /**
@@ -252,10 +316,12 @@ class User extends BaseUser
 
     /**
      * @param integer $id_depot_cli
+     * @return User
      */
     public function setIdDepotCli($id_depot_cli)
     {
         $this->id_depot_cli = $id_depot_cli;
+        return $this;
     }
 
     /**
@@ -268,11 +334,12 @@ class User extends BaseUser
 
     /**
      * @param string $nom_depot_cli
+     * @return User
      */
     public function setNomDepotCli($nom_depot_cli)
     {
         $this->nom_depot_cli = $nom_depot_cli;
+        return $this;
     }
-
 
 }
