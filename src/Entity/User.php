@@ -77,7 +77,7 @@ class User extends BaseUser
      * @var integer
      * @SWG\Property(description="Identifiant unique Evolubat du user.", type="integer")
      */
-    private $id_cli = null;
+    protected $id_cli = null;
 
     /**
      *

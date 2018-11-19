@@ -30,6 +30,7 @@ class AuthenticationFailureListener
         $response->setData([
             'code' => $response->getStatusCode(),
             'message' => $response->getMessage(),
+            'exception' => $event->getException(),
             'user' => null,
             'token' => null
         ]);
