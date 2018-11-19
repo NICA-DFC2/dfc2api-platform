@@ -3,13 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Entity\Panier;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use FOS\UserBundle\Model\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Swagger\Annotations as SWG;
-use JMS\Serializer\Annotation as JMSSerializer;
 
 /**
  * Entité qui représente un User. Certain champs sont hydratés par un appel aux services web GIMEL. Héritage de la class BaseUser de FOSUserBundle.
@@ -80,7 +77,7 @@ class User extends BaseUser
      * @var integer
      * @SWG\Property(description="Identifiant unique Evolubat du user.", type="integer")
      */
-    protected $id_cli = null;
+    private $id_cli = null;
 
     /**
      *

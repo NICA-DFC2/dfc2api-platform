@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Entity\Panier;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
