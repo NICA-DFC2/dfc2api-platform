@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use FOS\UserBundle\Model\UserInterface;
@@ -109,30 +112,55 @@ class User extends BaseUser
 
 
     /**
-     * @ORM\OneToOne(targetEntity="Panier", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Panier", mappedBy="user", cascade={"persist"})
      */
-    protected $panier;
+    protected $paniers;
 
 
     /**
-     * Set panier
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->paniers = new ArrayCollection();
+    }
+
+    /**
+     * Add panier
      *
      * @param Panier $panier
      * @return User
      */
-    public function setPanier(Panier $panier = null)
+    public function addPanier(Panier $panier = null)
     {
-        $this->panier = $panier;
+        if(!$this->paniers->contains($panier)) {
+            $this->paniers->add($panier);
+        }
         return $this;
     }
+
     /**
-     * Get panier
+     * Remove panier
      *
-     * @return Panier
+     * @param Panier $panier
+     * @return User
      */
-    public function getPanier()
+    public function removePanier(Panier $panier = null)
     {
-        return $this->panier;
+        $this->paniers->removeElement($panier);
+        return $this;
+    }
+
+    /**
+     * Get paniers
+     *
+     * @return ArrayCollection
+     */
+    public function getPaniers()
+    {
+        return $this->paniers;
     }
 
     /**

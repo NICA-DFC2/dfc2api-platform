@@ -136,7 +136,7 @@ class UserService
                             $this->user_infos['lien_cmd'] = 'api/ws/commandes/'.$wsClient->getIdCli().'/client';
                             $this->user_infos['lien_dev'] = 'api/ws/devis/'.$wsClient->getIdCli().'/client';
                             $this->user_infos['lien_fac'] = 'api/ws/factures/'.$wsClient->getIdCli().'/client';
-                            $this->user_infos['lien_paniers'] = 'api/paniers?user.id_cli='.$wsClient->getIdCli();
+                            $this->user_infos['lien_paniers'] = 'api/paniers?user.id='.$user->getId();
                             //$this->user_infos['interface'] = serialize($token);
 
                         }

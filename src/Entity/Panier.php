@@ -3,14 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ApiFilter(SearchFilter::class, properties={"user.id_cli": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"user.id": "exact"})
  * @ORM\Entity
  * @ORM\Table(name="panier")
  */
@@ -44,7 +44,7 @@ class Panier
     private $date_update;
 
     /**
-     * @ORM\OneToOne(targetEntity="User", inversedBy="panier")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="panier", cascade={"persist"})
      */
     private $user;
 
