@@ -1,0 +1,86 @@
+settings:
+  index:
+    # single node, no sharding
+    number_of_shards: 1
+    number_of_replicas: 0
+mappings:
+  articles:
+    dynamic: false # disable dynamic mapping
+    properties:
+      title: &fr_text
+        type: text
+        analyzer: french
+      summary: *fr_text
+      author: *fr_text
+      content: *fr_text
+      
+      
+      
+IdAD
+IdArt
+IdSoc
+IdDep
+IdIC
+NoAD: &fr_text
+  type: text
+  analyzer: french
+CodAD: &fr_text
+  type: text
+  analyzer: french
+DesiAutoAD
+ValNivAD
+StkReelAD
+StkResAD
+StkCmdeAD
+CodGesStkAD
+EtatStockAD
+StockDisponible
+StockDisponibleSoc
+StockPratique
+StkReelPlat1
+QteCIDSsCFAD
+UVteArt
+UStoArt
+CvStoVteAD
+TypCvStoVteAD
+NbUStoCondVteAD
+PoidsUVteArt
+NbUVteUCondVte
+PrixPubUCondVte
+PrixNetUCondVte
+NbUStoUVte
+NbUVteUSto
+NbrDecArt
+LongAD
+LargAD
+EpaisAD
+CondVteAD
+FlgDecondAD
+Desi2Art
+IdFour
+NomDep
+CodSuspAD
+MultimediaArt
+ComTechAD
+DocLie
+GenCodAD
+CodEcoTaxeAD
+MtEcoTaxe
+ValEcoTaxe
+IdDepPlat
+IdADF
+CodADF
+GenCod1ADF
+GenCod2ADF
+CodCatAD
+PrixNet
+PrixPubCli
+PrixPubAD
+TypeTarif
+PrixRevConvAD
+PrixRevReelAD
+CoefPRRAD
+CoefPRCAD
+MargeReelleAD
+MargeConvAD
+Stocks
