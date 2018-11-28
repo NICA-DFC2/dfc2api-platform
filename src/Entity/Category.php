@@ -14,9 +14,9 @@ use App\Validator\Constraints as ApiAssert;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass="App\Repository\ArticleCategorieRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  */
-class ArticleCategorie
+class Category
 {
     /**
      * @ORM\Id()
@@ -24,6 +24,19 @@ class ArticleCategorie
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\Column(name="old_id", type="integer")
+     */
+    private $oldId;
+
+    /**
+     * @ORM\Column(name="old_id_parent", type="integer", nullable=true)
+     */
+    private $oldIdParent;
+
+
+
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -38,20 +51,20 @@ class ArticleCategorie
 
     /**
      * One Category has Many children ArticleCategories.
-     * @OneToMany(targetEntity="ArticleCategorie", mappedBy="parent", cascade={"persist"})
+     * @OneToMany(targetEntity="Category", mappedBy="parent", cascade={"persist"})
      */
     private $children;
 
     /**
-     * Many ArticleCategories have One parent ArticleCategory.
-     * @ManyToOne(targetEntity="ArticleCategorie", inversedBy="children", cascade={"persist"})
+     * Many Categories have One parent Category.
+     * @ManyToOne(targetEntity="Category", inversedBy="children", cascade={"persist"})
      * @JoinColumn(name="parent_id", referencedColumnName="id")
-     * @ApiAssert\ParentArticleCategorieIsEmpty()
+     * @ApiAssert\ParentCategoryIsEmpty()
      */
     private $parent;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Article", inversedBy="articleCategories", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Article", inversedBy="categories", cascade={"persist"})
      * @ORM\JoinTable(name="article_category",
      *      joinColumns={@JoinColumn(name="category_id", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="article_id", referencedColumnName="IdAD")}
@@ -64,11 +77,52 @@ class ArticleCategorie
         $this->children = new ArrayCollection();
         $this->articles = new ArrayCollection();
     }
+
+    public function setId(int $id){
+        $this->$id = $id;
+        return $this;
+}
     
     public function getId()
     {
         return $this->id;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOldId()
+    {
+        return $this->oldId;
+
+    }
+
+    /**
+     * @param mixed $oldId
+     */
+    public function setOldId($oldId)
+    {
+        $this->oldId = $oldId;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOldIdParent()
+    {
+        return $this->oldIdParent;
+    }
+
+    /**
+     * @param mixed $oldIdParent
+     */
+    public function setOldIdParent($oldIdParent)
+    {
+        $this->oldIdParent = $oldIdParent;
+    }
+
+
 
     public function getName(): ?string
     {
@@ -101,14 +155,14 @@ class ArticleCategorie
 
 
     /**
-     * @return Collection|ArticleCategorie[]
+     * @return Collection|Category[]
      */
     public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    public function addChildren(ArticleCategorie $children): self
+    public function addChildren(Category $children): self
     {
         if (!$this->children->contains($children)) {
             $this->children[] = $children;
@@ -119,10 +173,10 @@ class ArticleCategorie
     }
 
     /**
-     * @param ArticleCategorie $children
-     * @return ArticleCategorie
+     * @param Category $children
+     * @return Category
      */
-    public function removeChildren(ArticleCategorie $children): self
+    public function removeChildren(Category $children): self
     {
         if ($this->children->contains($children)) {
             $this->children->removeElement($children);
@@ -136,7 +190,7 @@ class ArticleCategorie
     }
 
     /**
-     * @return ArticleCategorie
+     * @return Category
      */
     public function getParent()
     {
@@ -144,10 +198,10 @@ class ArticleCategorie
     }
 
     /**
-     * @param ArticleCategorie $parent
+     * @param Category $parent
      * @return $this
      */
-    public function setParent(ArticleCategorie $parent)
+    public function setParent(Category $parent)
     {
         $this->parent = $parent;
         return $this;

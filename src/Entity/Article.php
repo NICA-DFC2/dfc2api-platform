@@ -60,7 +60,7 @@ use App\Validator\Constraints as ApiAssert;
  *      }
  * }
  *     )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
  * @ORM\Table(name="Article")
  */
 class Article
@@ -73,6 +73,11 @@ class Article
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $IdAD;
+
+    /**
+     * @ORM\Column(name="old_id", type="integer")
+     */
+    private $oldId;
 
     /**
      * @param integer $IdArtEvoAD A IdArt propriété - Identifiant unique d'un article dans Evolubat.
@@ -219,15 +224,23 @@ class Article
     private $UModAD;
 
     /**
-     * @ORM\ManyToMany(targetEntity="ArticleCategorie", mappedBy="articles", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Category", mappedBy="articles", cascade={"persist"})
      * @ORM\JoinTable(name="article_category")
      *
-     * @ApiAssert\ArticleCategorieOfArticleHaveNoChildren()
+     * @ApiAssert\CategoryOfArticleHaveNoChildren()
      */
-    private $articleCategories;
+    private $categories;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\AffinageGroupe", inversedBy="articles")
+     */
+    private $affinageGroupe;
 
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ArticleDeclinaisonGroupe", inversedBy="articles")
+     */
+    private $DeclinaisonGroupe;
 
 
 
@@ -297,10 +310,7 @@ class Article
      */
     private $Stocks = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\AffinageGroupe", inversedBy="articles")
-     */
-    private $affinageGroupe;
+
 
     /**
      * ArtDet constructor.
@@ -308,7 +318,8 @@ class Article
     public function __construct()
     {
         $this->Stocks = array();
-        $this->articleCategories = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+        $this->declinaisons = new ArrayCollection();
     }
 
     /**
@@ -372,10 +383,28 @@ class Article
     /**
      * @param mixed $IdAD
      */
-    public function setIdAD($IdAD)
+    public function setIdAD(int $IdAD)
     {
         $this->IdAD = $IdAD;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOldId()
+    {
+        return $this->oldId;
+    }
+
+    /**
+     * @param mixed $oldId
+     */
+    public function setOldId($oldId)
+    {
+        $this->oldId = $oldId;
+    }
+
+
 
     /**
      * @return mixed
@@ -828,32 +857,59 @@ class Article
     }
 
     /**
-     * @return Collection|ArticleCategorie[]
+     * @return Collection|Category[]
      */
-    public function getArticleCategories(): Collection
+    public function getCategories(): Collection
     {
-        return $this->articleCategories;
+        return $this->categories;
     }
 
-    public function addArticleCategory(ArticleCategorie $articleCategory): self
+    public function addCategory(Category $category): self
     {
-        if (!$this->articleCategories->contains($articleCategory)) {
-            $this->articleCategories[] = $articleCategory;
-            $articleCategory->addArticle($this);
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+            $category->addArticle($this);
         }
 
         return $this;
     }
 
-    public function removeArticleCategory(ArticleCategorie $articleCategory): self
+    public function removeCategory(Category $category): self
     {
-        if ($this->articleCategories->contains($articleCategory)) {
-            $this->articleCategories->removeElement($articleCategory);
-            $articleCategory->removeArticle($this);
+        if ($this->categories->contains($category)) {
+            $this->categories->removeElement($category);
+            $category->removeArticle($this);
         }
 
         return $this;
     }
+
+    public function getAffinageGroupe(): ?AffinageGroupe
+    {
+        return $this->affinageGroupe;
+    }
+
+    public function setAffinageGroupe(?AffinageGroupe $affinageGroupe): self
+    {
+        $this->affinageGroupe = $affinageGroupe;
+
+        return $this;
+    }
+
+    public function getDeclinaisonGroupe(): ?ArticleDeclinaisonGroupe
+    {
+        return $this->DeclinaisonGroupe;
+    }
+
+    public function setDeclinaisonGroupe(?ArticleDeclinaisonGroupe $DeclinaisonGroupe): self
+    {
+        $this->DeclinaisonGroupe = $DeclinaisonGroupe;
+
+        return $this;
+    }
+
+
+
 
     /* ***********************
 
@@ -1022,17 +1078,6 @@ class Article
         $this->Stocks = $stocks;
     }
 
-    public function getAffinageGroupe(): ?AffinageGroupe
-    {
-        return $this->affinageGroupe;
-    }
-
-    public function setAffinageGroupe(?AffinageGroupe $affinageGroupe): self
-    {
-        $this->affinageGroupe = $affinageGroupe;
-
-        return $this;
-    }
 
 
     /* ***********************
