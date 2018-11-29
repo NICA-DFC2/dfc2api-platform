@@ -25,6 +25,19 @@ class Categorie
      */
     private $id;
 
+
+    /**
+     * @ORM\Column(name="old_id", type="integer", nullable=true)
+     */
+    private $oldId;
+
+    /**
+     * @ORM\Column(name="old_id_parent", type="integer", nullable=true)
+     */
+    private $oldIdParent;
+
+
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -50,7 +63,7 @@ class Categorie
     /**
      * Many ArticleCategories have One parent ArticleCategorie.
      * @ManyToOne(targetEntity="Categorie", inversedBy="children", cascade={"persist"})
-     * @JoinColumn(name="parent_id", referencedColumnName="id")
+     * @JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      * @ApiAssert\ParentCategorieIsEmpty()
      */
     private $parent;
@@ -74,6 +87,42 @@ class Categorie
     {
         return $this->id;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOldId()
+    {
+        return $this->oldId;
+
+    }
+
+    /**
+     * @param mixed $oldId
+     */
+    public function setOldId($oldId)
+    {
+        $this->oldId = $oldId;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOldIdParent()
+    {
+        return $this->oldIdParent;
+    }
+
+    /**
+     * @param mixed $oldIdParent
+     */
+    public function setOldIdParent($oldIdParent)
+    {
+        $this->oldIdParent = $oldIdParent;
+    }
+
+
 
     public function getName(): ?string
     {
