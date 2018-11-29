@@ -51,14 +51,14 @@ class ParentCategorieIsEmptyValidatorTest extends KernelTestCase
         $validator = $this->configureValidator($constraint->message);
 
 
-        $parentCategory = new Categorie();
-        $parentCategory->setName("parent");
+        $parentCategorie = new Categorie();
+        $parentCategorie->setName("parent");
 
         $articleInParent = new Article();
-        $articleInParent->addCategory($parentCategory);
+        $articleInParent->addCategorie($parentCategorie);
 
         $category = new Categorie();
-        $category->setParent($parentCategory);
+        $category->setParent($parentCategorie);
 
 
         $validator->validate($category, $constraint);
@@ -72,11 +72,11 @@ class ParentCategorieIsEmptyValidatorTest extends KernelTestCase
         $validator = $this->configureValidator();
 
 
-        $parentCategory = new Categorie();
-        $parentCategory->setName("parent");
+        $parentCategorie = new Categorie();
+        $parentCategorie->setName("parent");
 
         $category = new Categorie();
-        $category->setParent($parentCategory);
+        $category->setParent($parentCategorie);
 
 
         $validator->validate($category, $constraint);
