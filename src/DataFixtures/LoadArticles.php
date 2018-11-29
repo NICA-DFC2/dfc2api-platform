@@ -49,7 +49,7 @@ class LoadArticles extends Fixture implements OrderedFixtureInterface
             $article->setFlgEclVertAD($faker->boolean());
             $article->setDateCreAD($faker->dateTimeBetween('-5 years','-2 years'));
             $article->setDateModAD($faker->dateTimeBetween('-2 years', 'now'));
-            $article->addCategory ($childrenCategory);
+            $article->addCategorie ($childrenCategory);
             $manager->persist($article);
             $manager->flush();
             $manager->clear();
