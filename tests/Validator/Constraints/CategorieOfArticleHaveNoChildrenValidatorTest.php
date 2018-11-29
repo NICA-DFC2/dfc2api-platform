@@ -54,15 +54,15 @@ class CategorieOfArticleHaveNoChildrenValidatorTest extends KernelTestCase
         $validator = $this->configureValidator ( $constraint->message );
 
 
-        $parentCategory = new Categorie();
-        $parentCategory->setName ( "testWithChildren-parent" );
+        $parentCategorie = new Categorie();
+        $parentCategorie->setName ( "testWithChildren-parent" );
 
         $category = new Categorie();
         $category->setName ( "testWithChildren-enfant" );
-        $parentCategory->addChildren ($category);
+        $parentCategorie->addChildren ($category);
 
         $article = new Article();
-        $article->addCategory ( $parentCategory );
+        $article->addCategorie ( $parentCategorie );
 
 
 
@@ -78,15 +78,15 @@ class CategorieOfArticleHaveNoChildrenValidatorTest extends KernelTestCase
         $validator = $this->configureValidator ();
 
 
-        $parentCategory = new Categorie();
-        $parentCategory->setName ( "testWithoutChildren-parent2" );
+        $parentCategorie = new Categorie();
+        $parentCategorie->setName ( "testWithoutChildren-parent2" );
 
         $category = new Categorie();
         $category->setName ( "testWithoutChildren-enfant2" );
-        $category->setParent ( $parentCategory );
+        $category->setParent ( $parentCategorie );
 
         $article = new Article();
-        $article->addCategory ( $category );
+        $article->addCategorie ( $category );
 
 
         $validator->validate ( $article, $constraint );
