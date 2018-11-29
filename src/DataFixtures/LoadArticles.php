@@ -11,7 +11,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Faker;
 
-class LoadArticles extends Fixture implements OrderedFixtureInterface
+class LoadArticles
 {
     public function load(ObjectManager $manager)
     {

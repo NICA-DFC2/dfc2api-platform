@@ -16,12 +16,12 @@ class IndexBuilder
 
     public function create()
     {
-        // We name our index "blog"
-        $index = $this->client->getIndex('blog');
+        // We name our index "articles"
+        $index = $this->client->getIndex('articles');
 
         $settings = Yaml::parse(
             file_get_contents(
-                __DIR__.'/../../config/elasticsearch_articles.yaml'
+                __DIR__ . '/../../config/elasticsearch_articles.yaml'
             )
         );
 

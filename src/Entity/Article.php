@@ -960,15 +960,15 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getFlgAncAD()
+    public function getFlgAncAD(): bool
     {
         return $this->FlgAncAD;
     }
 
     /**
-     * @param mixed $FlgAncAD
+     * @param boolean $FlgAncAD
      */
     public function setFlgAncAD($FlgAncAD)
     {
