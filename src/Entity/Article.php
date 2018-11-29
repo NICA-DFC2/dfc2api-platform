@@ -32,7 +32,7 @@ class Article
     private $IdAD;
 
     /**
-     * @ORM\Column(name="old_id", type="integer")
+     * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
     private $oldId;
 

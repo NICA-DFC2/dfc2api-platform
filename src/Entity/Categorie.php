@@ -27,7 +27,7 @@ class Categorie
 
 
     /**
-     * @ORM\Column(name="old_id", type="integer")
+     * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
     private $oldId;
 
@@ -63,7 +63,7 @@ class Categorie
     /**
      * Many ArticleCategories have One parent ArticleCategorie.
      * @ManyToOne(targetEntity="Categorie", inversedBy="children", cascade={"persist"})
-     * @JoinColumn(name="parent_id", referencedColumnName="id")
+     * @JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      * @ApiAssert\ParentCategorieIsEmpty()
      */
     private $parent;
