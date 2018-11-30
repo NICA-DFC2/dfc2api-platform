@@ -6,6 +6,7 @@ use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Article;
 use App\Entity\User;
 use App\Services\Objets\Notif;
+use App\Services\Objets\WsArticle;
 use App\Services\Parameters\WsTableNamesRetour;
 use App\Services\UserService;
 use App\Services\WsManager;
@@ -194,20 +195,18 @@ final class TransformResponseSubscriber implements EventSubscriberInterface
 
                         for ($i = 0; $i < count($result['hydra:member']); $i++) {
                             $item = $result['hydra:member'][$i];
+                            /** @var WsArticle $wsArticle */
                             $wsArticle = $TTParam->getItemByFilter('IdArt', $item['IdArtEvoAD']);
 
                             $item["IdADWS"] = $wsArticle->getIdAD();
-                            $item["NoADWS"] = $wsArticle->getNoAD();
                             $item["CodADFWS"] = $wsArticle->getCodADF();
                             $item["DesiAutoADWS"] = $wsArticle->getDesiAutoAD();
-                            $item["CodADWS"] = $wsArticle->getCodAD();
                             $item["UVteADWS"] = $wsArticle->getUVteArt();
                             $item["UStoADWS"] = $wsArticle->getUStoArt();
                             $item["PrixPubADWS"] = $wsArticle->getPrixPubAD();
                             $item["PrixNetCliADWS"] = $wsArticle->getPrixNet();
 
                             $item["IdDepWS"] = $wsArticle->getIdDep();
-                            $item["NoADWS"] = $wsArticle->getNoAD();
                             $item["CodADWS"] = $wsArticle->getCodAD();
                             $item["StkReelADWS"] = $wsArticle->getStkReelAD();
                             $item["StkResADWS"] = $wsArticle->getStkResAD();
@@ -237,13 +236,104 @@ final class TransformResponseSubscriber implements EventSubscriberInterface
 
                             $item["PrixNetWS"] = $wsArticle->getPrixNet();
                             $item["PrixPubCliWS"] = $wsArticle->getPrixPubCli();
-                            $item["PrixPubADWS"] = $wsArticle->getPrixPubAD();
                             $item["PrixRevConvADWS"] = $wsArticle->getPrixRevConvAD();
                             $item["CoefPRCADWS"] = $wsArticle->getCoefPRCAD();
                             $item["MargeConvADWS"] = $wsArticle->getMargeConvAD();
                             $item["Stocks"] = $wsArticle->getStocks();
                             $result['hydra:member'][$i] = $item;
                         }
+                    }
+                }
+            }
+        }
+        else {
+            $depots = array();
+            $array_idarts = array();
+
+            $parseUrl = parse_url($uri);
+            if (array_key_exists('query', $parseUrl)) {
+                parse_str($parseUrl['query'], $arrayQuery);
+
+                if (array_key_exists('depots', $arrayQuery)) {
+                    $depots = $arrayQuery['depots'];
+                    if (is_array(json_decode($depots))) {
+                        $depots = json_decode($depots);
+                    } else {
+                        $depots = array($depots);
+                    }
+                }
+            }
+
+            // Lecture du user connecté
+            $user = $this->user_service->getCurrentUser();
+
+            // si user connecté et de type User
+            if ($user instanceof User) {
+                array_push($array_idarts, $result['IdArtEvoAD']);
+
+                // instancie la propriété user du manager des services web gimel
+                $this->ws_manager->setUser($user);
+
+                // Appel service web d'un article par son identifiant technique IdArt et calcul du prix net si client connecté
+                $TTRetour = $this->ws_manager->getArticlesByArray($array_idarts, !in_array('ROLE_COMMERCIAL', $user->getRoles()), $depots);
+            } else {
+                // Appel service web d'un article par son identifiant technique IdArt
+                array_push($array_idarts, $result['IdArtEvoAD']);
+                $TTRetour = $this->ws_manager->getArticlesByArray($array_idarts, false, $depots);
+            }
+
+            if (!is_null($TTRetour)) {
+                if(!$TTRetour instanceof Notif) {
+                    $TTParam = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+
+                    if (!is_null($TTParam) && $TTParam->countItems() > 0) {
+
+                            /** @var WsArticle $wsArticle */
+                            $wsArticle = $TTParam->getItemByFilter('IdArt', $result['IdArtEvoAD']);
+
+                            $item["IdADWS"] = $wsArticle->getIdAD();
+                            $item["CodADFWS"] = $wsArticle->getCodADF();
+                            $item["DesiAutoADWS"] = $wsArticle->getDesiAutoAD();
+                            $item["UVteADWS"] = $wsArticle->getUVteArt();
+                            $item["UStoADWS"] = $wsArticle->getUStoArt();
+                            $item["PrixPubADWS"] = $wsArticle->getPrixPubAD();
+                            $item["PrixNetCliADWS"] = $wsArticle->getPrixNet();
+
+                            $item["IdDepWS"] = $wsArticle->getIdDep();
+                            $item["CodADWS"] = $wsArticle->getCodAD();
+                            $item["StkReelADWS"] = $wsArticle->getStkReelAD();
+                            $item["StkResADWS"] = $wsArticle->getStkResAD();
+                            $item["StkCmdeADWS"] = $wsArticle->getStkCmdeAD();
+                            $item["StockDisponibleWS"] = $wsArticle->getStockDisponible();
+                            $item["StockDisponibleSocWS"] = $wsArticle->getStockDisponibleSoc();
+                            $item["StockPratiqueWS"] = $wsArticle->getStockPratique();
+                            $item["StkReelPlat1WS"] = $wsArticle->getStkReelPlat1();
+                            $item["UVteArtWS"] = $wsArticle->getUVteArt();
+                            $item["UStoArtWS"] = $wsArticle->getUStoArt();
+                            $item["PrixPubUCondVteWS"] = $wsArticle->getPrixPubUCondVte();
+                            $item["PrixNetUCondVteWS"] = $wsArticle->getPrixNetUCondVte();
+
+                            $item["LongADWS"] = $wsArticle->getLongAD();
+                            $item["LargADWS"] = $wsArticle->getLargAD();
+                            $item["EpaisADWS"] = $wsArticle->getEpaisAD();
+                            $item["CondVteADWS"] = $wsArticle->getCondVteAD();
+                            $item["FlgDecondADWS"] = $wsArticle->getFlgDecondAD();
+                            $item["Desi2ArtWS"] = $wsArticle->getDesi2Art();
+                            $item["IdFourWS"] = $wsArticle->getIdFour();
+                            $item["NomDepWS"] = $wsArticle->getNomDep();
+                            $item["CodSuspADWS"] = $wsArticle->getCodSuspAD();
+                            $item["GenCodADWS"] = $wsArticle->getGenCodAD();
+                            $item["CodADFWS"] = $wsArticle->getCodADF();
+                            $item["GenCod1ADFWS"] = $wsArticle->getGenCod1ADF();
+                            $item["GenCod2ADFWS"] = $wsArticle->getGenCod2ADF();
+
+                            $item["PrixNetWS"] = $wsArticle->getPrixNet();
+                            $item["PrixPubCliWS"] = $wsArticle->getPrixPubCli();
+                            $item["PrixRevConvADWS"] = $wsArticle->getPrixRevConvAD();
+                            $item["CoefPRCADWS"] = $wsArticle->getCoefPRCAD();
+                            $item["MargeConvADWS"] = $wsArticle->getMargeConvAD();
+                            $item["Stocks"] = $wsArticle->getStocks();
+                            $result = $item;
                     }
                 }
             }

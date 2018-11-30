@@ -802,69 +802,67 @@ class WsManager
          */
         public function getArticlesByArray(?array $idarts, $calculPrixNet = false, $filter_depots = array())
         {
-            if(!is_null($this->getUser())) {
-                $TTParamAppel = new TTParam();
-                $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
-                $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
+            $TTParamAppel = new TTParam();
+            $TTParamAppel->addItem(new CritParam('TypeDonnee', WsParameters::TYPE_DONNEE_ARTDET_STOCK));
+            $TTParamAppel->addItem(new CritParam("CalculPrixNet", ($calculPrixNet) ? "yes" : "no"));
 
+            if(!is_null($this->getUser())) {
                 if ($this->getUser()->getIdCli() > 0 && $calculPrixNet) {
                     $TTParamAppel->addItem(new CritParam('IdCli', $this->getUser()->getIdCli()));
                 }
-
-                $TTCritSel = new TTParam();
-                for ($i = 0; $i < count($idarts); $i++) {
-                    if ($i == 0) {
-                        $TTCritSel->addItem(new CritParam('IdArt', $idarts[$i], 1));
-                    } else {
-                        $TTCritSel->addItem(new CritParam('IdArt', $idarts[$i], 1));
-                        $TTCritSel->addItem(new CritParam('IdArt', 'OR', 4));
-                    }
-                }
-
-                $response = $this->getCaller()
-                    ->setCache($this->getCache())
-                    ->setModule(WsParameters::MODULE_ARTICLE)
-                    ->setContext(WsTypeContext::CONTEXT_ADMIN)
-                    ->setFilter($this->getFilter())
-                    ->setParamsAppel($TTParamAppel)
-                    ->setCritsSelect($TTCritSel)
-                    ->get();
-
-                $responseDecode = new ResponseDecode($response);
-                $decode = $responseDecode->decodeRetour($filter_depots);
-
-                if (!$decode instanceof Notif && !is_null($decode)) {
-                    $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
-                    for ($i = 0; $i < $TTParam->countItems(); $i++) {
-                        $wsArticle = $TTParam->getItem($i);
-
-                        // Lecture du tableau des stocks
-                        // Le retour est complexe on doit créer un tableau simplifié
-                        $stocks = $wsArticle->getStocks();
-
-                        $arrayStocks = array();
-                        if (!is_null($stocks) && count($stocks) > 0) {
-                            // Création d'un tableau des stocks simplifié
-                            for ($iS = 0; $iS < count($stocks); $iS++) {
-                                $wsStock = $stocks[$iS];
-
-                                $wsDepot = $this->getDepotClass($wsStock->getIdDep());
-
-                                $stockDepot = new StockDepot();
-                                $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
-                                $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
-                            }
-                            $wsArticle->setStocks($arrayStocks);
-                        }
-                        $TTParam->setItem($i, $wsArticle);
-                    }
-
-                    $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
-                }
-                return $decode;
             }
-            
-            return new Notif('WsManager::class', 'Les paramètres d\'appel ne sont pas tous renseignés getUser() est NULL ou getIdCli() inférieur à 0', 'Paramètres manquants', '', __FUNCTION__);
+
+            $TTCritSel = new TTParam();
+            for ($i = 0; $i < count($idarts); $i++) {
+                if ($i == 0) {
+                    $TTCritSel->addItem(new CritParam('IdArt', $idarts[$i], 1));
+                } else {
+                    $TTCritSel->addItem(new CritParam('IdArt', $idarts[$i], 1));
+                    $TTCritSel->addItem(new CritParam('IdArt', 'OR', 4));
+                }
+            }
+
+            $response = $this->getCaller()
+                ->setCache($this->getCache())
+                ->setModule(WsParameters::MODULE_ARTICLE)
+                ->setContext(WsTypeContext::CONTEXT_ADMIN)
+                ->setFilter($this->getFilter())
+                ->setParamsAppel($TTParamAppel)
+                ->setCritsSelect($TTCritSel)
+                ->get();
+
+            $responseDecode = new ResponseDecode($response);
+            $decode = $responseDecode->decodeRetour($filter_depots);
+
+            if (!$decode instanceof Notif && !is_null($decode)) {
+                $TTParam = $decode->getTable(WsTableNamesRetour::TABLENAME_TT_ARTDET);
+                for ($i = 0; $i < $TTParam->countItems(); $i++) {
+                    $wsArticle = $TTParam->getItem($i);
+
+                    // Lecture du tableau des stocks
+                    // Le retour est complexe on doit créer un tableau simplifié
+                    $stocks = $wsArticle->getStocks();
+
+                    $arrayStocks = array();
+                    if (!is_null($stocks) && count($stocks) > 0) {
+                        // Création d'un tableau des stocks simplifié
+                        for ($iS = 0; $iS < count($stocks); $iS++) {
+                            $wsStock = $stocks[$iS];
+
+                            $wsDepot = $this->getDepotClass($wsStock->getIdDep());
+
+                            $stockDepot = new StockDepot();
+                            $stockDepot->parseObject($wsStock, (!is_null($wsDepot)) ? $wsDepot->getNomDep() : $iS);
+                            $arrayStocks[(!is_null($wsDepot)) ? $wsDepot->getNomDepLower() : $iS] = $stockDepot->parseString();
+                        }
+                        $wsArticle->setStocks($arrayStocks);
+                    }
+                    $TTParam->setItem($i, $wsArticle);
+                }
+
+                $decode->setTable($TTParam, WsTableNamesRetour::TABLENAME_TT_ARTDET);
+            }
+            return $decode;
         }
 
         /**
