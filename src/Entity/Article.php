@@ -45,6 +45,27 @@ class Article
     private $IdArtEvoAD;
 
     /**
+     * @param integer $NoAD - Numéro unique d'un article dans Evolubat selon le type d'article (ANC/Stocké géré/Stocké non géré).
+     *
+     * @ORM\Column(name="NoAD", type="integer", options={"default":-1}, nullable=true)
+     */
+    private $NoAD;
+
+    /**
+     * @param string $CodAD - Code unique d'un article dans Evolubat selon le type d'article (ANC/Stocké géré/Stocké non géré).
+     *
+     * @ORM\Column(name="CodAD", type="string", length=50, nullable=true)
+     */
+    private $CodAD;
+
+    /**
+     * @param string $PrixPubAD - Code unique d'un article dans Evolubat selon le type d'article (ANC/Stocké géré/Stocké non géré).
+     *
+     * @ORM\Column(name="PrixPubAD", type="decimal", scale=2, options={"default":0.00})
+     */
+    private $PrixPubAD;
+
+    /**
      * @ORM\Column(name="DesiAD", type="string", length=255, nullable=true)
      * @ApiFilter(SearchFilter::class, strategy="partial")
      */
@@ -99,6 +120,7 @@ class Article
     private $NumDecliAD;
 
     /**
+     * @param boolean $FlgAncAD
      * @ORM\Column(name="FlgAncAD", type="boolean", nullable=true)
      */
     private $FlgAncAD;
@@ -205,12 +227,6 @@ class Article
     private $IdADWS;
 
     /**
-     * @var integer|null
-     * @SWG\Property(description="Numéro unique Evolubat de l'article.", type="integer")
-     */
-    private $NoADWS;
-
-    /**
      * @var string|null
      * @SWG\Property(description="Code fournisseur unique Evolubat de l'article.", type="string")
      */
@@ -224,12 +240,6 @@ class Article
 
     /**
      * @var string|null
-     * @SWG\Property(description="Code unique Evolubat de l'article.", type="string")
-     */
-    private $CodADWS;
-
-    /**
-     * @var string|null
      * @SWG\Property(description="Unité de vente de l'article.", type="string")
      */
     private $UVteADWS;
@@ -239,12 +249,6 @@ class Article
      * @SWG\Property(description="Unité de stock de l'article.", type="string")
      */
     private $UStoADWS;
-
-    /**
-     * @var float|null
-     * @SWG\Property(description="Prix public HT de l'article.", type="decimal")
-     */
-    private $PrixPubADWS;
 
     /**
      * @var float|null
@@ -637,8 +641,6 @@ class Article
             $this->setIdAD($json_object->{'IdAD'});
             $this->setIdArtEvoAD($json_object->{'IdArt'});
             $this->setIdDepWS($json_object->{'IdDep'});
-            $this->setNoADWS($json_object->{'NoAD'});
-            $this->setCodADWS($json_object->{'CodAD'});
             $this->setDesiAutoADWS($json_object->{'DesiAutoAD'});
             $this->setStkReelADWS($json_object->{'StkReelAD'});
             $this->setStkResADWS($json_object->{'StkResAD'});
@@ -671,7 +673,6 @@ class Article
 
             $this->setPrixNetWS($json_object->{'PrixNet'});
             $this->setPrixPubCliWS($json_object->{'PrixPubCli'});
-            $this->setPrixPubADWS($json_object->{'PrixPubAD'});
             $this->setPrixRevConvADWS($json_object->{'PrixRevConvAD'});
             $this->setCoefPRCADWS($json_object->{'CoefPRCAD'});
             $this->setMargeConvADWS($json_object->{'MargeConvAD'});
@@ -685,8 +686,6 @@ class Article
         $string .= '"IdSoc": '. $this->getIdSocWS() .', ';
         $string .= '"IdDep": '. $this->getIdDepWS() .', ';
         $string .= '"IdIC": '. $this->getIdICWS() .', ';
-        $string .= '"NoAD": '. $this->getNoADWS() .', ';
-        $string .= '"CodAD": "'. $this->getCodADWS() .'", ';
         $string .= '"DesiAutoAD": "'. $this->getDesiAutoADWS() .'", ';
         $string .= '"ValNivAD": "'. $this->getValNivADWS() .'", ';
         $string .= '"StkReelAD": '. $this->getStkReelADWS() .', ';
@@ -741,7 +740,6 @@ class Article
         $string .= '"CodCatAD": "'. $this->getCodCatADWS() .'", ';
         $string .= '"PrixNet": '. $this->getPrixNetWS() .', ';
         $string .= '"PrixPubCli": '. $this->getPrixPubCliWS() .', ';
-        $string .= '"PrixPubAD": '. $this->getPrixPubADWS() .', ';
         $string .= '"TypeTarif": "'. $this->getTypeTarifWS() .'", ';
         $string .= '"PrixRevConvAD": '. $this->getPrixRevConvADWS() .', ';
         $string .= '"PrixRevReelAD": '. $this->getPrixRevReelADWS() .', ';
@@ -762,8 +760,8 @@ class Article
     public function __shortToString() {
         $string = '{';
         $string .= '"IdAD": '. $this->getIdAD() .', ';
-        $string .= '"NoAD": '. $this->getNoADWS() .', ';
-        $string .= '"CodAD": "'. $this->getCodADWS() .'", ';
+        $string .= '"NoAD": '. $this->getNoAD() .', ';
+        $string .= '"CodAD": "'. $this->getCodAD() .'", ';
         $string .= '"DesiAutoAD": "'. $this->getDesiAutoADWS() .'", ';
         $string .= '"UVteArt": "'. $this->getUVteArtWS() .'", ';
         $string .= '"UStoArt": "'. $this->getUStoArtWS() .'", ';
@@ -773,7 +771,7 @@ class Article
         $string .= '"CodADF": "'. $this->getCodADFWS() .'", ';
         $string .= '"GenCod1ADF": "'. $this->getGenCod1ADFWS() .'", ';
         $string .= '"GenCod2ADF": "'. $this->getGenCod2ADFWS() .'", ';
-        $string .= '"PrixPubAD": '. $this->getPrixPubADWS() .' ';
+        $string .= '"PrixPubAD": '. $this->getPrixPubAD() .' ';
         $string .= '}';
 
         return $string;
@@ -809,6 +807,54 @@ class Article
     public function setIdArtEvoAD($IdArtEvoAD)
     {
         $this->IdArtEvoAD = $IdArtEvoAD;
+    }
+
+    /**
+     * @return integer|null
+     */
+    public function getNoAD()
+    {
+        return $this->NoAD;
+    }
+
+    /**
+     * @param integer|null $NoAD
+     */
+    public function setNoAD($NoAD)
+    {
+        $this->NoAD = $NoAD;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCodAD()
+    {
+        return $this->CodAD;
+    }
+
+    /**
+     * @param string|null $CodAD
+     */
+    public function setCodAD($CodAD)
+    {
+        $this->CodAD = $CodAD;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPrixPubAD()
+    {
+        return $this->PrixPubAD;
+    }
+
+    /**
+     * @param float|null $PrixPubAD
+     */
+    public function setPrixPubAD($PrixPubAD)
+    {
+        $this->PrixPubAD = $PrixPubAD;
     }
 
     /**
@@ -974,15 +1020,15 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getFlgAncAD()
+    public function getFlgAncAD(): bool
     {
         return $this->FlgAncAD;
     }
 
     /**
-     * @param mixed $FlgAncAD
+     * @param boolean $FlgAncAD
      */
     public function setFlgAncAD($FlgAncAD)
     {
@@ -1328,22 +1374,6 @@ class Article
     }
 
     /**
-     * @return integer|null
-     */
-    public function getNoADWS()
-    {
-        return $this->NoADWS;
-    }
-
-    /**
-     * @param integer|null $NoADWS
-     */
-    public function setNoADWS($NoADWS)
-    {
-        $this->NoADWS = $NoADWS;
-    }
-
-    /**
      * @return string|null
      */
     public function getCodADFWS()
@@ -1378,22 +1408,6 @@ class Article
     /**
      * @return string|null
      */
-    public function getCodADWS()
-    {
-        return $this->CodADWS;
-    }
-
-    /**
-     * @param string|null $CodADWS
-     */
-    public function setCodADWS($CodADWS)
-    {
-        $this->CodADWS = $CodADWS;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getUVteADWS()
     {
         return $this->UVteADWS;
@@ -1421,22 +1435,6 @@ class Article
     public function setUStoADWS($UStoADWS)
     {
         $this->UStoADWS = $UStoADWS;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getPrixPubADWS()
-    {
-        return $this->PrixPubADWS;
-    }
-
-    /**
-     * @param float|null $PrixPubADWS
-        */
-        public function setPrixPubADWS($PrixPubADWS)
-    {
-        $this->PrixPubADWS = $PrixPubADWS;
     }
 
     /**

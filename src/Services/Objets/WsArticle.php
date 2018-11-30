@@ -111,7 +111,7 @@ class WsArticle
         $string .= '"EtatStockAD": "'. $this->getEtatStockAD() .'", ';
         $string .= '"StockDisponible": '. $this->getStockDisponible() .', ';
         $string .= '"StockDisponibleSoc": '. $this->getStockDisponibleSoc() .', ';
-        $string .= '"StockPratique": '. $this->getStockPratique() .', ';
+        //$string .= '"StockPratique": '. $this->getStockPratique() .', ';
         $string .= '"StkReelPlat1": '. $this->getStkReelPlat1() .', ';
         $string .= '"QteCIDSsCFAD": '. $this->getQteCIDSsCFAD() .', ';
         $string .= '"UVteArt": "'. $this->getUVteArt() .'", ';
@@ -192,7 +192,7 @@ class WsArticle
             $this->setEtatStockAD($json_object->{'EtatStockAD'});
             $this->setStockDisponible($json_object->{'StockDisponible'});
             $this->setStockDisponibleSoc($json_object->{'StockDisponibleSoc'});
-            $this->setStockPratique($json_object->{'StockPratique'});
+            //$this->setStockPratique($json_object->{'StockPratique'});
             $this->setStkReelPlat1($json_object->{'StkReelPlat1'});
             $this->setQteCIDSsCFAD($json_object->{'QteCIDSsCFAD'});
             $this->setUVteArt($json_object->{'UVteArt'});

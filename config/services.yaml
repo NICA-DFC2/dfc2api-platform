@@ -8,14 +8,12 @@ parameters:
 services:
     # default configuration for services in *this* file
     _defaults:
-        autowire: false      # Automatically injects dependencies in your services.
+        autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         public: true        # Allows optimizing the container by removing unused services; this also means
                             # fetching services directly from the container via $container->get() won't work.
                             # The best practice is to be explicit about your dependencies anyway.
 
-    # Alias de la class du service manager du bundle
-    App\Services\WsManager: '@dfc2.api.manager'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -28,20 +26,43 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
-    # paramétrage du service mannager
-    dfc2.api.manager:
+
+    App\Services\WsManager:
         class: App\Services\WsManager
         autowire: true
         public: true
         arguments:
-            $wsAdminUser: '%dfc2.api.admin_user%'
-            $wsAdminPassword: '%dfc2.api.admin_password%'
+          $wsAdminUser: '%dfc2.api.admin_user%'
+          $wsAdminPassword: '%dfc2.api.admin_password%'
+
+    dfc2.api.manager:
+        alias: App\Services\WsManager
+        public: true
 
     dfc2.user.service:
         public: true
         autowire: true
         class: App\Services\UserService
         arguments: [ '@security.token_storage', '@dfc2.api.manager' ]
+
+    App\Services\Filter\WsFilter:
+        public: true
+        autowire: false
+
+    App\Services\Json\ResponseDecode:
+        public: true
+        autowire: false
+
+    App\Services\Objets\:
+        resource: '../src/Services/Objets'
+        public: true
+        autowire: false
+
+    App\Utils\:
+      resource: '../src/Utils'
+      public: true
+      autowire: false
+
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -92,3 +113,8 @@ services:
             class: App\EventListener\AuthenticationTokenExpiredListener
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_expired, method: onJWTExpired }
+
+
+    Elastica\Client:
+      $config:
+        host: '127.0.0.1' # ou elasticsearch
