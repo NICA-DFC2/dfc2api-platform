@@ -192,10 +192,10 @@ class ArticleTest extends TestCase
         $this->assertEquals(0, $this->article->getIdADWS());
     }
 
-    public function testGetNoADWS()
+    public function testGetNoAD()
     {
-        $this->article->setNoADWS(0);
-        $this->assertEquals(0, $this->article->getNoADWS());
+        $this->article->setNoAD(0);
+        $this->assertEquals(0, $this->article->getNoAD());
     }
 
     public function testGetCodADFWS()
@@ -210,10 +210,10 @@ class ArticleTest extends TestCase
         $this->assertEquals('test', $this->article->getDesiADWS());
     }
 
-    public function testGetCodADWS()
+    public function testGetCodAD()
     {
-        $this->article->setCodADWS('test');
-        $this->assertEquals('test', $this->article->getCodADWS());
+        $this->article->setCodAD('test');
+        $this->assertEquals('test', $this->article->getCodAD());
     }
 
     public function testGetUVteADWS()
@@ -228,10 +228,10 @@ class ArticleTest extends TestCase
         $this->assertEquals('test', $this->article->getUStoADWS());
     }
 
-    public function testGetPrixPubADWS()
+    public function testGetPrixPubAD()
     {
-        $this->article->setPrixPubADWS(0.0);
-        $this->assertEquals(0.0, $this->article->getPrixPubADWS());
+        $this->article->setPrixPubAD(0.0);
+        $this->assertEquals(0.0, $this->article->getPrixPubAD());
     }
 
     public function testGetPrixNetCliADWS()
