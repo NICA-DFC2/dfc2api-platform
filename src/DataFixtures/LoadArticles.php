@@ -25,6 +25,7 @@ class LoadArticles
             $category->setName ($faker->text (10));
             $category->setIcon($faker->imageUrl(100, 100));
             $article = new Article();
+            $article->setOldId ($i + 1);
             $article->setIdArtEvoAD(271507); // IdArt qui existe
             $article->setDesiAD($faker->text(50));
             $article->setDesiPrincAD($faker->text(50));
@@ -49,7 +50,7 @@ class LoadArticles
             $article->setFlgEclVertAD($faker->boolean());
             $article->setDateCreAD($faker->dateTimeBetween('-5 years','-2 years'));
             $article->setDateModAD($faker->dateTimeBetween('-2 years', 'now'));
-            $article->addCategory ($childrenCategory);
+            $article->addCategorie ($childrenCategory);
             $manager->persist($article);
             $manager->flush();
             $manager->clear();

@@ -32,6 +32,12 @@ class Article
     private $IdAD;
 
     /**
+     * @ORM\Column(name="old_id", type="integer", nullable=true)
+     */
+    private $oldId;
+
+
+    /**
      * @param integer $IdArtEvoAD A IdArt propriété - Identifiant unique d'un article dans Evolubat.
      *
      * @ORM\Column(name="IdArtEvoAD", type="integer", options={"default":-1}, nullable=true)
@@ -605,6 +611,14 @@ class Article
 
     /** @ORM\OneToMany(targetEntity="PanierLigne", mappedBy="article") */
     protected $articles;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ArticleDeclinaisonGroupe", inversedBy="articles")
+     */
+    private $DeclinaisonGroupe;
+
+
 
 
 
@@ -1285,7 +1299,7 @@ class Article
         return $this->categories;
     }
 
-    public function addCategory(Categorie $categorie): self
+    public function addCategorie(Categorie $categorie): self
     {
         if (!$this->categories->contains($categorie)) {
             $this->categories[] = $categorie;
@@ -1295,7 +1309,7 @@ class Article
         return $this;
     }
 
-    public function removeCategory(Categorie $categorie): self
+    public function removeCategorie(Categorie $categorie): self
     {
         if ($this->categories->contains($categorie)) {
             $this->categories->removeElement($categorie);
@@ -1304,6 +1318,38 @@ class Article
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOldId()
+    {
+        return $this->oldId;
+    }
+
+    /**
+     * @param mixed $oldId
+     */
+    public function setOldId($oldId)
+    {
+        $this->oldId = $oldId;
+    }
+
+    public function getDeclinaisonGroupe(): ?ArticleDeclinaisonGroupe
+    {
+        return $this->DeclinaisonGroupe;
+    }
+
+    public function setDeclinaisonGroupe(?ArticleDeclinaisonGroupe $DeclinaisonGroupe): self
+    {
+        $this->DeclinaisonGroupe = $DeclinaisonGroupe;
+
+        return $this;
+    }
+
+
+
+
 
     /* ***********************
 

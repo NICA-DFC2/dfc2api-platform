@@ -119,6 +119,9 @@
     "exsyst/swagger": {
         "version": "v0.4.0"
     },
+    "facebook/webdriver": {
+        "version": "1.6.0"
+    },
     "friendsofsymfony/user-bundle": {
         "version": "v2.1.2"
     },
@@ -323,6 +326,9 @@
     "symfony/options-resolver": {
         "version": "v4.1.0"
     },
+    "symfony/panther": {
+        "version": "v0.2.0"
+    },
     "symfony/phpunit-bridge": {
         "version": "4.1",
         "recipe": {
@@ -337,6 +343,9 @@
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.8.0"
+    },
+    "symfony/polyfill-php72": {
+        "version": "v1.10.0"
     },
     "symfony/process": {
         "version": "v4.1.4"
