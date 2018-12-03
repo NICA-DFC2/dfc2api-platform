@@ -1,0 +1,41 @@
+# Read the documentation: https://github.com/FriendsOfSymfony/FOSElasticaBundle/blob/master/Resources/doc/setup.md
+fos_elastica:
+    clients:
+        default: { host: localhost, port: 9200 }
+    indexes:
+        app:
+            types:
+                articles:
+                    properties:
+                        NoAD: { type: integer, index: true }
+                        CodAD: { type: text, index: true }
+                        DesiPrincAD: { type: text, index: true }
+                        DesiAD: { type: text, index: true }
+                        DescriWebAD: { type: text, index: true }
+                        DescriCatalogAD: { type: text, index: true }
+                        PlusAD: { type: text, index: false }
+                        slug: { type: text, index: false }
+                        IdArtEvoAD: { type: integer, index: false }
+                        MediasAD:  { type: text, index: false }
+                        OrdreAD: { type: integer, index: false }
+                        NumDecliAD: { type: integer, index: false }
+                        FlgAncAD:  { type: boolean, index: false }
+                        FlgCatalogAD: { type: boolean, index: false }
+                        FlgPrincAD: { type: boolean, index: false }
+                        FlgDestockAD: { type: boolean, index: false }
+                        FlgHorsMarqueAD: { type: boolean, index: false }
+                        FlgNouvAD: { type: boolean, index: false }
+                        FlgPromoAD: { type: boolean, index: false }
+                        FlgVisibleAD: { type: boolean, index: false }
+                        FlgEclBleuAD: { type: boolean, index: false }
+                        FlgEclRoseAD: { type: boolean, index: false }
+                        FlgEclVertAD: { type: boolean, index: false }
+                        FlgEclOrangeAD: { type: boolean, index: false }
+                        IdFourAD: { type: integer, index: false }
+                        PrixPubAD: { type: float, index: false }
+                    persistence:
+                        # the driver can be orm, mongodb or phpcr
+                        driver: orm
+                        model: App\Entity\Article
+                        provider: ~
+                        finder: ~

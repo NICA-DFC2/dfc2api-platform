@@ -113,8 +113,3 @@ services:
             class: App\EventListener\AuthenticationTokenExpiredListener
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_expired, method: onJWTExpired }
-
-
-    Elastica\Client:
-      $config:
-        host: '127.0.0.1' # ou elasticsearch

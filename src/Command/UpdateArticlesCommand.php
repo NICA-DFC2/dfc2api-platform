@@ -74,6 +74,9 @@ class UpdateArticlesCommand extends ContainerAwareCommand
             $article = new Article();
             $article->setOldId ($dumpedArticle['IdAD']);
             $article->setIdArtEvoAD ($dumpedArticle['IdEvoArtAD']);
+            $article->setNoAD($dumpedArticle['NoAD']);
+            $article->setCodAD ($dumpedArticle['CodAD']);
+            $article->setPrixPubAD($dumpedArticle['PrixPubAD']);
             $article->setDesiAD ($dumpedArticle['DesiWebAD']);
             $article->setDesiPrincAD ($dumpedArticle['DesiWebDecliAD']);
             $article->setDescriWebAD ($dumpedArticle['DescriAD']);
