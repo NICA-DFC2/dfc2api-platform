@@ -34,6 +34,7 @@ fos_elastica:
                         IdFourAD: { type: integer, index: false }
                         PrixPubAD: { type: float, index: false }
                     persistence:
+                        identifier: IdAD
                         # the driver can be orm, mongodb or phpcr
                         driver: orm
                         model: App\Entity\Article

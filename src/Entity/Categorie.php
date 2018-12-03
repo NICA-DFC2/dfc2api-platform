@@ -72,7 +72,7 @@ class Categorie
      * @ORM\ManyToMany(targetEntity="Article", inversedBy="categories", cascade={"persist"})
      * @ORM\JoinTable(name="article_categorie",
      *      joinColumns={@JoinColumn(name="categorie_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@JoinColumn(name="article_id", referencedColumnName="IdAD")}
+     *      inverseJoinColumns={@JoinColumn(name="article_id", referencedColumnName="id")}
      *      )
      */
     private $articles;

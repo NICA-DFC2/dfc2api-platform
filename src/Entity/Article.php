@@ -156,84 +156,84 @@ class Article
      * @var boolean
      *
      * @param boolean $FlgAncAD
-     * @ORM\Column(name="FlgAncAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgAncAD", type="boolean", nullable=false)
      */
     private $FlgAncAD;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="FlgCatalogAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgCatalogAD", type="boolean", nullable=false)
      */
     private $FlgCatalogAD;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="FlgPrincAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgPrincAD", type="boolean", nullable=false)
      */
     private $FlgPrincAD;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="FlgDestockAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgDestockAD", type="boolean", nullable=false)
      */
     private $FlgDestockAD;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="FlgHorsMarqueAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgHorsMarqueAD", type="boolean", nullable=false)
      */
     private $FlgHorsMarqueAD;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="FlgNouvAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgNouvAD", type="boolean", nullable=false)
      */
     private $FlgNouvAD;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="FlgPromoAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgPromoAD", type="boolean", nullable=false)
      */
     private $FlgPromoAD;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="FlgVisibleAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgVisibleAD", type="boolean", nullable=false)
      */
     private $FlgVisibleAD;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="FlgEclBleuAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgEclBleuAD", type="boolean", nullable=false)
      */
     private $FlgEclBleuAD;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="FlgEclRoseAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgEclRoseAD", type="boolean", nullable=false)
      */
     private $FlgEclRoseAD;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="FlgEclVertAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgEclVertAD", type="boolean", nullable=false)
      */
     private $FlgEclVertAD;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="FlgEclOrangeAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgEclOrangeAD", type="boolean", nullable=false)
      */
     private $FlgEclOrangeAD;
 
@@ -911,7 +911,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getIdAD()
     {
@@ -921,7 +921,7 @@ class Article
     /**
      * for elasticsearch.
      *
-     * @return mixed
+     * @return integer
      */
     public function getId()
     {
@@ -929,7 +929,7 @@ class Article
     }
 
     /**
-     * @param mixed $IdAD
+     * @param integer $IdAD
      */
     public function setIdAD($IdAD)
     {
@@ -937,7 +937,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getIdArtEvoAD()
     {
@@ -945,7 +945,7 @@ class Article
     }
 
     /**
-     * @param mixed $IdArtEvoAD
+     * @param integer $IdArtEvoAD
      */
     public function setIdArtEvoAD($IdArtEvoAD)
     {
@@ -1179,7 +1179,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgCatalogAD()
     {
@@ -1187,7 +1187,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgCatalogAD
+     * @param boolean $FlgCatalogAD
      */
     public function setFlgCatalogAD($FlgCatalogAD)
     {
@@ -1195,7 +1195,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgPrincAD()
     {
@@ -1203,7 +1203,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgPrincAD
+     * @param boolean $FlgPrincAD
      */
     public function setFlgPrincAD($FlgPrincAD)
     {
@@ -1211,7 +1211,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgDestockAD()
     {
@@ -1219,7 +1219,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgDestockAD
+     * @param boolean $FlgDestockAD
      */
     public function setFlgDestockAD($FlgDestockAD)
     {
@@ -1227,7 +1227,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgHorsMarqueAD()
     {
@@ -1235,7 +1235,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgHorsMarqueAD
+     * @param boolean $FlgHorsMarqueAD
      */
     public function setFlgHorsMarqueAD($FlgHorsMarqueAD)
     {
@@ -1243,7 +1243,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgNouvAD()
     {
@@ -1251,7 +1251,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgNouvAD
+     * @param boolean $FlgNouvAD
      */
     public function setFlgNouvAD($FlgNouvAD)
     {
@@ -1259,7 +1259,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgPromoAD()
     {
@@ -1267,7 +1267,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgPromoAD
+     * @param boolean $FlgPromoAD
      */
     public function setFlgPromoAD($FlgPromoAD)
     {
@@ -1275,7 +1275,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgVisibleAD()
     {
@@ -1283,7 +1283,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgVisibleAD
+     * @param boolean $FlgVisibleAD
      */
     public function setFlgVisibleAD($FlgVisibleAD)
     {
@@ -1291,7 +1291,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgEclBleuAD()
     {
@@ -1299,7 +1299,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgEclBleuAD
+     * @param boolean $FlgEclBleuAD
      */
     public function setFlgEclBleuAD($FlgEclBleuAD)
     {
@@ -1307,7 +1307,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgEclRoseAD()
     {
@@ -1315,7 +1315,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgEclRoseAD
+     * @param boolean $FlgEclRoseAD
      */
     public function setFlgEclRoseAD($FlgEclRoseAD)
     {
@@ -1323,7 +1323,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgEclVertAD()
     {
@@ -1331,7 +1331,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgEclVertAD
+     * @param boolean $FlgEclVertAD
      */
     public function setFlgEclVertAD($FlgEclVertAD)
     {
@@ -1339,7 +1339,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgEclOrangeAD()
     {
@@ -1347,7 +1347,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgEclOrangeAD
+     * @param boolean $FlgEclOrangeAD
      */
     public function setFlgEclOrangeAD($FlgEclOrangeAD)
     {
@@ -1355,7 +1355,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getIdFourAD()
     {
@@ -1363,7 +1363,7 @@ class Article
     }
 
     /**
-     * @param mixed $IdFourAD
+     * @param integer $IdFourAD
      */
     public function setIdFourAD($IdFourAD)
     {
