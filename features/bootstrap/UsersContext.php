@@ -19,4 +19,19 @@ class UsersContext implements Context, SnippetAcceptingContext
     {
         throw new PendingException();
     }
+
+    /**
+     * @When a demo scenario sends a request to :arg1
+     */
+    public function aDemoScenarioSendsARequestTo($arg1)
+    {
+        throw new PendingException();
+    }
+    /**
+     * @Then the response should be received
+     */
+    public function theResponseShouldBeReceived()
+    {
+        throw new PendingException();
+    }
 }
