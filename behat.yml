@@ -2,12 +2,12 @@
 default:
   suites:
     default:
-      contexts:
-        - UsersContext
-        - ArticlesContext
-        - Behat\MinkExtension\Context\MinkContext
-        - Behatch\Context\RestContext
-        - Behatch\Context\JsonContext
+      contexts: ~
+#        - UsersContext
+#        - ArticlesContext
+#        - Behat\MinkExtension\Context\MinkContext
+#        - Behatch\Context\RestContext
+#        - Behatch\Context\JsonContext
   extensions:
 
     Behat\Symfony2Extension:
