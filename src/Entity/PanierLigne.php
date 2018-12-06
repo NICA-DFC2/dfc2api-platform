@@ -21,7 +21,7 @@ class PanierLigne
     /**
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="Article", inversedBy="lignes")
-     * @ORM\JoinColumn(name="article_id", referencedColumnName="IdAD")
+     * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
      */
     protected $article;
 

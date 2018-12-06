@@ -23,49 +23,63 @@ use App\Validator\Constraints as ApiAssert;
 class Article
 {
     /**
-     * @param integer $IdAD A IdAD propriété - Identifiant unique d'un article dans la base de l'application.
+     * A IdAD propriété - Identifiant unique d'un article dans la base de l'application.
      *
-     * @ORM\Column(name="IdAD", type="integer")
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $IdAD;
 
     /**
+     * @var integer
+     *
      * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
     private $oldId;
 
 
     /**
-     * @param integer $IdArtEvoAD A IdArt propriété - Identifiant unique d'un article dans Evolubat.
+     * Identifiant unique d'un article dans Evolubat.
+     *
+     * @var integer
      *
      * @ORM\Column(name="IdArtEvoAD", type="integer", options={"default":-1}, nullable=true)
      */
     private $IdArtEvoAD;
 
     /**
-     * @param integer $NoAD - Numéro unique d'un article dans Evolubat selon le type d'article (ANC/Stocké géré/Stocké non géré).
+     * Numéro unique d'un article dans Evolubat selon le type d'article (ANC/Stocké géré/Stocké non géré).
+     *
+     * @var integer
      *
      * @ORM\Column(name="NoAD", type="integer", options={"default":-1}, nullable=true)
      */
     private $NoAD;
 
     /**
-     * @param string $CodAD - Code unique d'un article dans Evolubat selon le type d'article (ANC/Stocké géré/Stocké non géré).
+     * Code unique d'un article dans Evolubat selon le type d'article (ANC/Stocké géré/Stocké non géré).
+     *
+     * @var string
      *
      * @ORM\Column(name="CodAD", type="string", length=50, nullable=true)
      */
     private $CodAD;
 
     /**
-     * @param string $PrixPubAD - Code unique d'un article dans Evolubat selon le type d'article (ANC/Stocké géré/Stocké non géré).
+     * Code unique d'un article dans Evolubat selon le type d'article (ANC/Stocké géré/Stocké non géré).
+     *
+     * @var string
      *
      * @ORM\Column(name="PrixPubAD", type="decimal", scale=2, options={"default":0.00})
      */
     private $PrixPubAD;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="DesiAD", type="string", length=255, nullable=true)
      * @ApiFilter(SearchFilter::class, strategy="partial")
      */
@@ -73,139 +87,194 @@ class Article
 
     /**
      * Désignation commune à tous les articles de la même déclinaison
+     *
+     * @var string
+     *
      * @ORM\Column(name="DesiPrincAD", type="string", length=255, nullable=true)
      */
     private $DesiPrincAD;
 
     /**
+     * @var string
+     *
      * @Gedmo\Slug(fields={"DesiAD"})
      * @ORM\Column(name="slug", type="string", length=190, unique=true)
      */
     private $slug;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="DescriWebAD", type="text", nullable=true)
      */
     private $DescriWebAD;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="DescriCatalogAD", type="text", nullable=true)
      */
     private $DescriCatalogAD;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="MediasAD", type="text", nullable=true)
      */
     private $MediasAD;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="PlusAD", type="text", nullable=true)
      */
     private $PlusAD;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="MotsClesAD", type="string", length=255, nullable=true)
      * @ApiFilter(SearchFilter::class, strategy="partial")
      */
     private $MotsClesAD;
 
     /**
+     * @var integer
+     *
      * @ORM\Column(name="OrdreAD", type="integer", options={"default":0}, nullable=true)
      */
     private $OrdreAD;
 
     /**
+     * @var integer
+     *
      * @ORM\Column(name="NumDecliAD", type="integer", nullable=true)
      */
     private $NumDecliAD;
 
     /**
+     * @var boolean
+     *
      * @param boolean $FlgAncAD
-     * @ORM\Column(name="FlgAncAD", type="boolean", nullable=true)
+     * @ORM\Column(name="FlgAncAD", type="boolean", nullable=false)
      */
     private $FlgAncAD;
 
     /**
-     * @ORM\Column(name="FlgCatalogAD", type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="FlgCatalogAD", type="boolean", nullable=false)
      */
     private $FlgCatalogAD;
 
     /**
-     * @ORM\Column(name="FlgPrincAD", type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="FlgPrincAD", type="boolean", nullable=false)
      */
     private $FlgPrincAD;
 
     /**
-     * @ORM\Column(name="FlgDestockAD", type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="FlgDestockAD", type="boolean", nullable=false)
      */
     private $FlgDestockAD;
 
     /**
-     * @ORM\Column(name="FlgHorsMarqueAD", type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="FlgHorsMarqueAD", type="boolean", nullable=false)
      */
     private $FlgHorsMarqueAD;
 
     /**
-     * @ORM\Column(name="FlgNouvAD", type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="FlgNouvAD", type="boolean", nullable=false)
      */
     private $FlgNouvAD;
 
     /**
-     * @ORM\Column(name="FlgPromoAD", type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="FlgPromoAD", type="boolean", nullable=false)
      */
     private $FlgPromoAD;
 
     /**
-     * @ORM\Column(name="FlgVisibleAD", type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="FlgVisibleAD", type="boolean", nullable=false)
      */
     private $FlgVisibleAD;
 
     /**
-     * @ORM\Column(name="FlgEclBleuAD", type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="FlgEclBleuAD", type="boolean", nullable=false)
      */
     private $FlgEclBleuAD;
 
     /**
-     * @ORM\Column(name="FlgEclRoseAD", type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="FlgEclRoseAD", type="boolean", nullable=false)
      */
     private $FlgEclRoseAD;
 
     /**
-     * @ORM\Column(name="FlgEclVertAD", type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="FlgEclVertAD", type="boolean", nullable=false)
      */
     private $FlgEclVertAD;
 
     /**
-     * @ORM\Column(name="FlgEclOrangeAD", type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="FlgEclOrangeAD", type="boolean", nullable=false)
      */
     private $FlgEclOrangeAD;
 
     /**
+     * @var integer
+     *
      * @ORM\Column(name="IdFourAD", type="integer", nullable=true)
      */
     private $IdFourAD;
 
     /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="DateCreAD", type="datetime", nullable=true)
      */
     private $DateCreAD;
 
     /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="DateModAD", type="datetime", nullable=true)
      */
     private $DateModAD;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="UCreAD", type="string", length=5, nullable=true)
      */
     private $UCreAD;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="UModAD", type="string", length=5, nullable=true)
      */
     private $UModAD;
 
     /**
+     * @var Categorie[]
+     *
      * @ORM\ManyToMany(targetEntity="Categorie", mappedBy="articles", cascade={"persist"})
      * @ORM\JoinTable(name="article_categorie")
      *
@@ -222,384 +291,448 @@ class Article
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Identifiant unique Evolubat de l'article.", type="integer")
      */
     private $IdADWS;
 
     /**
      * @var string|null
+     *
      * @SWG\Property(description="Code fournisseur unique Evolubat de l'article.", type="string")
      */
     private $CodADFWS;
 
     /**
      * @var string|null
+     *
      * @SWG\Property(description="Désignation Evolubat de l'article.", type="string")
      */
     private $DesiADWS;
 
     /**
      * @var string|null
+     *
      * @SWG\Property(description="Unité de vente de l'article.", type="string")
      */
     private $UVteADWS;
 
     /**
      * @var string|null
+     *
      * @SWG\Property(description="Unité de stock de l'article.", type="string")
      */
     private $UStoADWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Prix net HT du client connecté de l'article.", type="decimal")
      */
     private $PrixNetCliADWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Identifiant de la société de l'article.", type="integer")
      */
     private $IdSocWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Identifiant du dépot d'appartenance de l'article.", type="integer")
      */
     private $IdDepWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Identifiant d'instance de catégorie de l'article.", type="integer")
      */
     private $IdICWS;
 
     /**
      * @var string|null
+     *
      * @SWG\Property(description="Désignation automatique de l'article.", type="string")
      */
     private $DesiAutoADWS;
 
     /**
      * @var string|null
+     *
      * @SWG\Property(description="Valeur de niveau de l'article.", type="string")
      */
     private $ValNivADWS;
     
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Stock réél de l'article.", type="float")
      */
     private $StkReelADWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Stock réservé de l'article.", type="float")
      */
     private $StkResADWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Stock en commande de l'article.", type="float")
      */
     private $StkCmdeADWS;
 
     /**
      * @var string|null
+     *
      * @SWG\Property(description="Code de gestion stock de l'article.", type="string")
      */
     private $CodGesStkADWS;
 
     /**
      * @var string|null
+     *
      * @SWG\Property(description="Etat de stock de l'article.", type="string")
      */
     private $EtatStockADWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Stock disponible de l'article.", type="float")
      */
     private $StockDisponibleWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Stock disponible de la société de l'article.", type="float")
      */
     private $StockDisponibleSocWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Stock pratique de l'article.", type="float")
      */
     private $StockPratiqueWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Stock réél à la plateforme de l'article.", type="float")
      */
     private $StkReelPlat1WS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Identifiant unique ?? de l'article.", type="integer")
      */
     private $QteCIDSsCFADWS;
 
     /**
      * @var string|null
+     *
      * @SWG\Property(description="Unité de vente de l'article.", type="string")
      */
     private $UVteArtWS;
 
     /**
      * @var string|null
+     *
      * @SWG\Property(description="Unité de stock de l'article.", type="string")
      */
     private $UStoArtWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="valeur ?? de l'article.", type="float")
      */
     private $CvStoVteADWS;
 
     /**
      * @var boolean|null
+     *
      * @SWG\Property(description="valeur ?? de l'article.", type="boolean")
      */
     private $TypCvStoVteADWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Nombre unité de stock en conditionnement de vente de l'article.", type="integer")
      */
     private $NbUStoCondVteADWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Poids unité de vente de l'article.", type="float")
      */
     private $PoidsUVteArtWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Nombre unité de vente en conditionnement de vente de l'article.", type="float")
      */
     private $NbUVteUCondVteWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Prix public conditionnel vente de l'article.", type="float")
      */
     private $PrixPubUCondVteWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Prix net unitaire conditionel vente de l'article.", type="float")
      */
     private $PrixNetUCondVteWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Nombre unitaire stock à la vente de l'article.", type="integer")
      */
     private $NbUStoUVteWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Nombre unitaire vente de stock de l'article.", type="integer")
      */
     private $NbUVteUStoWS;
     
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Nombre déconditionnement de l'article.", type="integer")
      */
     private $NbrDecArtWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Longueur de l'article.", type="integer")
      */
     private $LongADWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Largeur de l'article.", type="integer")
      */
     private $LargADWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Epaissseur de l'article.", type="integer")
      */
     private $EpaisADWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Conditionnement à la vente de l'article.", type="integer")
      */
     private $CondVteADWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="indique s'il faut déconditionner l'article.", type="integer")
      */
     private $FlgDecondADWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Désignation 2 de l'article.", type="integer")
      */
     private $Desi2ArtWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Identifiant unique du fournisseur de l'article.", type="integer")
      */
     private $IdFourWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Nom du dépot d'apartenance de l'article.", type="integer")
      */
     private $NomDepWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Code de suspension de l'article.", type="integer")
      */
     private $CodSuspADWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Lien du média de l'article.", type="integer")
      */
     private $MultimediaArtWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Commentaires techniques de l'article.", type="integer")
      */
     private $ComTechADWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Lien vers un document de l'article.", type="integer")
      */
     private $DocLieWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Gencode de l'article.", type="integer")
      */
     private $GenCodADWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Code ecotaxe de l'article.", type="integer")
      */
     private $CodEcoTaxeADWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Montant ecotaxe de l'article.", type="integer")
      */
     private $MtEcoTaxeWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Valeur ecotaxe de l'article.", type="integer")
      */
     private $ValEcoTaxeWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Identifiant du dépot de la plateforme de l'article.", type="integer")
      */
     private $IdDepPlatWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Identifiant unique fournisseur  de l'article.", type="integer")
      */
     private $IdADFWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Gencode 1 fournisseur de l'article.", type="integer")
      */
     private $GenCod1ADFWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Gencode 2 fournisseur de l'article.", type="integer")
      */
     private $GenCod2ADFWS;
 
     /**
      * @var integer|null
+     *
      * @SWG\Property(description="Code de la catégorie de l'article.", type="integer")
      */
     private $CodCatADWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Prix net de l'article.", type="float")
      */
     private $PrixNetWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Prix public client de l'article.", type="float")
      */
     private $PrixPubCliWS;
 
     /**
      * @var string|null
+     *
      * @SWG\Property(description="Type tarif de l'article.", type="string")
      */
     private $TypeTarifWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Prix de revient conventionnel de l'article.", type="float")
      */
     private $PrixRevConvADWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Prix de revient réél de l'article.", type="float")
      */
     private $PrixRevReelADWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Coefficient PRR de l'article.", type="float")
      */
     private $CoefPRRADWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Coefficient PRC de l'article.", type="float")
      */
     private $CoefPRCADWS;
 
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Marge réélle de l'article.", type="float")
      */
     private $MargeReelleADWS;
     
     /**
      * @var float|null
+     *
      * @SWG\Property(description="Marge conventionelle de l'article.", type="float")
      */
     private $MargeConvADWS;
     
     /**
      * @var array
+     *
      * @SWG\Property(description="Stocks disponibles Evolubat de l'article dans les différents dépots.", type="array")
      */
     private $Stocks = null;
@@ -778,7 +911,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getIdAD()
     {
@@ -786,7 +919,17 @@ class Article
     }
 
     /**
-     * @param mixed $IdAD
+     * for elasticsearch.
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->IdAD;
+    }
+
+    /**
+     * @param integer $IdAD
      */
     public function setIdAD($IdAD)
     {
@@ -794,7 +937,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getIdArtEvoAD()
     {
@@ -802,7 +945,7 @@ class Article
     }
 
     /**
-     * @param mixed $IdArtEvoAD
+     * @param integer $IdArtEvoAD
      */
     public function setIdArtEvoAD($IdArtEvoAD)
     {
@@ -1036,7 +1179,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgCatalogAD()
     {
@@ -1044,7 +1187,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgCatalogAD
+     * @param boolean $FlgCatalogAD
      */
     public function setFlgCatalogAD($FlgCatalogAD)
     {
@@ -1052,7 +1195,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgPrincAD()
     {
@@ -1060,7 +1203,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgPrincAD
+     * @param boolean $FlgPrincAD
      */
     public function setFlgPrincAD($FlgPrincAD)
     {
@@ -1068,7 +1211,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgDestockAD()
     {
@@ -1076,7 +1219,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgDestockAD
+     * @param boolean $FlgDestockAD
      */
     public function setFlgDestockAD($FlgDestockAD)
     {
@@ -1084,7 +1227,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgHorsMarqueAD()
     {
@@ -1092,7 +1235,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgHorsMarqueAD
+     * @param boolean $FlgHorsMarqueAD
      */
     public function setFlgHorsMarqueAD($FlgHorsMarqueAD)
     {
@@ -1100,7 +1243,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgNouvAD()
     {
@@ -1108,7 +1251,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgNouvAD
+     * @param boolean $FlgNouvAD
      */
     public function setFlgNouvAD($FlgNouvAD)
     {
@@ -1116,7 +1259,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgPromoAD()
     {
@@ -1124,7 +1267,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgPromoAD
+     * @param boolean $FlgPromoAD
      */
     public function setFlgPromoAD($FlgPromoAD)
     {
@@ -1132,7 +1275,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgVisibleAD()
     {
@@ -1140,7 +1283,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgVisibleAD
+     * @param boolean $FlgVisibleAD
      */
     public function setFlgVisibleAD($FlgVisibleAD)
     {
@@ -1148,7 +1291,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgEclBleuAD()
     {
@@ -1156,7 +1299,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgEclBleuAD
+     * @param boolean $FlgEclBleuAD
      */
     public function setFlgEclBleuAD($FlgEclBleuAD)
     {
@@ -1164,7 +1307,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgEclRoseAD()
     {
@@ -1172,7 +1315,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgEclRoseAD
+     * @param boolean $FlgEclRoseAD
      */
     public function setFlgEclRoseAD($FlgEclRoseAD)
     {
@@ -1180,7 +1323,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgEclVertAD()
     {
@@ -1188,7 +1331,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgEclVertAD
+     * @param boolean $FlgEclVertAD
      */
     public function setFlgEclVertAD($FlgEclVertAD)
     {
@@ -1196,7 +1339,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getFlgEclOrangeAD()
     {
@@ -1204,7 +1347,7 @@ class Article
     }
 
     /**
-     * @param mixed $FlgEclOrangeAD
+     * @param boolean $FlgEclOrangeAD
      */
     public function setFlgEclOrangeAD($FlgEclOrangeAD)
     {
@@ -1212,7 +1355,7 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getIdFourAD()
     {
@@ -1220,7 +1363,7 @@ class Article
     }
 
     /**
-     * @param mixed $IdFourAD
+     * @param integer $IdFourAD
      */
     public function setIdFourAD($IdFourAD)
     {

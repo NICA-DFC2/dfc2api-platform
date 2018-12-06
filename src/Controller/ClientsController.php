@@ -13,6 +13,7 @@ use App\Services\WsManager;
 use App\Utils\ErrorRoute;
 use Doctrine\Common\Collections\ArrayCollection;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Swagger\Annotations as SWG;
 
 
-class ClientsController extends Controller
+class ClientsController extends AbstractController
 {
     /**
      * @SWG\Property(

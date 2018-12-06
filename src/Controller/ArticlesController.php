@@ -10,14 +10,14 @@ use App\Services\UserService;
 use App\Services\WsManager;
 use App\Utils\ErrorRoute;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Swagger\Annotations as SWG;
 
 
-class ArticlesController extends Controller
+class ArticlesController extends AbstractController
 {
     /**
      * @SWG\Property(
@@ -394,6 +394,99 @@ class ArticlesController extends Controller
         }
 
         return new JsonResponse(new ErrorRoute('Les paramètres renseignés ne sont pas pris en charge !', 406), 406, array(), true);
+    }
+
+    /**
+     * Recherche des articles by Elasticsearch.
+     *
+     * @Route(
+     *     name = "api_articles_search_get",
+     *     path = "/api/articles/_search",
+     *     methods= "GET"
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retourne une liste d'articles.",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Article::class, groups={"full"}))
+     *     )
+     * )
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function callArticlesByElasticsearchGetAction(Request $request) {
+
+        $query = $request->query->get('q', '');
+
+//        if (!$request->isXmlHttpRequest()) {
+//            return $this->render('blog/search.html.twig');
+//        }
+
+//        $query = $request->query->get('q', '');
+//        $limit = $request->query->get('l', 10);
+//
+//        $match = new MultiMatch();
+//        $match->setQuery($query);
+//        $match->setFields(['NoAD',
+//            'DesiAD',
+//            'DesiPrincAD^4',
+//            'CodAD',
+//            'DescriCatalogAD',
+//            'DescriWebAD',
+//            'PlusAD',
+//            'slug']);
+//
+//        $bool = new BoolQuery();
+//        $bool->addMust($match);
+//
+//        $elasticaQuery = new Query($bool);
+//        $elasticaQuery->setSize($limit);
+//
+//        $foundArticles = $client->getIndex('articles')->search($elasticaQuery);
+//        var_dump($foundArticles);
+//        $results = [];
+//        foreach ($foundArticles as $article) {
+//            $results[] = $article->getSource();
+//        }
+//
+//        return $this->json($results);
+
+        $finder = $this->container->get('fos_elastica.finder.app.articles');
+
+        // Option 1. Returns all users who have example.net in any of their mapped fields
+        $results = $finder->find($query);
+
+        // Option 2. Returns a set of hybrid results that contain all Elasticsearch results
+        // and their transformed counterparts. Each result is an instance of a HybridResult
+        //$results = $finder->findHybrid('example.net');
+
+        // Option 3a. Pagerfanta'd resultset
+        ///** var Pagerfanta\Pagerfanta */
+        //$userPaginator = $finder->findPaginated('bob');
+        //$countOfResults = $userPaginator->getNbResults();
+
+        // Option 3b. KnpPaginator resultset
+        //$paginator = $this->get('knp_paginator');
+        //$results = $finder->createPaginatorAdapter('bob');
+        //$pagination = $paginator->paginate($results, $page, 10);
+
+        // You can specify additional options as the fourth parameter of Knp Paginator
+        // paginate method to nested_filter and nested_sort
+
+//        $options = [
+//            'sortNestedPath' => 'owner',
+//            'sortNestedFilter' => new Query\Term(['enabled' => ['value' => true]]),
+//        ];
+
+        // sortNestedPath and sortNestedFilter also accepts a callable
+        // which takes the current sort field to get the correct sort path/filter
+
+        //$pagination = $paginator->paginate($results, $page, 10, $options);
+
+
+        return $this->json($results);
     }
 
 }

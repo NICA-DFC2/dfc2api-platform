@@ -14,6 +14,7 @@ use App\Entity\Devis;
 use App\Utils\ErrorRoute;
 use App\Utils\Ligne;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Swagger\Annotations as SWG;
 
 
-class BonsLivraisonController extends Controller
+class BonsLivraisonController extends AbstractController
 {
     /**
      * @SWG\Property(
@@ -269,6 +270,8 @@ class BonsLivraisonController extends Controller
         $this->ws_manager->setUser($user);
 
         $TTRetour = $this->ws_manager->getEdition($id, WsParameters::TYPE_PRENDRE_EDITION_BL, WsParameters::FORMAT_EDITION_BLOB);
+
+        print_r($TTRetour);
 
         if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
             if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_EDITION)) {

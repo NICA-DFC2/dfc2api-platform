@@ -4,8 +4,9 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Context\SnippetAcceptingContext;
 
-class UsersContext implements Context
+class UsersContext implements Context, SnippetAcceptingContext
 {
     public function __construct()
     {
@@ -15,6 +16,21 @@ class UsersContext implements Context
      * @When after authentication with method :arg1 on :arg2 as :arg3 with password :arg4, i send an authenticated :arg5 request to :arg6 with body:
      */
     public function afterAuthenticationWithMethodOnAsWithPasswordISendAnAuthenticatedRequestToWithBody($arg1, $arg2, $arg3, $arg4, $arg5, $arg6)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @When a demo scenario sends a request to :arg1
+     */
+    public function aDemoScenarioSendsARequestTo($arg1)
+    {
+        throw new PendingException();
+    }
+    /**
+     * @Then the response should be received
+     */
+    public function theResponseShouldBeReceived()
     {
         throw new PendingException();
     }

@@ -15,13 +15,14 @@ use App\Utils\EtatFacture;
 use App\Entity\Facture;
 use App\Utils\Ligne;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Swagger\Annotations as SWG;
 
-class FacturesController extends Controller
+class FacturesController extends AbstractController
 {
     /**
      * @SWG\Property(

@@ -45,33 +45,4 @@ Feature: User
     Then the response status code should be 200
     And the response should be in JSON
     And the header "Content-Type" should be equal to "application/ld+json"
-    And the JSON should be equal to:
-    """
-      {
-    "token": "eyJhbGciOiJSUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1JFQURFUiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6Ik5JQ0EiLCJpYXQiOjE1MzA3OTM0NDYsImV4cCI6MTUzMDc5NzA0Nn0.EdWaX620cf7nLKO_1lZqJozVrk34UhClPD4YgWY_rWRb2yq0lBc2v3xEo4RmasPuIYbepnYpOEG0Go8whE9ED503ouJQwvDjrx1WYHXyU1twRsT7FRkd2j-_-50V174Wz0czAfpvyzgaCihogfGpxGJPYpuj1CpZ8Y9N52e0NXXrJj1z374Nyhg9EM_bGKFoU-TaXbJeyKpl7rZwgFJ5VkNmnixlpFhgqRMCSuKMr9nLesei-2frAgXNbDbLyXrHiIr6HsJmz59RZg4MurGa5olCRUGyAKj86zrYC-uY712G0T_PDNcde5yUtMFQ1PESZxJa7Rl2hNgSG8cjP1eEeZC3_tRBHgbB5n8kMhQBiG0P9ls6_JEem3T3-YlP0lnXQLQlEJOM6JVJZSUwmX-t98guLqjXUl85XXw1sLmypU1DsEhkVpefQiP6Cl6lVqIovtpBfr1vNWwtBpiQSUWLFLLC0IUUEM3tYTGySwolavh1LvSVgGJ0OEbMelsZXdIyp1ieqggWVWXYwRB7QBTwBhBNN7QGrjeY7kfDDk8NGVcJePpF9xlVWYPzii6a82oZIMgNOyerMEif6-eC1TKr5m8BE1lRaAEmmqXJE4LiVWcYNh7D6nfQ_WXhMW80i8bQZ4BpfnDjadpV5hHx1og_t9KvFZORIU_ckfnYyPq6Tjk",
-    "code": "200",
-    "message": "Connexion réussie.",
-    "user": {
-        "id": 3,
-        "username": "NICA",
-        "code": "CMB1",
-        "fullname": "Nicolas Cartier",
-        "email": "n.cartier@dfc2.biz",
-        "last_login": {
-            "date": "2018-07-05 12:24:06.508788",
-            "timezone_type": 3,
-            "timezone": "UTC"
-        },
-        "raison_sociale": "Cartier Nicolas",
-        "id_cli": 112999,
-        "no_cli": 100945,
-        "id_depot_cli": 1,
-        "nom_depot_cli": "VERTOU",
-        "roles": [
-            "ROLE_READER",
-            "ROLE_USER"
-        ],
-        "cntx_valid": true
-    }
-}
-    """
+
