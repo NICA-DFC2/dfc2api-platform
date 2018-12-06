@@ -57,6 +57,7 @@ install:
 before_script:
   - rm -Rf /var/cache/prod
   - rm -Rf /var/cache/dev
+  - export SYMFONY_DEPRECATIONS_HELPER=weak
 
 # Run script
 script:
