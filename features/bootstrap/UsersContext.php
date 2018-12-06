@@ -4,8 +4,9 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Context\SnippetAcceptingContext;
 
-class UsersContext implements Context
+class UsersContext implements Context, SnippetAcceptingContext
 {
     public function __construct()
     {
