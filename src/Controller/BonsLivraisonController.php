@@ -271,6 +271,8 @@ class BonsLivraisonController extends AbstractController
 
         $TTRetour = $this->ws_manager->getEdition($id, WsParameters::TYPE_PRENDRE_EDITION_BL, WsParameters::FORMAT_EDITION_BLOB);
 
+        print_r($TTRetour);
+
         if (!is_null($TTRetour) && $TTRetour instanceof TTRetour) {
             if($TTRetour->containsKey(WsTableNamesRetour::TABLENAME_TT_EDITION)) {
                 $TTEdition = $TTRetour->getTable(WsTableNamesRetour::TABLENAME_TT_EDITION);
