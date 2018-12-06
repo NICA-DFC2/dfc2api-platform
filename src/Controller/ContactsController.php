@@ -10,6 +10,7 @@ use App\Services\UserService;
 use App\Services\WsManager;
 use App\Utils\ErrorRoute;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Swagger\Annotations as SWG;
 
 
-class ContactsController extends Controller
+class ContactsController extends AbstractController
 {
     /**
      * @SWG\Property(
